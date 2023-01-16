@@ -1,0 +1,12 @@
+
+### Install Azure CLI
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+### dotnet cli
+dotnet new --help 
+dotnet --version
+dotnet new webapi -o RememberThis
+
+
+### az cli
+az login
