@@ -25,23 +25,23 @@ public class RememberThisController : ControllerBase
     {
         HttpRequest multipartRequest = HttpContext.Request;
 
-        string jsonData = multipartRequest.Form["jsonData"];
+        string? jsonData = multipartRequest.Form["jsonData"];
 
         // myItem = JsonSerializer.Deserialize<Item>(jsonData);
 
         _logger.LogInformation("RememberThisUpload  {DT}",
             DateTime.UtcNow.ToLongTimeString());
         
-        LocalTestMethod();
+        // LocalTestMethod();
 
-        return "File Upload Endpoint Success.";
+        return $"File Upload Endpoint Success with: {jsonData}";
 
     }
 
-     public void LocalTestMethod()
-        {       
-            // test method demontrating calling a method in the same class file
+    //  public void LocalTestMethod()
+    //     {       
+    //         // test method demontrating calling a method in the same class file
 
-        }
+    //     }
 
 } // end class rememberthis
