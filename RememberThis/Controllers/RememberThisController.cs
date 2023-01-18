@@ -48,6 +48,22 @@ public class RememberThisController : ControllerBase
 
     }
 
+[HttpPost]
+[Route("[action]")]
+    public ActionResult<rtItem> rtMulti ()
+    {        
+        HttpRequest multipartRequest = HttpContext.Request;  
+
+        //  var form = await request.ReadFormAsync();
+
+        // var jsonString = form.Keys.
+
+        // rtItem? weatherForecast = JsonSerializer.Deserialize<rtItem>(jsonString);
+
+        return Ok();
+    }
+
+   
     //  public void LocalTestMethod()
     //     {       
     //         // test method demontrating calling a method in the same class file
