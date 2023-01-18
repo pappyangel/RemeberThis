@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using RememberThis.Models;
 
 namespace RememberThis.Controllers;
 
@@ -16,25 +18,33 @@ public class RememberThisController : ControllerBase
     }
 
     [HttpGet(Name = "GetRememberThis")]
-    public string Get()
+    public ActionResult<rtItem> Get()
     {
-        return "RememberThis Controller test successful";
+        rtItem getItem = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDate =  DateTime.UtcNow };
+      
+        return Ok(getItem);
     }
+
     [HttpPost]
-    public string RememberThisUpload()
+    public ActionResult<rtItem> RememberThisUpload (rtItem _rtItem)
     {
+        // HttpRequest request
         HttpRequest multipartRequest = HttpContext.Request;
 
-        string? jsonData = multipartRequest.Form["jsonData"];
+        // var form = await request.ReadFormAsync();
 
-        // myItem = JsonSerializer.Deserialize<Item>(jsonData);
+        // string? jsonData = multipartRequest.Form["jsonData"];
+        
+        //rtItem myItem = new();
+
+        // rtItem myItem = JsonSerializer.Deserialize<rtItem>(jsonData);
 
         _logger.LogInformation("RememberThisUpload  {DT}",
             DateTime.UtcNow.ToLongTimeString());
         
         // LocalTestMethod();
 
-        return $"File Upload Endpoint Success with: {jsonData}";
+        return Ok(_rtItem);
 
     }
 
