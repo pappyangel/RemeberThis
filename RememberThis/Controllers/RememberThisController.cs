@@ -1,5 +1,7 @@
+using System.Collections.Specialized;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using RememberThis.Models;
 
 namespace RememberThis.Controllers;
@@ -51,16 +53,17 @@ public class RememberThisController : ControllerBase
 [HttpPost]
 [Route("[action]")]
     public ActionResult<rtItem> rtMulti ()
-    {        
+    {           
         HttpRequest multipartRequest = HttpContext.Request;  
+        
+        StringValues rtItemJson;
+        multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
 
-        //  var form = await request.ReadFormAsync();
+        rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
 
-        // var jsonString = form.Keys.
+        rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
 
-        // rtItem? weatherForecast = JsonSerializer.Deserialize<rtItem>(jsonString);
-
-        return Ok();
+        return Ok(rtItemFromPost);
     }
 
    
