@@ -9,7 +9,7 @@ namespace RememberThis.Models
         public string? rtDescription { get; set; } //= null;
         public string? rtLocation { get; set; }
         public DateTime rtDate { get; set; }
-        public string? rtImagePath { get; set; } //= string.Empty;
+        public string? rtImagePath { get; set; } //= string.Empty;        
 
          public bool Equals(rtItem? other)
         {
