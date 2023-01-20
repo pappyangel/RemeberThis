@@ -1,6 +1,6 @@
 using System;
 
-namespace RememberThis.Models
+namespace rtWebApp.Models
 {
     public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
     {

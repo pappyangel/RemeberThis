@@ -4,7 +4,30 @@
     ViewData["Title"] = "Call API page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">This page calls the API</h1>
-    
-</div>
+<div class="card justify-content-center" style="width: 50rem">
+    <div class="card-header">
+        This page records details of your goot time!
+    </div>
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data">
+            <div class="row">
+                <div class="column">    
+                    <label for="baseUrl">@Model.apiBase</label>
+                    <input type="text" asp-for="apiRoute" placeholder="Cocktail"><br>
+                    <br>            
+                    <label for="thisrtItem.rtUser">User Name: </label>
+                    <input type="text" asp-for="thisrtItem.rtUser" placeholder="Cocktail"><br> 
+                </div>
+                <div class="column">
+                    <input type="file" asp-for="Upload" />
+                </div>
+            </div>            
+            <br>
+            <br>
+            <button>Call API</button>
+        </form>
+    </div>
+
+    <div class="card-body">
+        <p> This is the message from the API: <b> @Model.myAPIMessage </p>
+    </div>

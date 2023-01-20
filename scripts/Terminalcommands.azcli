@@ -7,6 +7,9 @@ dotnet new --help
 dotnet --version
 dotnet new webapi -o RememberThis
 
+### front end
+dotnet new webapp -o rtWebApp
+
 
 ### az cli
 az login

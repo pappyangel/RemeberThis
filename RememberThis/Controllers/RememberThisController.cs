@@ -22,7 +22,7 @@ public class RememberThisController : ControllerBase
     [HttpGet(Name = "GetRememberThis")]
     public ActionResult<rtItem> Get()
     {
-        rtItem getItem = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDate =  DateTime.UtcNow };
+        rtItem getItem = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
       
         return Ok(getItem);
     }
