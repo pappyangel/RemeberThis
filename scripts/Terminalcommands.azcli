@@ -10,6 +10,10 @@ dotnet new webapi -o RememberThis
 ### front end
 dotnet new webapp -o rtWebApp
 
+##### Hot Reload
+https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-watch
+move to project folder
+dotnet watch
 
 ### az cli
 az login
