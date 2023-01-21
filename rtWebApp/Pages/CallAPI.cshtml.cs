@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using rtWebApp.Models;
 
 
+
 namespace rtWebApp.Pages;
 
 public class CallAPIModel : PageModel
@@ -26,7 +27,9 @@ public class CallAPIModel : PageModel
 
     [BindProperty]
     public IFormFile Upload { get; set; } = null!;
-    public rtItem thisrtItem = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
+    
+    [BindProperty]
+    public rtItem thisrtItem { get; set; } = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
 
     public void OnGet()
     {
@@ -35,7 +38,7 @@ public class CallAPIModel : PageModel
         
     }
 
-    public async Task<IActionResult> OnPostAsync()
+    public  IActionResult OnPost()
     {
 
         // logic to just read file from disk
@@ -49,21 +52,21 @@ public class CallAPIModel : PageModel
         
         apiUrl = apiBase + apiRoute;
 
-        using   MemoryStream ms = new MemoryStream();
+        // using   MemoryStream ms = new MemoryStream();
 
         
-        var myHttpRequest = new HttpRequestMessage(HttpMethod.Post, apiUrl);
-        var myMultipartFormData = new MultipartFormDataContent();
-        ms.Position = 0;
-        var myStreamContent = new StreamContent(ms);
+        // var myHttpRequest = new HttpRequestMessage(HttpMethod.Post, apiUrl);
+        // var myMultipartFormData = new MultipartFormDataContent();
+        // ms.Position = 0;
+        // var myStreamContent = new StreamContent(ms);
 
-        myStreamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(Upload.ContentType);  //Upload.ContentType = "image/jpg"
+        // myStreamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(Upload.ContentType);  //Upload.ContentType = "image/jpg"
 
-        myMultipartFormData.Add(myStreamContent, "file", Upload.FileName);
-
+        // myMultipartFormData.Add(myStreamContent, "file", Upload.FileName);
         
 
-        return Page();
+
+         return Page();
 
     }
 

@@ -8,7 +8,7 @@
             "name": "rtAPI",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-API",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/RememberThis/bin/Debug/net7.0/RememberThis.dll",
             "args": [],
@@ -33,7 +33,7 @@
             "name": "rtWebApp",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "build-WebApp",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/rtWebApp/bin/Debug/net7.0/rtWebApp.dll",
             "args": [],
