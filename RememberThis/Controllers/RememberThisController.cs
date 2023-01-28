@@ -2,7 +2,7 @@ using System.Collections.Specialized;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using RememberThis.Models;
+using SharedModels;
 
 namespace RememberThis.Controllers;
 
@@ -22,7 +22,7 @@ public class RememberThisController : ControllerBase
     [HttpGet(Name = "GetRememberThis")]
     public ActionResult<rtItem> Get()
     {
-        rtItem getItem = new rtItem{ rtId = 1001, rtUser = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
+        rtItem getItem = new rtItem{ rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
       
         return Ok(getItem);
     }
