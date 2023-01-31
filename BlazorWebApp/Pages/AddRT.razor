@@ -1,20 +1,52 @@
 @page "/AddRT"
 @inherits AddRTBase
-@* using BlazorWebApp.Models *@
+
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+
+    textarea {
+        vertical-align: middle;
+    }
+   
+</style>
 
 
-<PageTitle>Add your memory!</PageTitle>
-
-<h1>Please add a memory you would like to remember and share!</h1>
-
-<input @bind="Item.rtUserName" placeholder="please add your user name" />
-<br>
-<br>
-<input @bind="Item.rtDescription" placeholder="describe the fun time" />
-
-
-<br>
-
-
-
-
+<EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
+    <div class="row">
+        <div class="column">
+            <label for="apiBase">@apiBase</label>
+            <input @bind="apiRoute" placeholder="Cocktail"><br>
+            <br>
+            <label for="thisrtItem.rtUserName">User Name: </label>
+            <input @bind="thisrtItem.rtUserName" placeholder="user"><br>
+            <br>
+            <label for="thisrtItem.rtLocation">Location : </label>
+            <input @bind="thisrtItem.rtLocation" placeholder="location"><br>
+            <br>
+            <label for="thisrtItem.rtDateTime">Date/Time: </label>
+            <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
+            <br>
+            <label for="thisrtItem.rtDescription">Description: </label>
+            <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
+            @* <input type="text" asp-for="thisrtItem.rtDescription" placeholder="description"><br> *@
+        </div>
+        <div class="column">
+            <InputFile OnChange="LoadFile" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
+            <br>            
+            <br>
+            @if (!string.IsNullOrEmpty(file.Name))
+            {
+                <img id="pageimage" height=auto width="175" src="@file.Name" alt="Select an image to share">
+            }
+        </div>
+    </div>
+    <button class="btn btn-primary mt-3" type="submit">Remember This</button>
+</EditForm>
