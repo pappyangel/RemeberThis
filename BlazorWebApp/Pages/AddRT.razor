@@ -42,9 +42,9 @@
             <InputFile OnChange="LoadFile" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
             <br>            
             <br>
-            @if (!string.IsNullOrEmpty(file.Name))
+            @if (!string.IsNullOrEmpty(base64Image))
             {
-                <img id="pageimage" height=auto width="175" src="@file.Name" alt="Select an image to share">
+                <img id="pageimage" height=auto width="175" src="@base64Image" alt="Select an image to share">
             }
         </div>
     </div>
