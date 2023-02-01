@@ -38,14 +38,21 @@ namespace BlazorWebApp.Pages
          protected async Task LoadFile(InputFileChangeEventArgs e)
         {
            var format = "image/png";
-           var resizedImage = await e.File.RequestImageFileAsync(format, 200,200);           
-           var buffer = new byte[resizedImage.Size];
-           await resizedImage.OpenReadStream().ReadAsync(buffer);
+        //    var resizedImage = await e.File.RequestImageFileAsync(format, 200,200);           
+        //    var buffer = new byte[resizedImage.Size];
+        //    await resizedImage.OpenReadStream().ReadAsync(buffer);
            
         //    var buffer = new byte[e.File.Size];
         //    await e.File.OpenReadStream().ReadAsync(buffer);
+        //    base64Image = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
+           var buffer = new byte[e.File.Size];
+           var stream = e.File.OpenReadStream();
+           await stream.ReadAsync(buffer);
            base64Image = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+           stream.Close();
+
+           
            //file.ContentType = "image/png";
            //file = e.File;
            

@@ -19,6 +19,9 @@
 </style>
 
 
+ 
+
+
 <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
     <div class="row">
         <div class="column">
@@ -39,7 +42,7 @@
             @* <input type="text" asp-for="thisrtItem.rtDescription" placeholder="description"><br> *@
         </div>
         <div class="column">
-            <InputFile OnChange="LoadFile" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
+            <InputFile OnChange="LoadFileJS" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
             <br>            
             <br>
             @if (!string.IsNullOrEmpty(base64Image))
