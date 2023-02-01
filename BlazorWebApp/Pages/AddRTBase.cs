@@ -46,11 +46,21 @@ namespace BlazorWebApp.Pages
         //    await e.File.OpenReadStream().ReadAsync(buffer);
         //    base64Image = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
 
-           var buffer = new byte[e.File.Size];
-           var stream = e.File.OpenReadStream();
-           await stream.ReadAsync(buffer);
-           base64Image = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
-           stream.Close();
+        //    var buffer = new byte[e.File.Size];
+        //    var stream = e.File.OpenReadStream(1024 * 1024 * 10);           
+        //    await stream.ReadAsync(buffer);
+        //    base64Image = $"data:{format};base64,{Convert.ToBase64String(buffer)}";
+        //    stream.Close();
+
+        var byteArray = new byte[e.File.Size];
+        var stream = e.File.OpenReadStream();   
+        var ms = new MemoryStream();
+        await stream.CopyToAsync(ms);
+        //await stream.ReadAsync(buffer);
+        byteArray = ms.ToArray();
+        base64Image = $"data:{format};base64,{Convert.ToBase64String(byteArray)}";
+        stream.Close();
+        ms.Close();
 
            
            //file.ContentType = "image/png";
