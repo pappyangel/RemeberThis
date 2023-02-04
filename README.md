@@ -5,6 +5,8 @@ converting image to a base64 string
 
 partial & base class examples of splitting Blazor components
 
+JS Interop examples
+
 setting the SignalR buffer size and other type settings
 
 
