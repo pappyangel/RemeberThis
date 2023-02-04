@@ -32,17 +32,16 @@ namespace BlazorWebApp.Pages
         // protected async Task SubmitForm()
 
         [Inject]
-        protected IJSRuntime jsRuntime { get; set; } 
+        protected IJSRuntime jsRuntime { get; set; }
 
         protected async Task ShowAlert()
         {
             await jsRuntime.InvokeVoidAsync("ShowAlert", message);
         }
-        protected async Task LoadFile2(InputFileChangeEventArgs e)
-        {
-            int dog = 0;
-            dog++;
-            // await jsRuntime.InvokeVoidAsync("loadFileJS", e);
+        protected async Task LoadFileJS(InputFileChangeEventArgs e)
+        {            
+            file = e.File;
+            await jsRuntime.InvokeVoidAsync("loadFileJS", e);
         }
         protected void SubmitForm()
         {

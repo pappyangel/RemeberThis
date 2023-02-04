@@ -4,15 +4,16 @@ var ShowAlert = function (message) {
 
 
 var loadFileJS = function (event) {
-    alert("Inside loadFileJS");
-    var image = document.getElementById('pageimage');    
-    alert(image.src);
-    alert(event.File.Name);
+    // alert("Inside loadFileJS");
+    var image = document.getElementById('pageimage');   
+    var selectedFile = document.getElementById('IF1').files[0];
+    // alert(image.src);
+    // alert(URL.createObjectURL(selectedFile));
     // alert(event.target.files[0].);
     // image.src = URL.createObjectURL(event.target.files[0]);
-    image.src = URL.createObjectURL(event.File);
+    image.src = URL.createObjectURL(selectedFile);
     
-    alert("Leaving loadFileJS");
+    // alert("Leaving loadFileJS");
 };
 
 var loadFile2 = function (event) {    
