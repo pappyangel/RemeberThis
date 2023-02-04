@@ -1,6 +1,6 @@
 namespace BlazorWebApp.Pages
 {
- public partial class Bobo
+ public partial class PartialClass
  {
     
     private string UserName = "";

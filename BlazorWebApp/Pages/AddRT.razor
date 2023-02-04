@@ -1,6 +1,7 @@
 @page "/AddRT"
 @inherits AddRTBase
 
+
 <style>
     div {
         margin-bottom: 10px;
@@ -15,41 +16,48 @@
     textarea {
         vertical-align: middle;
     }
-   
 </style>
-
 
  
 
-
-<EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
-    <div class="row">
-        <div class="column">
-            <label for="apiBase">@apiBase</label>
-            <input @bind="apiRoute" placeholder="Cocktail"><br>
-            <br>
-            <label for="thisrtItem.rtUserName">User Name: </label>
-            <input @bind="thisrtItem.rtUserName" placeholder="user"><br>
-            <br>
-            <label for="thisrtItem.rtLocation">Location : </label>
-            <input @bind="thisrtItem.rtLocation" placeholder="location"><br>
-            <br>
-            <label for="thisrtItem.rtDateTime">Date/Time: </label>
-            <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
-            <br>
-            <label for="thisrtItem.rtDescription">Description: </label>
-            <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
-            @* <input type="text" asp-for="thisrtItem.rtDescription" placeholder="description"><br> *@
-        </div>
-        <div class="column">
-            <InputFile OnChange="LoadFile" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
-            <br>            
-            <br>
-            @if (!string.IsNullOrEmpty(base64Image))
-            {
-                <img id="pageimage" height=auto width="175" src="@base64Image" alt="Select an image to share">
-            }
-        </div>
+<div class="card">
+    <div class="card-header">
+        <label for="apiBase">@apiBase</label>
+        <input @bind="apiRoute" placeholder="Cocktail">
     </div>
-    <button class="btn btn-primary mt-3" type="submit">Remember This</button>
-</EditForm>
+    <div class="card-body">
+        <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
+            <div class="row">
+                <div class="column">
+
+                    <label for="thisrtItem.rtUserName">User Name: </label>
+                    <input @bind="thisrtItem.rtUserName" placeholder="user"><br>
+                    <br>
+                    <label for="thisrtItem.rtLocation">Location : </label>
+                    <input @bind="thisrtItem.rtLocation" placeholder="location"><br>
+                    <br>
+                    <label for="thisrtItem.rtDateTime">Date/Time: </label>
+                    <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
+                    <br>
+                    <label for="thisrtItem.rtDescription">Description: </label>
+                    <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
+                    @* <input type="text" asp-for="thisrtItem.rtDescription" placeholder="description"><br> *@
+                </div>
+                <div class="column">
+                    <InputFile id="IF1" OnChange="LoadFile2" class="form-control" accept=".png,.jpg,.jpeg,.gif" />                    
+                    <br>                    
+                    <img id="pageimage" height=auto width="175" src="./Images/NoImage.jpg" alt="Select an image to share">
+                    <br>
+                    <br>
+                    <input id="IF2" type="file" onchange="loadFile2(event)" class="form-control" accept=".png,.jpg,.jpeg,.gif" />
+                    <br>                     
+                </div>
+            </div>
+            <div class="card-footer">
+                <button class="btn btn-primary mt-0" type="submit">Remember This</button>    
+                <input type="text" @bind="message" />            
+                <button class="btn btn-primary mt-0" @onclick="ShowAlert" type="JS Interop">JS Interop</button>                
+            </div>
+        </EditForm>
+    </div>
+</div>
