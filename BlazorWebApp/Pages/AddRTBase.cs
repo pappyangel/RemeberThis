@@ -30,10 +30,10 @@ namespace BlazorWebApp.Pages
         protected IJSRuntime jsRuntime { get; set; }
 
       
-        protected async Task LoadFileJS(InputFileChangeEventArgs e)
+        protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {            
             file = e.File;
-            await jsRuntime.InvokeVoidAsync("loadFileJS", e);
+            await jsRuntime.InvokeVoidAsync("loadFileJS");
         }
         protected void SubmitForm()
         {
