@@ -15,6 +15,7 @@ namespace BlazorWebApp.Pages
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
 
         public string apiUrl { get; set; } = "";
+        protected bool ShowPopUp { get; set; } = false;
         protected rtItem thisrtItem { get; set; } =
             new rtItem
             {
@@ -37,8 +38,10 @@ namespace BlazorWebApp.Pages
         }
         protected void SubmitForm()
         {
+            ShowPopUp = true;
             int dog = 0;
             dog++;
+            
 
         }
         
