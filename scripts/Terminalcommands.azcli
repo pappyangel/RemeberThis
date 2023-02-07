@@ -10,6 +10,9 @@ dotnet new webapi -o RememberThis
 ### front end
 dotnet new webapp -o rtWebApp
 
+### blazor server with auth
+dotnet new blazorserver -o BlazB2C --auth IndividualB2C 
+
 ##### Hot Reload
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-watch
 move to project folder
