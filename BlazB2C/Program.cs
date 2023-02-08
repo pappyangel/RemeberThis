@@ -25,6 +25,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
@@ -39,6 +40,11 @@ if (!app.Environment.IsDevelopment())
 }
 
 
+app.UseCookiePolicy(new CookiePolicyOptions()
+    {
+        // MinimumSameSitePolicy = SameSiteMode.Lax
+        MinimumSameSitePolicy = SameSiteMode.None
+    });
 
 app.UseStaticFiles();
 
