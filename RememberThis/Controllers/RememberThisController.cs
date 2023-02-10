@@ -66,6 +66,21 @@ public class RememberThisController : ControllerBase
         return Ok(rtItemFromPost);
     }
 
+[HttpPost]
+[Route("[action]")]
+    public ActionResult<rtItem> Blaz ()
+    {           
+        HttpRequest multipartRequest = HttpContext.Request;  
+        
+        // StringValues rtItemJson;
+        // multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
+
+        // rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
+
+        // rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
+
+        return Ok("Hello from Blaz Controller");
+    }
 
    
     //  public void LocalTestMethod()

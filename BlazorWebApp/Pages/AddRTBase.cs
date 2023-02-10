@@ -40,14 +40,15 @@ namespace BlazorWebApp.Pages
             file = e.File;
             await jsRuntime.InvokeVoidAsync("loadFileJS");
         }
-        protected void SubmitForm()
+        protected async Task SubmitForm()
         {
             ShowPopUp = true;
             int dog = 0;
             
-
+            using var content = new MultipartFormDataContent();
             var client = ClientFactory.CreateClient();
-
+            var response =  await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz",  content);
+            
             dog++;
 
         }
