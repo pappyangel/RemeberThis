@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SharedModels;
 using Microsoft.JSInterop;
+using System.Net.Http;
 
 namespace BlazorWebApp.Pages
 {
@@ -30,6 +31,9 @@ namespace BlazorWebApp.Pages
         [Inject]
         protected IJSRuntime jsRuntime { get; set; }
 
+        [Inject]
+        protected IHttpClientFactory ClientFactory { get; set; }
+
       
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {            
@@ -40,8 +44,11 @@ namespace BlazorWebApp.Pages
         {
             ShowPopUp = true;
             int dog = 0;
-            dog++;
             
+
+            var client = ClientFactory.CreateClient();
+
+            dog++;
 
         }
         
