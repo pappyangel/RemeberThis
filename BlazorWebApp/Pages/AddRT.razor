@@ -41,7 +41,7 @@
                     <label for="thisrtItem.rtDateTime">Date/Time: </label>
                     <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
                     <br>
-                    <label for="thisrtItem.rtDescription">Description: </label>
+                    <label>Description: </label>
                     <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
                 </div>
                 <div class="column">
@@ -53,33 +53,13 @@
                 </div>
             </div>
             <div class="card-footer d-flex align-items-center">
-                <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i>
-                    memory! </button>
-                <button type=button class="btn btn-primary" data-toggle="modal" data-target="#popupModal">POP UP</button>
+                <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i> memory! </button>                
+                               
             </div>
         </EditForm>
     </div>
 </div>
 
+<label >@myAPIMessage </label>
 
 
-<div class="modal fade" id="popupModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">
-                    H5 title
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">
-                        x
-                    </span>
-                </button>
-            </div>
-            <div class="modal-body">
-                myText test
-            </div>
-
-        </div>
-    </div>
-</div>
