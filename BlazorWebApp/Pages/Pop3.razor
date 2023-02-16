@@ -8,21 +8,23 @@
 <h1>Modal Confirmation Demo!</h1>
 
 
-<button type="button" class="btn btn-primary" @onclick="CallShowModal" >
+@* <button type="button" class="btn btn-primary" @onclick="CallShowModal" > *@
+  <button type="button" class="btn btn-primary" @onclick="() => modalcomponent.ShowModal()" >
+  
   Display Modal
 </button>
 
-<Popup confirmation=@showSwitch @ref="modalcomponent" />
+<Popup @ref="modalcomponent" />
 
 @code
 { 
   private bool showSwitch = false;
 
-  Popup modalcomponent;
+  private Popup modalcomponent { get; set; }
   
   private void CallShowModal()
   {
-    @* modalcomponent.ShowModal(); *@
+    modalcomponent.ShowModal();
     showSwitch = true;
 
   }
