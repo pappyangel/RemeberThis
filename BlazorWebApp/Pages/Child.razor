@@ -1,5 +1,5 @@
-<button type="button" @onclick="CallParentMethodOK">Call parent OK</button>
-<button type="button" @onclick="CallParentMethodCancel">Call parent Cancel</button>
+<button type="button" @onclick="ChildCallParentMethodOK">Call parent OK</button>
+<button type="button" @onclick="ChildCallParentMethodCancel">Call parent Cancel</button>
 
 @* <button type="button" @onclick="CallMethodParent">Call a method on parent component</button> *@
 
@@ -7,23 +7,23 @@
     @code {
     
         [Parameter]
-        public EventCallback<string> ParentMethod { get; set; }
+        public EventCallback<string> EventCallbackToParentMethod { get; set; }
         
 
     
-        private async Task CallParentMethodOK()
+        private async Task ChildCallParentMethodOK()
         {
-            if(ParentMethod.HasDelegate)
+            if(EventCallbackToParentMethod.HasDelegate)
             {
-              await  ParentMethod.InvokeAsync("You pressed the OK button.");
+              await  EventCallbackToParentMethod.InvokeAsync("You clicked the OK button.");
             }
         }
 
-         private async Task CallParentMethodCancel()
+         private async Task ChildCallParentMethodCancel()
         {
-            if(ParentMethod.HasDelegate)
+            if(EventCallbackToParentMethod.HasDelegate)
             {
-              await  ParentMethod.InvokeAsync("You pressed the Cancel button.");
+              await  EventCallbackToParentMethod.InvokeAsync("You clicked the Cancel button.");
             }
         }
     

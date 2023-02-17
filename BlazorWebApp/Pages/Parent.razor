@@ -2,12 +2,12 @@
 
 <p>@message</p>
 
-<Child ParentMethod="ParentMethod" />
+<Child EventCallbackToParentMethod="ParentLocalMethod" />
 
 @code{
     private string message;
 
-    private void ParentMethod(string message)
+    private void ParentLocalMethod(string message)
     {
         this.message = message;
     }
