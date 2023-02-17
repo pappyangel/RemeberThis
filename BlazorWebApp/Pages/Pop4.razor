@@ -5,15 +5,14 @@
 Welcome to your new app.
 <button class="btn btn-primary" @onclick="() => modal.Open()">Modal!</button>
 
-<Modal @ref="modal">
+<Modal @bind-ModalButtonClicked="modalButtonClicked"  @ref="modal">
     <Title>This is a <em>Title!</em></Title>
     <Body>
         <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Omnes enim iucundum motum, quo sensus hilaretur.
             <i>Quis istud possit, inquit, negare?</i>
             <mark>Ego vero isti, inquam, permitto.</mark> Duo Reges: constructio interrete.
-        </p>
-        <FetchData />
+        </p>        
         <dl>
             <dt><dfn>Stoici scilicet.</dfn></dt>
             <dd>An hoc usque quaque, aliter in vita?</dd>
@@ -24,10 +23,15 @@ Welcome to your new app.
     <Footer>
         <button type="button" class="btn btn-primary">Save changes</button>
         <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="() => modal.Close()">Close</button>
-
     </Footer>
 </Modal>
 
+<br>
+<br>
+<br>
+<label >@modalButtonClicked </label>
+
 @code {
     private Modal modal { get; set; }
+    private string modalButtonClicked = "InitVal";
 }

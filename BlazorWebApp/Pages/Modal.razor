@@ -32,6 +32,14 @@
     [Parameter]
     public RenderFragment Footer { get; set; }
 
+    [Parameter]    
+    public string ModalButtonClicked { get; set; }
+
+    @* [Parameter]
+    public EventCallback<string> SendModalButtonClicked { get; set; } *@
+
+
+
     private string modalDisplay = "none;";
     private string modalClass = "";
     private bool showBackdrop = false;
@@ -41,6 +49,7 @@
         modalDisplay = "block;";
         modalClass = "show";
         showBackdrop = true;
+
     }
 
     public void Close()
@@ -48,5 +57,8 @@
         modalDisplay = "none";
         modalClass = "";
         showBackdrop = false;
+        ModalButtonClicked="Close";
+        @* return SendModalButtonClicked.InvokeAsync(ModalButtonClicked); *@
+
     }
 }
