@@ -1,0 +1,15 @@
+@page "/Parent"
+
+<p>@message</p>
+
+<Child ParentMethod="ParentMethod" />
+
+@code{
+    private string message;
+
+    private void ParentMethod(string message)
+    {
+        this.message = message;
+    }
+
+}
