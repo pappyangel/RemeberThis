@@ -1,0 +1,70 @@
+@page "/NewModalParent"
+
+<h1>Slick Method calling child and getting callback!</h1>
+
+<button class="btn btn-primary" @onclick="() => childmodal.Open()">Call child Modal</button>
+
+<NewModalChild @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
+    <Title> <em>Test Harnes to tet myModal</em></Title>
+
+    <Body>
+        <p>
+            This is paragraph text
+            <i>This is inside the i</i>
+            <mark>This is inside the mark</mark>
+        </p>
+    </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick="() => childmodal.SendModalButtonClicked(btnClose)">
+            <span class="oi oi-cloud" aria-hidden="true"></span> Close
+        </button>
+
+        <button type="button" class="btn btn-secondary"
+            @onclick='() => childmodal.SendModalButtonClicked("Secondary")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> Secondary
+        </button>
+
+        <button type="button" class="btn btn-success"
+            @onclick='() => childmodal.SendModalButtonClicked("Success")'>
+            <span class="oi oi-check" aria-hidden="true"></span> Success
+        </button>
+
+        <button type="button" class="btn btn-danger"
+            @onclick='() => childmodal.SendModalButtonClicked("Danger")'>
+            <span class="oi oi-ban" aria-hidden="true"></span> Danger
+        </button>
+
+        <button type="button" class="btn btn-warning">Warning</button>
+
+        <button type="button" class="btn btn-info"
+             @onclick='() => childmodal.SendModalButtonClicked("Info")'>
+            <span class="oi oi-circle-check" style="color: green;" aria-hidden="true"></span> Info
+        </button>
+        <button type="button" class="btn btn-light">Light</button>
+        <button type="button" class="btn btn-dark">Dark</button>
+
+
+
+    </Footer>
+</NewModalChild>
+
+<br>
+<br>
+<br>
+<br>
+<p>You clicked this button: @btnClicked</p>
+
+
+@code {
+    private NewModalChild childmodal { get; set; }
+    private string btnClicked = "Initial";
+    private string btnClose = "Close";
+
+    private void DisplayBtnClicked(string _btnClicked)
+    {
+        btnClicked = _btnClicked;
+
+    }
+
+}
