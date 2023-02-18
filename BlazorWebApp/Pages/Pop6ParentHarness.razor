@@ -1,0 +1,16 @@
+@page "/Pop6ParentHarness"
+
+
+<p>@message</p>
+
+<MyChildModalComponent EventCallbackToParentMethod="ParentLocalMethod" />
+
+@code{
+    private string message;
+
+    private void ParentLocalMethod(string message)
+    {
+        this.message = message;
+    }
+
+}

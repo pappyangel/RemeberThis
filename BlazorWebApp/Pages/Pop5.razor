@@ -1,19 +1,21 @@
 @page "/Pop5"
 
-<h1>Hello, world!</h1>
+<h1>Test Harness Page</h1>
 
-Welcome to your new app.
-<button class="btn btn-primary" @onclick="() => modal.Open()">Modal!</button>
+Parent Harness to call modal dialog.
+<br>
+<br>
+<button class="btn btn-primary" @onclick="() => modal.Open()">Call child Modal</button>
 
 <Modal @ref="modal">
-    <Title>This is a <em>big Title!</em></Title>
+    <Title> <em>Test Harnes to tet myModal</em></Title>
     <Body>
         <p>
             my Lorem ipsum dolor sit amet, consectetur adipiscing elit. Omnes enim iucundum motum, quo sensus hilaretur.
             <i>Quis istud possit, inquit, negare?</i>
             <mark>Ego vero isti, inquam, permitto.</mark> Duo Reges: constructio interrete.
         </p>
-        <FetchData />
+        @* <FetchData /> *@
         <dl>
             <dt><dfn>Stoici scilicet.</dfn></dt>
             <dd>An hoc usque quaque, aliter in vita?</dd>
