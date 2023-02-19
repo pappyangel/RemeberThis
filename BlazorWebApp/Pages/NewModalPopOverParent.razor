@@ -1,4 +1,5 @@
 @page "/NewModalPopOverParent"
+@inject IJSRuntime JS
 
 
 <h1>Slick Method calling child and getting callback!</h1>
@@ -23,7 +24,7 @@
 
         <button type="button" class="btn btn-lg btn-secondary"
             @* @onclick='() => childmodal.SendModalButtonClicked("Secondary")' *@
-            data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?"                                                                            >
+            data-bs-toggle="popover" data-bs-title="Popover title" data-bs-content="This button doesn't do anything, but you can keep clicking me!"                                                                            >
             Click to see Popover2
         </button>
 
@@ -46,6 +47,14 @@
     {
         btnClicked = _btnClicked;
 
+    }
+
+     protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("enablePopovers");
+        }
     }
 
 }

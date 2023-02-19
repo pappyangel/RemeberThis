@@ -1,17 +1,4 @@
 
-// const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-// const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-
-
-// var popover = new bootstrap.Popover(document.querySelector('.example-popover'), {
-//     container: 'body'
-//   })
-
-//   var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'))
-// var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-//   return new bootstrap.Popover(popoverTriggerEl)
-// })
-
 var loadFileJS = function () {    
     
     var image = document.getElementById('pageimage');   
@@ -20,12 +7,10 @@ var loadFileJS = function () {
 
 };
 
-// $(function () {
-//     $('[data-bs-toggle="popover"]').popover()
-//   })
-
-// $(document).ready(function() {
-//     $('[data-bs-toggle=popover]').popover();
-// }); 
-
+window.enablePopovers = function () {
+    document.querySelectorAll('[data-bs-toggle="popover"]')
+        .forEach(function (popover) {
+            new bootstrap.Popover(popover);
+        });
+}
 
