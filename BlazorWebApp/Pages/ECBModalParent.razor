@@ -1,18 +1,18 @@
-@page "/Pop4"
+@page "/ECBModalParent"
 
 <h1>We are trying to open a child modal.</h1>
 
 
 <button class="btn btn-primary" @onclick="() => childmodal.Open()">Click here to open a child modal.</button>
 
-<ModalComponent EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
+<ECBModalChild EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
     <Title>This is a <em>Title!</em></Title>
 
     <Body>
         <p class="bg-warning">Please confirm your action.</p>
         <p>Are you sure you want to proceed? </p>
     </Body>
-</ModalComponent>
+</ECBModalChild>
 
 <br>
 <br>
@@ -20,7 +20,7 @@
 <label>@modalButtonClicked </label>
 
 @code {
-    private ModalComponent childmodal { get; set; }
+    private ECBModalChild childmodal { get; set; }
     private string modalButtonClicked = "InitVal";
 
     private void ParentLocalMethod(string message)

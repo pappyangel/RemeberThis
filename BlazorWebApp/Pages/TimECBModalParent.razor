@@ -1,11 +1,11 @@
-@page "/Pop7Parent"
+@page "/TimECBModalParent"
 
 <h1>Test Harness Page for calling child modal</h1>
 
 
 <button class="btn btn-primary" @onclick="() => childmodal.Open()">Call child Modal == childmodal</button>
 
-<ModalComponentChild EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
+<TimECBModalChild EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
     <Title> <em>Test Harness to test my ChildModal</em></Title>
 
     <Body>
@@ -14,7 +14,7 @@
         </p>
     </Body>
 
-</ModalComponentChild>
+</TimECBModalChild>
 
 <br>
 <br>
@@ -23,7 +23,7 @@
 
 
 @code {
-    private ModalComponentChild childmodal { get; set; }
+    private TimECBModalChild childmodal { get; set; }
     private string modalButtonClicked = "InitVal";
     private void ParentLocalMethod(string message)
     {

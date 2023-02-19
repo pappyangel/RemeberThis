@@ -1,4 +1,4 @@
-@page "/Pop5"
+@page "/ModalPassBtnParent"
 
 <h1>Test Harness Page</h1>
 
@@ -7,7 +7,7 @@ Parent Harness to call modal dialog.
 <br>
 <button class="btn btn-primary" @onclick="() => modal.Open()">Call child Modal</button>
 
-<Modal @ref="modal">
+<ModalPassBtnChild @ref="modal">
     <Title> <em>Test Harnes to tet myModal</em></Title>
     <Body>
         <p>
@@ -35,8 +35,8 @@ Parent Harness to call modal dialog.
 
 
     </Footer>
-</Modal>
+</ModalPassBtnChild>
 
 @code {
-    private Modal modal { get; set; }
+    private ModalPassBtnChild modal { get; set; }
 }
