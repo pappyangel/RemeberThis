@@ -70,14 +70,20 @@ namespace BlazorWebApp.Pages
 
             content.Add(streamContent, "file", file.Name);
 
-            childmodal.Open();
-
-
-
-
-
-
-            // var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
+            try
+            {
+                var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
+                
+            }
+            catch (Exception Ex)
+            {
+                string dog= string.Empty;
+                
+                dog = Ex.Message;
+                
+                throw;
+            }
+            
 
             // switch (response1.StatusCode)
             // {
@@ -101,6 +107,8 @@ namespace BlazorWebApp.Pages
             //         break;
 
             // }
+
+            // childmodal.Open();
 
 
 
