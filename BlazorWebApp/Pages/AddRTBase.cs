@@ -29,12 +29,19 @@ namespace BlazorWebApp.Pages
                 rtDateTime = DateTime.UtcNow
             };
         // protected async Task SubmitForm()
+        protected RTModalComponent childmodal { get; set; }
 
         [Inject]
         protected IJSRuntime jsRuntime { get; set; }
 
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; }
+
+        protected void DisplayBtnClicked(string _btnClicked)
+        {
+            myAPIMessage = _btnClicked;
+
+        }
 
 
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
@@ -63,31 +70,37 @@ namespace BlazorWebApp.Pages
 
             content.Add(streamContent, "file", file.Name);
 
+            childmodal.Open();
 
-            var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
 
-            switch (response1.StatusCode)
-            {
-                case System.Net.HttpStatusCode.OK:
-                    myAPIMessage = await response1.Content.ReadAsStringAsync();
-                    break;
-                case System.Net.HttpStatusCode.NoContent:
-                    myAPIMessage = "No content";
-                    break;
-                case System.Net.HttpStatusCode.NotFound:
-                    myAPIMessage = "API Route not found!";
-                    break;
-                case System.Net.HttpStatusCode.Forbidden:
-                    myAPIMessage = "Your Access to this API route is Forbidden!";
-                    break;
-                case System.Net.HttpStatusCode.Unauthorized:
-                    myAPIMessage = "Your Access to this API route is Unauthorized!";
-                    break;
-                default:
-                    myAPIMessage = "Unhandled Error!";
-                    break;
 
-            }
+
+
+
+            // var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
+
+            // switch (response1.StatusCode)
+            // {
+            //     case System.Net.HttpStatusCode.OK:
+            //         myAPIMessage = await response1.Content.ReadAsStringAsync();
+            //         break;
+            //     case System.Net.HttpStatusCode.NoContent:
+            //         myAPIMessage = "No content";
+            //         break;
+            //     case System.Net.HttpStatusCode.NotFound:
+            //         myAPIMessage = "API Route not found!";
+            //         break;
+            //     case System.Net.HttpStatusCode.Forbidden:
+            //         myAPIMessage = "Your Access to this API route is Forbidden!";
+            //         break;
+            //     case System.Net.HttpStatusCode.Unauthorized:
+            //         myAPIMessage = "Your Access to this API route is Unauthorized!";
+            //         break;
+            //     default:
+            //         myAPIMessage = "Unhandled Error!";
+            //         break;
+
+            // }
 
 
 

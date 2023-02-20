@@ -24,6 +24,21 @@
     }
 </style>
 
+
+<RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
+    <Title> Add a Memory Status</Title>
+    <Body> Persisting your memory to storage will be added in a future phase. </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+      </Footer>
+
+</RTModalComponent>
+
+
+
 <div class="card">
     <div class="card-header">
         <h3 style="text-align:center">Add a memory you want to save and share later!</h3>
