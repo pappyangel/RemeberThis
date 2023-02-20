@@ -1,0 +1,33 @@
+@page "/Pop7Parent"
+
+<h1>Test Harness Page for calling child modal</h1>
+
+
+<button class="btn btn-primary" @onclick="() => childmodal.Open()">Call child Modal == childmodal</button>
+
+<ModalComponentChild EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
+    <Title> <em>Test Harness to test my ChildModal</em></Title>
+
+    <Body>
+        <p>
+            Confirm your changes please.
+        </p>
+    </Body>
+
+</ModalComponentChild>
+
+<br>
+<br>
+<br>
+<label>Child Modal Button Selected: @modalButtonClicked </label>
+
+
+@code {
+    private ModalComponentChild childmodal { get; set; }
+    private string modalButtonClicked = "InitVal";
+    private void ParentLocalMethod(string message)
+    {
+
+        this.modalButtonClicked = message;
+    }
+}

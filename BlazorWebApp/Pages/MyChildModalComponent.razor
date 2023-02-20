@@ -1,0 +1,32 @@
+@* this is a CHILD blazer component which can be placed on a page or harness page *@
+
+<button type="button" @onclick="MyChildCallParentMethodOK">Call the parent OK method</button>
+<button type="button" @onclick="MyChildCallParentMethodCancel">Call the parent Cancel method </button>
+
+@* <button type="button" @onclick="CallMethodParent">Call a method on parent component</button> *@
+
+
+    @code {
+    
+        [Parameter]
+        public EventCallback<string> EventCallbackToParentMethod { get; set; }
+        
+
+    
+        private async Task MyChildCallParentMethodOK()
+        {
+            if(EventCallbackToParentMethod.HasDelegate)
+            {
+              await  EventCallbackToParentMethod.InvokeAsync("OK button clicked on child modal.");
+            }
+        }
+
+         private async Task MyChildCallParentMethodCancel()
+        {
+            if(EventCallbackToParentMethod.HasDelegate)
+            {
+              await  EventCallbackToParentMethod.InvokeAsync("Cancel button clicked on child modal.");
+            }
+        }
+    
+    }
