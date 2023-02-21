@@ -77,11 +77,9 @@ namespace BlazorWebApp.Pages
             }
             catch (Exception Ex)
             {
-                string dog= string.Empty;
-                
-                dog = Ex.Message;
-                
-                throw;
+                // Opps!  Did we forget to start the API?!?
+                myAPIMessage = "API not available";
+                // throw;
             }
             
 
