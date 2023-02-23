@@ -12,7 +12,7 @@ namespace BlazorWebApp.Pages
     public class AddRTBase : ComponentBase
     {
         protected IBrowserFile? file;
-        protected string? myAPIMessage { get; set; } = "API Return Message";
+        protected string? InfoMsg { get; set; } = "API Return Message";
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
@@ -37,9 +37,12 @@ namespace BlazorWebApp.Pages
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; }
 
+        [Inject]
+        protected IConfiguration Config { get; set; }
+
         protected void DisplayBtnClicked(string _btnClicked)
         {
-            myAPIMessage = _btnClicked;
+            InfoMsg = _btnClicked;
 
         }
 
@@ -51,8 +54,7 @@ namespace BlazorWebApp.Pages
         }
         protected async Task SubmitForm()
         {
-            ShowPopUp = true;
-
+            long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             using var content = new MultipartFormDataContent();
             var client = ClientFactory.CreateClient();
@@ -62,58 +64,65 @@ namespace BlazorWebApp.Pages
             var classContent = new StringContent(jsonString);
             content.Add(classContent, "classData");
 
-            //Add file 
-            var ms = new MemoryStream();
-            await file.OpenReadStream().CopyToAsync(ms);
-            var streamContent = new StreamContent(ms);
-            streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
-
-            content.Add(streamContent, "file", file.Name);
-
-            try
+            //Add file             
+            if (!((file.Size > 0) && (file.Size < _fileSizeLimit)))
             {
-                var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
+                InfoMsg = "File size too large";
+            }
+            else
+            {
+                var ms = new MemoryStream();
+                await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
+                ms.Position = 0;
+                var streamContent = new StreamContent(ms);
+                streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(file.ContentType);
 
-                switch (response1.StatusCode)
+                content.Add(streamContent, "file", file.Name);
+
+                try
                 {
-                    case System.Net.HttpStatusCode.OK:
-                        myAPIMessage = await response1.Content.ReadAsStringAsync();
-                        break;
-                    case System.Net.HttpStatusCode.NoContent:
-                        myAPIMessage = "No content";
-                        break;
-                    case System.Net.HttpStatusCode.NotFound:
-                        myAPIMessage = "API Route not found!";
-                        break;
-                    case System.Net.HttpStatusCode.Forbidden:
-                        myAPIMessage = "Your Access to this API route is Forbidden!";
-                        break;
-                    case System.Net.HttpStatusCode.Unauthorized:
-                        myAPIMessage = "Your Access to this API route is Unauthorized!";
-                        break;
-                    default:
-                        myAPIMessage = "Unhandled Error!";
-                        break;
+                    var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
 
+                    switch (response1.StatusCode)
+                    {
+                        case System.Net.HttpStatusCode.OK:
+                            InfoMsg = await response1.Content.ReadAsStringAsync();
+                            break;
+                        case System.Net.HttpStatusCode.NoContent:
+                            InfoMsg = "No content";
+                            break;
+                        case System.Net.HttpStatusCode.NotFound:
+                            InfoMsg = "API Route not found!";
+                            break;
+                        case System.Net.HttpStatusCode.Forbidden:
+                            InfoMsg = "Your Access to this API route is Forbidden!";
+                            break;
+                        case System.Net.HttpStatusCode.Unauthorized:
+                            InfoMsg = "Your Access to this API route is Unauthorized!";
+                            break;
+                        default:
+                            InfoMsg = "Unhandled Error!";
+                            break;
+
+                    }
+
+
+
+
+                }
+                catch (Exception Ex)
+                {
+                    // Opps!  Did we forget to start the API?!?
+                    InfoMsg = "API not available";
+                    // throw;
                 }
 
 
 
+                // childmodal.Open();
+
 
             }
-            catch (Exception Ex)
-            {
-                // Opps!  Did we forget to start the API?!?
-                myAPIMessage = "API not available";
-                // throw;
-            }
-
-
-
-            // childmodal.Open();
-
-
-
 
         }
 
