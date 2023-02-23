@@ -19,6 +19,8 @@ dotnet new blazorserver -o BBS
 dotnet new blazorserver-empty -o BBBS
 dotnet add package BootstrapBlazor
 
+dotnet add package Azure.Storage.Blobs 
+
 ##### Hot Reload
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-watch
 move to project folder

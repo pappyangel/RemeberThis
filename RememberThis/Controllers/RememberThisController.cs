@@ -1,8 +1,10 @@
 using System.Collections.Specialized;
 using System.Text.Json;
+using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using SharedModels;
+
 
 namespace RememberThis.Controllers;
 
@@ -13,11 +15,13 @@ public class RememberThisController : ControllerBase
 
 
     private readonly ILogger<RememberThisController> _logger;
+    private readonly IConfiguration _config;
     private string returnMsg = "Method Start";
     private string[] permittedExtensions = new string[] { ".gif", ".png", ".jpg", ".jpeg" };
-    public RememberThisController(ILogger<RememberThisController> logger)
+    public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config)
     {
         _logger = logger;
+        _config = config;
     }
 
     [HttpGet(Name = "GetRememberThis")]
@@ -71,38 +75,61 @@ public class RememberThisController : ControllerBase
     [Route("[action]")]
     public async Task<ActionResult> Blaz()
     {
-        
+
         HttpRequest multipartRequest = HttpContext.Request;
 
         // get class data from key value pair out of multi part
         StringValues rtItemJson;
         multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
         rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
+        rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
 
         var form = await multipartRequest.ReadFormAsync();
         var formFile = form.Files["file"];
         await using var stream = formFile.OpenReadStream();
         using var ms = new MemoryStream();
-        
-            await stream.CopyToAsync(ms);
 
-        bool jojo = IsValidFileExtensionAndSignature(formFile.FileName, ms);
-        
+        await stream.CopyToAsync(ms);
 
-        rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
+        if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
+        {
+            // true
+            //write to storage method
+        }
+
+
+
 
         return Ok(returnMsg);
-    } 
+    }
 
-       public bool IsValidFileExtensionAndSignature(string fileName, MemoryStream streamParam)
-    {        
+    private async Task WritetoAzureStorage(MemoryStream _ms, string filename)
+    {
+        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"];
+        string ImageContainer =  _config["ImageContainer"];
+        Boolean OverWrite = true;
         
+        string trustedExtension = Path.GetExtension(filename).ToLowerInvariant(); 
+        string trustedNewFileName = Guid.NewGuid().ToString();
+
+        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
+        BlobClient blobClient = containerClient.GetBlobClient(trustedNewFileName + trustedExtension);
+
+        _ms.Position = 0;
+        await blobClient.UploadAsync(_ms, OverWrite);
+
+        
+
+    }  // end of write to azure storage
+    public bool IsValidFileExtensionAndSignature(string fileName, MemoryStream streamParam)
+    {
+
         // might need to go somehwere higher in stack
         returnMsg = "Method Start";
-        returnMsg = "file check start";        
+        returnMsg = "file check start";
 
         MemoryStream data = new MemoryStream();
-        streamParam.Position =0;
+        streamParam.Position = 0;
         streamParam.CopyTo(data);
 
         // this is generally checked by the file upload control itself - but we can double check it here
@@ -140,11 +167,11 @@ public class RememberThisController : ControllerBase
 
             return fileSigCorrect;
 
-        }       
+        }
 
     } // End IsValidFileExtensionAndSignature
 
-        private static readonly Dictionary<string, List<byte[]>> _fileSignature = new Dictionary<string, List<byte[]>>
+    private static readonly Dictionary<string, List<byte[]>> _fileSignature = new Dictionary<string, List<byte[]>>
         {
             { ".gif", new List<byte[]> { new byte[] { 0x47, 0x49, 0x46, 0x38 } } },
             { ".png", new List<byte[]> { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } } },
