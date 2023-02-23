@@ -73,7 +73,33 @@ namespace BlazorWebApp.Pages
             try
             {
                 var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
-                
+
+                switch (response1.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.OK:
+                        myAPIMessage = await response1.Content.ReadAsStringAsync();
+                        break;
+                    case System.Net.HttpStatusCode.NoContent:
+                        myAPIMessage = "No content";
+                        break;
+                    case System.Net.HttpStatusCode.NotFound:
+                        myAPIMessage = "API Route not found!";
+                        break;
+                    case System.Net.HttpStatusCode.Forbidden:
+                        myAPIMessage = "Your Access to this API route is Forbidden!";
+                        break;
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        myAPIMessage = "Your Access to this API route is Unauthorized!";
+                        break;
+                    default:
+                        myAPIMessage = "Unhandled Error!";
+                        break;
+
+                }
+
+
+
+
             }
             catch (Exception Ex)
             {
@@ -81,30 +107,8 @@ namespace BlazorWebApp.Pages
                 myAPIMessage = "API not available";
                 // throw;
             }
-            
 
-            // switch (response1.StatusCode)
-            // {
-            //     case System.Net.HttpStatusCode.OK:
-            //         myAPIMessage = await response1.Content.ReadAsStringAsync();
-            //         break;
-            //     case System.Net.HttpStatusCode.NoContent:
-            //         myAPIMessage = "No content";
-            //         break;
-            //     case System.Net.HttpStatusCode.NotFound:
-            //         myAPIMessage = "API Route not found!";
-            //         break;
-            //     case System.Net.HttpStatusCode.Forbidden:
-            //         myAPIMessage = "Your Access to this API route is Forbidden!";
-            //         break;
-            //     case System.Net.HttpStatusCode.Unauthorized:
-            //         myAPIMessage = "Your Access to this API route is Unauthorized!";
-            //         break;
-            //     default:
-            //         myAPIMessage = "Unhandled Error!";
-            //         break;
 
-            // }
 
             // childmodal.Open();
 
