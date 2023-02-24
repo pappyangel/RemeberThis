@@ -16,7 +16,7 @@ public class RememberThisController : ControllerBase
 
     private readonly ILogger<RememberThisController> _logger;
     private readonly IConfiguration _config;
-    private string returnMsg = "Method Start";
+    private string returnMsg = "Controller Start";
     private string[] permittedExtensions = new string[] { ".gif", ".png", ".jpg", ".jpeg" };
     public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config)
     {
@@ -86,6 +86,8 @@ public class RememberThisController : ControllerBase
 
         var form = await multipartRequest.ReadFormAsync();
         var formFile = form.Files["file"];
+        string unsafeFileNameAndExt = formFile.FileName;
+
         await using var stream = formFile.OpenReadStream();
         using var ms = new MemoryStream();
 
@@ -93,12 +95,9 @@ public class RememberThisController : ControllerBase
 
         if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            // true
-            //write to storage method
+            await WritetoAzureStorage(ms, unsafeFileNameAndExt);           
+
         }
-
-
-
 
         return Ok(returnMsg);
     }
@@ -106,10 +105,10 @@ public class RememberThisController : ControllerBase
     private async Task WritetoAzureStorage(MemoryStream _ms, string filename)
     {
         string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"];
-        string ImageContainer =  _config["ImageContainer"];
+        string ImageContainer = _config["ImageContainer"];
         Boolean OverWrite = true;
-        
-        string trustedExtension = Path.GetExtension(filename).ToLowerInvariant(); 
+
+        string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
         string trustedNewFileName = Guid.NewGuid().ToString();
 
         BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
@@ -118,14 +117,14 @@ public class RememberThisController : ControllerBase
         _ms.Position = 0;
         await blobClient.UploadAsync(_ms, OverWrite);
 
-        
+        returnMsg = "Write to Storage success";
 
     }  // end of write to azure storage
     public bool IsValidFileExtensionAndSignature(string fileName, MemoryStream streamParam)
     {
 
         // might need to go somehwere higher in stack
-        returnMsg = "Method Start";
+        returnMsg = "Validation Method Start";
         returnMsg = "file check start";
 
         MemoryStream data = new MemoryStream();
