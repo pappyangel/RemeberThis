@@ -81,7 +81,7 @@ namespace BlazorWebApp.Pages
 
                 try
                 {
-                    var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis/Blaz", content);
+                    var response1 = await client.PostAsync("http://127.0.0.1:5197/RememberThis", content);
 
                     switch (response1.StatusCode)
                     {

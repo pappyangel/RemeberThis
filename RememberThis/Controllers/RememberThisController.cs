@@ -3,6 +3,7 @@ using System.Text.Json;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
+using RememberThis.DB;
 using SharedModels;
 
 
@@ -32,48 +33,8 @@ public class RememberThisController : ControllerBase
         return Ok(getItem);
     }
 
-    [HttpPost]
-    public ActionResult<rtItem> RememberThisUpload(rtItem _rtItem)
-    {
-        // HttpRequest request
-        HttpRequest multipartRequest = HttpContext.Request;
-
-        // var form = await request.ReadFormAsync();
-
-        // string? jsonData = multipartRequest.Form["jsonData"];
-
-        //rtItem myItem = new();
-
-        // rtItem myItem = JsonSerializer.Deserialize<rtItem>(jsonData);
-
-        _logger.LogInformation("RememberThisUpload  {DT}",
-            DateTime.UtcNow.ToLongTimeString());
-
-        // LocalTestMethod();
-
-        return Ok(_rtItem);
-
-    }
-
-    [HttpPost]
-    [Route("[action]")]
-    public ActionResult<rtItem> rtMulti()
-    {
-        HttpRequest multipartRequest = HttpContext.Request;
-
-        StringValues rtItemJson;
-        multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
-
-        rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
-
-        rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
-
-        return Ok(rtItemFromPost);
-    }
-
-    [HttpPost]
-    [Route("[action]")]
-    public async Task<ActionResult> Blaz()
+    [HttpPost]    
+    public async Task<ActionResult> RememberThisUpload()
     {
 
         HttpRequest multipartRequest = HttpContext.Request;
@@ -95,14 +56,19 @@ public class RememberThisController : ControllerBase
 
         if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            await WritetoAzureStorage(ms, unsafeFileNameAndExt);           
+            rtItemFromPost.rtImagePath = await WritetoAzureStorage(ms, unsafeFileNameAndExt); 
+            SqlDb sqlDb = new(_config);
+            int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
+
+            _logger.LogInformation("Received request to add this item: {@Item}", rtItemFromPost);            
 
         }
-
+        
+        //return $"Row(s) inserted were: {rowsAffected}";
         return Ok(returnMsg);
     }
 
-    private async Task WritetoAzureStorage(MemoryStream _ms, string filename)
+    private async Task<string> WritetoAzureStorage(MemoryStream _ms, string filename)
     {
         string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"];
         string ImageContainer = _config["ImageContainer"];
@@ -110,14 +76,17 @@ public class RememberThisController : ControllerBase
 
         string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
         string trustedNewFileName = Guid.NewGuid().ToString();
+        string trustedFileNameAndExt = trustedNewFileName + trustedExtension;
 
         BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
-        BlobClient blobClient = containerClient.GetBlobClient(trustedNewFileName + trustedExtension);
+        BlobClient blobClient = containerClient.GetBlobClient(trustedFileNameAndExt);
 
         _ms.Position = 0;
         await blobClient.UploadAsync(_ms, OverWrite);
 
         returnMsg = "Write to Storage success";
+
+        return trustedFileNameAndExt;
 
     }  // end of write to azure storage
     public bool IsValidFileExtensionAndSignature(string fileName, MemoryStream streamParam)

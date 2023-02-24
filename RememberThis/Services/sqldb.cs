@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SharedModels;
 using Microsoft.Extensions.Configuration;
 
-namespace cocktails.DB
+namespace RememberThis.DB
 {
     public class SqlDb
     {
@@ -14,8 +14,8 @@ namespace cocktails.DB
         private readonly IConfiguration _configuration;
 
         private List<rtItem> sqlrtItems = new();
-        private string tblName = "rtItems";
-        private string viewName = "rtItemsVw";
+        private string tblName = "Items";
+        private string viewName = "vw_Items";
 
         //private string selectClause = "Select id, name, price, rating, coalesce(imagepath,'', imagepath) ";
         private string selectClause = "Select id, name, price, rating, imagepath ";
@@ -31,10 +31,10 @@ namespace cocktails.DB
         public SqlConnection GetSQLCn()
         {
             var builder = new SqlConnectionStringBuilder(
-                _configuration["ConnectionStrings:defaultConnection"]);
+                _configuration["ConnectionStrings:defaultSQLConnection"]);
 
-            var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
-            //builder.Password = _configuration.GetValue<string>(keyVaultSecretLookup);
+            // var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
+            builder.Password = _configuration.GetValue<string>("SQLPW");
 
             SqlConnection sqlDBCn = new SqlConnection(builder.ConnectionString);
 
@@ -116,25 +116,7 @@ namespace cocktails.DB
 
             return sqlrtItems;
 
-        }
-        private int CRUD(string sqlStatetment)
-        {
-            SqlCommand command;
-            int rowsAffected;
-
-            SqlConnection SQLCn = GetSQLCn();
-            SQLCn.Open();
-
-            command = new SqlCommand(sqlStatetment, SQLCn);
-            command.CommandType = CommandType.Text;
-            rowsAffected = command.ExecuteNonQuery();
-
-            command.Dispose();
-            SQLCn.Close();
-
-            return rowsAffected;
-
-        }
+        }        
         private async Task<int> CRUDAsync(string sqlStatetment)
         {
             SqlCommand command;
@@ -176,7 +158,7 @@ namespace cocktails.DB
         public async Task<int> InsertrtItem(rtItem rtItem)
         {
             int crudResult;
-            string sql = $"Insert into {tblName} (User, Description, Location, Dt, ImagePath) values ('{rtItem.rtUserName}', {rtItem.rtDescription}, {rtItem.rtLocation}, {rtItem.rtDateTime}, {rtItem.rtImagePath})";
+            string sql = $"Insert into {tblName} ([User], Description, Location, Dt, ImagePath) values ('{rtItem.rtUserName}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
 
             crudResult = await CRUDAsync(sql);
 
