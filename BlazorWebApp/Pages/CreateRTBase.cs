@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 namespace BlazorWebApp.Pages
 {
 
-    public class AddRTBase : ComponentBase
+    public class CreateRTBase : ComponentBase
     {
         protected IBrowserFile? file;
         protected string? InfoMsg { get; set; } = "API Return Message";
