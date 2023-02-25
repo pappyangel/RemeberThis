@@ -13,12 +13,15 @@ namespace BlazorWebApp.Pages
     {
         protected IBrowserFile? file;
         protected string? InfoMsg { get; set; } = "API Return Message";
+        protected string? ChildModalBody { get; set; } = string.Empty;
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
 
-        public string apiUrl { get; set; } = "";
+        public string apiUrl { get; set; } = string.Empty;
         protected bool ShowPopUp { get; set; } = false;
+        
+        //pre-build item in dev mode so we don;t have to type one in each time we test
         protected rtItem thisrtItem { get; set; } =
             new rtItem
             {
@@ -28,7 +31,7 @@ namespace BlazorWebApp.Pages
                 rtLocation = "backyard",
                 rtDateTime = DateTime.UtcNow
             };
-        // protected async Task SubmitForm()
+        
         protected RTModalComponent childmodal { get; set; }
 
         [Inject]
@@ -49,8 +52,21 @@ namespace BlazorWebApp.Pages
 
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {
-            file = e.File;
-            await jsRuntime.InvokeVoidAsync("loadFileJS");
+            long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
+            
+             if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
+            {
+                ChildModalBody = "File size invalid";
+                childmodal.Open();
+                await jsRuntime.InvokeVoidAsync("ResetFilePicker");
+                
+            }
+            else
+            {
+                // file size is good so same to class variable and update privew on screen
+                file = e.File;            
+                await jsRuntime.InvokeVoidAsync("loadFileJS");
+            }
         }
         protected async Task SubmitForm()
         {
@@ -67,7 +83,7 @@ namespace BlazorWebApp.Pages
             //Add file             
             if (!((file.Size > 0) && (file.Size < _fileSizeLimit)))
             {
-                InfoMsg = "File size too large";
+                InfoMsg = "File size invalid";
             }
             else
             {
@@ -106,9 +122,6 @@ namespace BlazorWebApp.Pages
 
                     }
 
-
-
-
                 }
                 catch (Exception Ex)
                 {
@@ -119,7 +132,7 @@ namespace BlazorWebApp.Pages
 
 
 
-                // childmodal.Open();
+                
 
 
             }

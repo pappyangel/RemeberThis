@@ -27,14 +27,13 @@
 
 <RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
     <Title> Add a Memory Status</Title>
-    <Body> Persisting your memory to storage will be added in a future phase. </Body>
+    <Body> @ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
             @onclick='() => childmodal.SendModalButtonClicked("OK")'>
             <span class="oi oi-cloud" aria-hidden="true"></span> OK
         </button>
       </Footer>
-
 </RTModalComponent>
 
 
@@ -60,7 +59,7 @@
                     <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
                 </div>
                 <div class="column">
-                    <InputFile id="IF1" OnChange="SelectedFileProcess" class="form-control"
+                    <InputFile id="blazIF1" OnChange="SelectedFileProcess" class="form-control"
                         accept=".png,.jpg,.jpeg,.gif"  />                        
                     <br>
                     <img id="pageimage" height=auto width="175" src="./Images/No Image Selected.png"
