@@ -2,6 +2,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
+// builder.Services.AddServerSideBlazor().AddHubOptions(o => { o.MaximumReceiveMessageSize = 10 * 1024 * 1024;  }); // 10MB
+
+// builder.Services
+//     .AddServerSideBlazor()
+//     .AddHubOptions(opt =>
+//     {
+//         opt.MaximumReceiveMessageSize = 10 * 1024 * 1024;
+//         // opt.DisableImplicitFromServicesParameters = true;
+//     });
 
 var app = builder.Build();
 
@@ -21,5 +31,6 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.MapBlazorHub();
 
 app.Run();

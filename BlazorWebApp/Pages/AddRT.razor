@@ -1,0 +1,80 @@
+@page "/AddRT"
+@inherits AddRTBase
+
+
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+
+    textarea {
+        vertical-align: middle;
+    }
+
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+
+<RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
+    <Title> Add a Memory Status</Title>
+    <Body> Persisting your memory to storage will be added in a future phase. </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+      </Footer>
+
+</RTModalComponent>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center">Add a memory you want to save and share later!</h3>
+    </div>
+    <div class="card-body">
+        <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
+            <div class="row">
+                <div class="column">
+                    <label for="thisrtItem.rtUserName">User Name: </label>
+                    <input @bind="thisrtItem.rtUserName" placeholder="user"><br>
+                    <br>
+                    <label for="thisrtItem.rtLocation">Location : </label>
+                    <input @bind="thisrtItem.rtLocation" placeholder="location"><br>
+                    <br>
+                    <label for="thisrtItem.rtDateTime">Date/Time: </label>
+                    <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
+                    <br>
+                    <label>Description: </label>
+                    <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
+                </div>
+                <div class="column">
+                    <InputFile id="IF1" OnChange="SelectedFileProcess" class="form-control"
+                        accept=".png,.jpg,.jpeg,.gif"  />                        
+                    <br>
+                    <img id="pageimage" height=auto width="175" src="./Images/No Image Selected.png"
+                        alt="Select an image to share">
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center">
+                <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i> memory! </button>                
+                               
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<label >@InfoMsg </label>
+
+
