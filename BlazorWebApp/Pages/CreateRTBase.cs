@@ -5,13 +5,14 @@ using Microsoft.JSInterop;
 using System.Net.Http;
 using System.Text.Json;
 using System.Net.Http.Headers;
+using BlazorWebApp.Services;
 
 namespace BlazorWebApp.Pages
 {
 
     public class CreateRTBase : ComponentBase
     {
-        protected IBrowserFile? file;
+        protected IBrowserFile? file;        
         protected string? InfoMsg { get; set; } = "API Return Message";
         protected string? ChildModalBody { get; set; } = string.Empty;
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
@@ -63,13 +64,17 @@ namespace BlazorWebApp.Pages
             }
             else
             {
-                // file size is good so same to class variable and update privew on screen
+                // file size is good so save to class variable and update preview on screen
                 file = e.File;            
                 await jsRuntime.InvokeVoidAsync("loadFileJS");
             }
         }
         protected async Task SubmitForm()
         {
+            
+            PersistItem persistItem = new(Config);
+            string testReturn= persistItem.TestAccess();
+            
             long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             using var content = new MultipartFormDataContent();
