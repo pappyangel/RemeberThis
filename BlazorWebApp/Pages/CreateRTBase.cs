@@ -12,7 +12,7 @@ namespace BlazorWebApp.Pages
 
     public class CreateRTBase : ComponentBase
     {
-        protected IBrowserFile? file;        
+        protected IBrowserFile file = null!;        
         protected string? InfoMsg { get; set; } = "API Return Message";
         protected string? ChildModalBody { get; set; } = string.Empty;
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
@@ -33,23 +33,24 @@ namespace BlazorWebApp.Pages
                 rtDateTime = DateTime.UtcNow
             };
         
-        protected RTModalComponent childmodal { get; set; }
+        protected RTModalComponent childmodal { get; set; } = null!;
 
         [Inject]
-        protected IJSRuntime jsRuntime { get; set; }
+        protected IJSRuntime jsRuntime { get; set; } = null!;
 
         [Inject]
-        protected IHttpClientFactory ClientFactory { get; set; }
+        protected IHttpClientFactory ClientFactory { get; set; } = null!;
 
         [Inject]
-        protected IConfiguration Config { get; set; }
+         //protected IConfiguration Config  = null!; 
+
+        protected IConfiguration Config { get; set; } = null!;
 
         protected void DisplayBtnClicked(string _btnClicked)
         {
             InfoMsg = _btnClicked;
 
         }
-
 
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {
@@ -72,9 +73,17 @@ namespace BlazorWebApp.Pages
         protected async Task SubmitForm()
         {
             
-            PersistItem persistItem = new(Config);
-            string testReturn= persistItem.TestAccess();
+            // PersistItem persistItem = new(Config);
+            // string PersistReturnMsg = string.Empty;
+
+            var ms = new MemoryStream();
+            await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
+            ms.Position = 0;
+
+            // PersistReturnMsg= persistItem.AddItem(thisrtItem, ms);
             
+            // start of code block to move
+
             long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             using var content = new MultipartFormDataContent();
@@ -92,7 +101,7 @@ namespace BlazorWebApp.Pages
             }
             else
             {
-                var ms = new MemoryStream();
+                //var ms = new MemoryStream();
                 await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
                 ms.Position = 0;
                 var streamContent = new StreamContent(ms);
@@ -136,7 +145,7 @@ namespace BlazorWebApp.Pages
                 }
 
 
-
+                // end of code block to move
                 
 
 
