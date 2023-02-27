@@ -1,4 +1,5 @@
 using System.Net.Http.Headers;
+
 using System.Text.Json;
 using SharedModels;
 
@@ -6,12 +7,12 @@ namespace BlazorWebApp.Services
 {
     public class PersistItem
     {
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _configuration = null!;
         
-        protected IHttpClientFactory ClientFactory = null!;
-        //protected IHttpClientFactory ClientFactory { get; set; }
+        private IHttpClientFactory _ClientFactory = null!;
+        //private IHttpClientFactory ClientFactory { get; set; }
 
-        public PersistItem(IConfiguration configuration, IHttpClientFactory _ClientFactory)
+        public PersistItem(IConfiguration configuration, IHttpClientFactory ClientFactory)
         {
             // _logger = logger
             _configuration = configuration;
@@ -31,7 +32,8 @@ namespace BlazorWebApp.Services
             //long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             using var content = new MultipartFormDataContent();
-            var client = ClientFactory.CreateClient();
+            using HttpClient client = _ClientFactory.CreateClient();
+            //var client = ClientFactory.CreateClient();
 
             //Add form data that bound to class into jsaon string via serialization
             string jsonString = JsonSerializer.Serialize(ItemtoAdd);
@@ -74,6 +76,7 @@ namespace BlazorWebApp.Services
                 catch (Exception Ex)
                 {
                     // Opps!  Did we forget to start the API?!?
+                    InfoMsg = Ex.Message;
                     InfoMsg = "API not available";
                     // throw;
                 }
