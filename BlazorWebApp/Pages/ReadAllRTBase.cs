@@ -29,7 +29,7 @@ namespace BlazorWebApp.Pages;
         // Create a list of objects - mock data initially
         // See SharedClassLib SharedModels Project for definition of rtItem Model
         // initialize a list of objects
-        List<rtItem> rtItemList = new List<rtItem>
+        public List<rtItem> rtItemList = new List<rtItem>
         {
             new rtItem
             {   rtId = 1001,

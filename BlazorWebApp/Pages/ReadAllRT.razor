@@ -1,14 +1,51 @@
 @page "/ReadAllRT"
 @inherits ReadAllRTBase
+@* @inherits System.Text.Json; *@
+@* @inherits SharedModels.rtItem *@
 
 
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+th, td {
+  padding: 25px;
+}
+</style>
 
-<div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center">Here are your memories!</h3>
-    </div>
-    <div class="card-body">
-    </div>
+<div class="text-center">
+    <h1 class="display-4">List of Items</h1>
+</div>
+
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+th, td {
+  padding: 25px;
+}
+</style>
+
+<div class="card-deck">
+    @foreach (var item in rtItemList)
+    {        
+        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
+            <div class="card-header">
+                <h3>@item.rtId</h3>
+                <p>User: @item.rtUserName</p>
+                <br>
+                <p>Description: @item.rtDescription</p>
+                <br>
+                <p>Location: @item.rtLocation</p>
+                <br>
+                <p>DateTime: @item.rtDateTime</p>
+                <br>
+                <p>ImagePath: @item.rtImagePath</p>
+
+            </div>    
+
+        </div>
+    }
 </div>
 
 <label >@InfoMsg </label>

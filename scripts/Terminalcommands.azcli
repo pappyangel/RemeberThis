@@ -29,3 +29,17 @@ dotnet watch
 
 ### az cli
 az login
+
+### Add reference to SharedClassLibrary to Project (SharedModel)
+
+dotnew classlib
+### now add reference to this classlib
+dotnet add [<PROJECT>] reference [-f|--framework <FRAMEWORK>]
+     [--interactive] <PROJECT_REFERENCES>
+
+dotnet add reference -h|--help
+
+### produces this in proj file
+  <ItemGroup>
+    <ProjectReference Include="..\SharedModels\SharedModels.csproj" />   
+  </ItemGroup>
