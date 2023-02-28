@@ -24,7 +24,7 @@ namespace BlazorWebApp.Services
         {
             return "You got to Test Access inside Persist Item";
         }
-        public async Task<string> AddItem(rtItem ItemtoAdd, MemoryStream ImageToAdd)
+        public async Task<string> AddItem(rtItem ItemtoAdd, MemoryStream ImageToAdd, string FileName, string FileType)
         {
             string AddItemsReturnMsg = "AddItems started";
             string InfoMsg = string.Empty;

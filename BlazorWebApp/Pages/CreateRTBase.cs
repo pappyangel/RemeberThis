@@ -84,7 +84,10 @@ namespace BlazorWebApp.Pages
             await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
             ms.Position = 0;
 
-            PersistReturnMsg = await _PersistItem.AddItem(thisrtItem, ms);
+            PersistReturnMsg = await _PersistItem.AddItem(thisrtItem, ms,file.Name,file.ContentType);
+            
+
+            
 
             ms.Position = 0;
             
