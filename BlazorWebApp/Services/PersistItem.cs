@@ -26,24 +26,23 @@ namespace BlazorWebApp.Services
         }
         public async Task<string> AddItem(rtItem ItemtoAdd, MemoryStream ImageToAdd, string FileName, string FileType)
         {
-            string AddItemsReturnMsg = "AddItems started";
-            string InfoMsg = string.Empty;
+            string AddItemsReturnMsg = "AddItems started";            
 
             //long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             using var content = new MultipartFormDataContent();
             using HttpClient client = _ClientFactory.CreateClient();
-            //var client = ClientFactory.CreateClient();
+            
 
-            //Add form data that bound to class into jsaon string via serialization
+            //Add form data that bound to class into json string via serialization
             string jsonString = JsonSerializer.Serialize(ItemtoAdd);
             var classContent = new StringContent(jsonString);
             content.Add(classContent, "classData");
 
             
             var streamContent = new StreamContent(ImageToAdd);
-            streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse("Need File Type");
-            content.Add(streamContent, "file", "Need File Name");
+            streamContent.Headers.ContentType = MediaTypeHeaderValue.Parse(FileType);
+            content.Add(streamContent, "file", FileName);
 
                 try
                 {
@@ -52,22 +51,22 @@ namespace BlazorWebApp.Services
                     switch (response1.StatusCode)
                     {
                         case System.Net.HttpStatusCode.OK:
-                            InfoMsg = await response1.Content.ReadAsStringAsync();
+                            AddItemsReturnMsg = await response1.Content.ReadAsStringAsync();                            
                             break;
                         case System.Net.HttpStatusCode.NoContent:
-                            InfoMsg = "No content";
+                            AddItemsReturnMsg = "No content";
                             break;
                         case System.Net.HttpStatusCode.NotFound:
-                            InfoMsg = "API Route not found!";
+                            AddItemsReturnMsg = "API Route not found!";
                             break;
                         case System.Net.HttpStatusCode.Forbidden:
-                            InfoMsg = "Your Access to this API route is Forbidden!";
+                            AddItemsReturnMsg = "Your Access to this API route is Forbidden!";
                             break;
                         case System.Net.HttpStatusCode.Unauthorized:
-                            InfoMsg = "Your Access to this API route is Unauthorized!";
+                            AddItemsReturnMsg = "Your Access to this API route is Unauthorized!";
                             break;
                         default:
-                            InfoMsg = "Unhandled Error!";
+                            AddItemsReturnMsg = "Unhandled Error!";
                             break;
 
                     }
@@ -76,17 +75,13 @@ namespace BlazorWebApp.Services
                 catch (Exception Ex)
                 {
                     // Opps!  Did we forget to start the API?!?
-                    InfoMsg = Ex.Message;
-                    InfoMsg = "API not available";
+                    AddItemsReturnMsg = Ex.Message;
+                    AddItemsReturnMsg = "API not available";
                     // throw;
                 }
-
-
-
-
             
             
-            AddItemsReturnMsg = "AddItems completed";
+            
 
             return AddItemsReturnMsg;
         }
