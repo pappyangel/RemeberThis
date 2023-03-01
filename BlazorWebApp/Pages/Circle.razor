@@ -4,17 +4,65 @@
 
 <h1>Test Page for Image in Cirlce</h1>
 
-<img class="rounded-circle"  src="./Images/BabaMan.jpg" alt="">
+
+@* <style>
+    .img-cover {
+        object-fit: cover;
+        object-position: center;
+    }
+</style>
+
+
+<img src="./Images/BabaMan.jpg" width=auto height="175" class="rounded-circle" alt="image">
+<br><br><br>
+<img src="./Images/BabaMan.jpg" width="175" height="175" class="rounded-circle" alt="image">
+<br><br><br>
+*@
+<img src="./Images/BabaMan.jpg" width="175" height=auto alt="image">
+<img src="./Images/BabaMan.jpg" width=auto height="175" alt="image">
+
+
+
+<div class="container py-4">
+    <div class="row g-4 row-cols-1 row-cols-sm-2 row-cols-md-3">
+        <div class="col">
+            <div class="card">
+                <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+                    <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Mahattan at Baba</h5>
+                    <p class="card-text">This is a Manhattan we drank at the bar at Baba's.</p>
+                    <a href="#" class="btn btn-primary">View More</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <br><br><br>
+<div class="card">
+    <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+        <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
+    </div>
+</div>
 
-<img  height=auto width="175" src="./Images/BabaMan.jpg" alt="">
+@* <img class="rounded-circle" src="./Images/BabaMan.jpg" alt="image"> *@
 
-<br><br><br>
+@* <br><br><br>
 
 <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
-    <img class="img-circle" height=auto width="175" src="./Images/BabaMan.jpg" alt="">
+    <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
 </div>
+
+<div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+    <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="">
+</div>
+<br><br><br>
+<div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+    <img class="img-circle" height=auto width="175" src="./Images/BabaMan.jpg" alt="image">
+    <img src="./Images/BabaMan.jpg" alt="image">
+</div> *@
 
 
 
