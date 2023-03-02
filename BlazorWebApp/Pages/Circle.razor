@@ -5,22 +5,33 @@
 <h1>Test Page for Image in Cirlce</h1>
 
 
-@* <style>
-.img-cover {
-object-fit: cover;
-object-position: center;
-}
-</style>
 
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center">This is a card showing an image within a circle!</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="column">
+                <p class="card-text">WHAT: This is a Manhattan we drank at the bar.</p>
+                <p class="card-text">WHERE: At Baba Sushi restaurant.</p>
+                <p class="card-text">WHEN: Tuesday, July 29th, 2022.</p>
+            </div>
+            <div class="column" align="center">
+                <div class="w-50 p-3">
+                    <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+                        <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
+                    </div>
+                </div>
 
-<img src="./Images/BabaMan.jpg" width=auto height="175" class="rounded-circle" alt="image">
-<br><br><br>
-<img src="./Images/BabaMan.jpg" width="175" height="175" class="rounded-circle" alt="image">
-<br><br><br>
-*@
-<img src="./Images/BabaMan.jpg" width="175" height=auto alt="image">
-<img src="./Images/BabaMan.jpg" width=auto height="175" alt="image">
+            </div>
+        </div>
+    </div>
+    <div class="card-footer d-flex align-items-center">
+        <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i> memory! </button>
 
+    </div>
+</div>
 
 
 <div class="container py-4">
@@ -30,9 +41,13 @@ object-position: center;
                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
                     <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
                 </div>
-                <div class="card-body">
+                <div class="card-header">
                     <h5 class="card-title">Mahattan at Baba</h5>
+                </div>
+                <div class="card-body">
                     <p class="card-text">This is a Manhattan we drank at the bar at Baba's.</p>
+                </div>
+                <div class="card-footer">
                     <a href="#" class="btn btn-primary">View More</a>
                 </div>
             </div>
@@ -47,7 +62,7 @@ object-position: center;
             <div class="card">
                 <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
                     <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
-                </div>                
+                </div>
             </div>
         </div>
     </div>
@@ -64,6 +79,25 @@ object-position: center;
         </div>
     </div>
 </div>
+
+
+@* <style>
+.img-cover {
+object-fit: cover;
+object-position: center;
+}
+</style>
+
+
+<img src="./Images/BabaMan.jpg" width=auto height="175" class="rounded-circle" alt="image">
+<br><br><br>
+<img src="./Images/BabaMan.jpg" width="175" height="175" class="rounded-circle" alt="image">
+<br><br><br>
+
+<img src="./Images/BabaMan.jpg" width="175" height=auto alt="image">
+<img src="./Images/BabaMan.jpg" width=auto height="175" alt="image">
+@* *@
+
 
 @* <img class="rounded-circle" src="./Images/BabaMan.jpg" alt="image"> *@
 
