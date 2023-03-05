@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Net.Http.Headers;
 using BlazorWebApp.Services;
+using Microsoft.AspNetCore.Components.Routing;
 
 namespace BlazorWebApp.Pages
 {
@@ -32,6 +33,7 @@ namespace BlazorWebApp.Pages
                 rtLocation = "backyard",
                 rtDateTime = DateTime.UtcNow
             };
+        protected EditContext? rtItemEditContext;
 
         protected RTModalComponent childmodal { get; set; } = null!;
 
@@ -46,6 +48,11 @@ namespace BlazorWebApp.Pages
 
         [Inject]
         protected PersistItem _PersistItem { get; set; } = null!;
+
+        protected override void OnInitialized()
+        {
+            rtItemEditContext = new(thisrtItem);
+        }
 
         protected void DisplayBtnClicked(string _btnClicked)
         {
@@ -71,10 +78,22 @@ namespace BlazorWebApp.Pages
                 await jsRuntime.InvokeVoidAsync("loadFileJS");
             }
         }
+
+        protected async Task ConfirmInternalNavigation(LocationChangingContext context)
+        {
+            var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
+
+            if (!confirmed)
+            {
+                context.PreventNavigation();
+            }
+        }
+
         protected async Task SubmitForm()
         {
             string PersistReturnMsg = string.Empty;
 
+            // need to add code to handle no image selected
             var ms = new MemoryStream();
             await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
             ms.Position = 0;

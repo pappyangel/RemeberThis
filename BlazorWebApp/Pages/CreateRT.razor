@@ -43,20 +43,22 @@
         <h3 style="text-align:center">Add a memory you want to save and share later!</h3>
     </div>
     <div class="card-body">
-        <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm">
+        @* <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm"> *@
+        <EditForm EditContext="@rtItemEditContext" OnValidSubmit="SubmitForm">
             <div class="row">
                 <div class="column">
-                    <label for="thisrtItem.rtUserName">User Name: </label>
-                    <input @bind="thisrtItem.rtUserName" placeholder="user"><br>
-                    <br>
-                    <label for="thisrtItem.rtLocation">Location : </label>
-                    <input @bind="thisrtItem.rtLocation" placeholder="location"><br>
-                    <br>
-                    <label for="thisrtItem.rtDateTime">Date/Time: </label>
-                    <input @bind="thisrtItem.rtDateTime" placeholder="Date/Time"><br>
-                    <br>
-                    <label>Description: </label>
-                    <textarea rows="3" cols="23" @bind="thisrtItem.rtDescription" placeholder="Enter text"></textarea>
+                    <label for="rtUser">User Name: </label>
+                    <InputText id="rtUser" @bind-Value="@thisrtItem.rtUserName" class="form-control" />
+                    <br><br>
+                    <label for="rtLocation">Location : </label>
+                    <InputText id="rtLocation" @bind-Value="@thisrtItem.rtLocation" class="form-control" />
+                    <br><br>
+                    <label for="rtDateTime">Date/Time: </label>
+                    <InputDate id="rtDateTime" @bind-Value="@thisrtItem.rtDateTime" class="form-control" />
+                    <br><br>
+                    <label for="rtDescription">Description: </label>
+                    <InputTextArea id="rtDescription" rows="3" cols="23" @bind-Value="@thisrtItem.rtDescription" class="form-control">
+                    </InputTextArea>
                 </div>
                 <div class="column">
                     <InputFile id="blazIF1" OnChange="SelectedFileProcess" class="form-control"
@@ -75,5 +77,8 @@
 </div>
 
 <label >@InfoMsg </label>
+
+  <NavigationLock ConfirmExternalNavigation="@(rtItemEditContext!.IsModified())" 
+                  OnBeforeInternalNavigation="ConfirmInternalNavigation" />
 
 
