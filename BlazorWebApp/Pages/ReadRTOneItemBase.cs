@@ -23,7 +23,7 @@ namespace BlazorWebApp.Pages;
             new rtItem
             {
                 rtId = 1001,
-                rtUserName = "Cosmo",
+                rtUserName = "Cosmo-1001",
                 rtDescription = "fun time digging hole for bone",
                 rtLocation = "backyard",
                 rtDateTime = DateTime.UtcNow
