@@ -1,0 +1,35 @@
+﻿@page "/Stream"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+
+<PageTitle>Stream</PageTitle>
+
+<h1>Stream Image</h1>
+
+
+<p>
+    <img id="image" />
+</p>
+
+<button @onclick="SetImageAsync">
+    Set Image
+</button>
+
+@code {
+    private async Task<System.IO.Stream> GetImageStreamAsync()
+    {
+        @* return await Http.GetStreamAsync("https://avatars.githubusercontent.com/u/9141961"); *@
+        return await Http.GetStreamAsync("https://cocktailsfrontend.azurewebsites.net/images/78d6434d-1b86-47a5-bfb8-f6848e71ae58_ElijahCraig.jpg");
+        @* return await Http.GetStreamAsync(""); *@
+        
+        
+    }
+
+    private async Task SetImageAsync()
+    {
+        var imageStream = await GetImageStreamAsync();
+        var dotnetImageStream = new DotNetStreamReference(imageStream);
+        await JS.InvokeVoidAsync("setImage", "image", dotnetImageStream);
+    }
+}
