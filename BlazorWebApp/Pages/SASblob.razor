@@ -1,0 +1,65 @@
+﻿@* @page "/SASdelegate"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+
+<PageTitle>Stream</PageTitle>
+
+<h1>SAS UserDelegate Blob Image</h1>
+
+
+<p>
+    <img id="image" />
+</p>
+
+<button @onclick="SetImageAsync">
+    Set Image
+</button>
+
+@code {
+    async static Task<Uri> GetUserDelegationSasBlob(BlobClient blobClient)
+    {
+        BlobServiceClient blobServiceClient =
+        blobClient.GetParentBlobContainerClient().GetParentBlobServiceClient();
+
+        // Get a user delegation key for the Blob service that's valid for 7 days.
+        // You can use the key to generate any number of shared access signatures
+        // over the lifetime of the key.
+        Azure.Storage.Blobs.Models.UserDelegationKey userDelegationKey =
+        await blobServiceClient.GetUserDelegationKeyAsync(DateTimeOffset.UtcNow,
+        DateTimeOffset.UtcNow.AddDays(7));
+
+        // Create a SAS token that's also valid for 7 days.
+        BlobSasBuilder sasBuilder = new BlobSasBuilder()
+            {
+                BlobContainerName = blobClient.BlobContainerName,
+                BlobName = blobClient.Name,
+                Resource = "b",
+                StartsOn = DateTimeOffset.UtcNow,
+                ExpiresOn = DateTimeOffset.UtcNow.AddDays(7)
+            };
+
+        // Specify read and write permissions for the SAS.
+        sasBuilder.SetPermissions(BlobSasPermissions.Read |
+        BlobSasPermissions.Write);
+
+        // Add the SAS token to the blob URI.
+        BlobUriBuilder blobUriBuilder = new BlobUriBuilder(blobClient.Uri)
+            {
+                // Specify the user delegation key.
+                Sas = sasBuilder.ToSasQueryParameters(userDelegationKey,
+            blobServiceClient.AccountName)
+            };
+
+        Console.WriteLine("Blob user delegation SAS URI: {0}", blobUriBuilder);
+        Console.WriteLine();
+        return blobUriBuilder.ToUri();
+    }
+
+    private async Task SetImageAsync()
+    {
+        var imageSASdelegate = await GetUserDelegationSasBlob();
+        var dotnetImageSASdelegate = new DotNetStreamReference(imageSASdelegate);
+        await JS.InvokeVoidAsync("setImage", "image", dotnetImageSASdelegate);
+    }
+} *@
