@@ -42,7 +42,7 @@ public class RememberThisController : ControllerBase
         // get class data from key value pair out of multi part
         StringValues rtItemJson;
         multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
-        rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
+        rtItem rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
         rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
 
         var form = await multipartRequest.ReadFormAsync();
@@ -75,7 +75,8 @@ public class RememberThisController : ControllerBase
         Boolean OverWrite = true;
 
         string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
-        string trustedNewFileName = Guid.NewGuid().ToString();
+        // string trustedNewFileName = Guid.NewGuid().ToString();
+        string trustedNewFileName = string.Format("{0:MM-dd-yyyy-H:mm:ss.fff}", DateTime.UtcNow);
         string trustedFileNameAndExt = trustedNewFileName + trustedExtension;
 
         BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
