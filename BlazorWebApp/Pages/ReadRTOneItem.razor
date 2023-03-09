@@ -3,8 +3,7 @@
 
 
 
-
-<style>
+@* <style>
 table, th, td {
   border: 1px solid black;
 }
@@ -24,76 +23,26 @@ table, th, td {
 th, td {
   padding: 25px;
 }
-</style>
-
-<!-- <div class="card-deck">
-    @foreach (var item in rtItemList)
-    {        
-        <div class="card m-3" style="min-width: 18rem; max-width:30.5%;">
-            <div class="card-header">
-                <h3>@item.rtId</h3>
-                <p>User: @item.rtUserName</p>
-                <br>
-                <p>Description: @item.rtDescription</p>
-                <br>
-                <p>Location: @item.rtLocation</p>
-                <br>
-                <p>DateTime: @item.rtDateTime</p>
-                <br>
-                <p>ImagePath: @item.rtImagePath</p>
-
-            </div>    
-
-        </div>
-    }
-</div> -->
-
-
-@* <div class="container">
-
-            <div class="col-md-4">
-                <div class="card">
-                    <div class="card-body border border-3">
-                        <h5 class="card-header bg-primary text-white" >@thisrtItem.rtUserName</h5>
-                        <p class="card-text">@thisrtItem.rtDescription</p>
-                        <p class="card-text">@thisrtItem.rtLocation</p>
-                        <p class="card-text">@thisrtItem.rtDateTime</p>
-                            
-                        <img class="rounded-circle" border-radius="50%" height="50%" width="50%" src="./Images/BabaMan.jpg"  alt="">
-                        
-                        <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
-                        <img  class="img-circle"  src="./Images/BabaMan.jpg"  alt="">
-                            
-                        </div>  
-                </div>
-                </div>
-            </div>
-
-</div> *@
+</style> *@
 
 <div class="card">
     <div class="card-header">
-        <h3 style="text-align:center">This is a card showing an image within a circle!</h3>
+        <h3 style="text-align:center">Here is your <i>Remember This</i> Memory!</h3>
     </div>
     <div class="card-body">
         <div class="row">
             <div class="column">
-                <p class="card-text">UniqueId: "@thisrtItem.rtId"</p>
-                <p class="card-text">What: "@thisrtItem.rtDescription"</p>
-                <p class="card-text">WHERE:  "@thisrtItem.rtLocation".</p>
-                <p class="card-text">WHEN:  "@thisrtItem.rtDateTime"</p>
-                 <p class="card-text">WHEN:  "@thisrtItem.rtDateTime"</p>
-                <p> when long "@myTicks"</p> 
-
-                 <p> when string "@myTicksString"</p> 
+                <p class="card-text">UniqueId: @thisrtItem.rtId</p>
+                <p class="card-text">What: @thisrtItem.rtDescription</p>
+                <p class="card-text">WHERE:  @thisrtItem.rtLocation.</p>
+                <p class="card-text">WHEN:  @thisrtItem.rtDateTime</p>                        
             </div>
             <div class="column" align="center">
                 <div class="w-50 p-3">
                     <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
-                        <img src="./Images/BabaMan.jpg" class="card-img-top img-cover" alt="Manhattan at Baba">
+                        <img src=@thisrtItem.rtImagePath class="card-img-top img-cover" alt="Manhattan at Baba">
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -101,6 +50,7 @@ th, td {
 
 
 
-<label >@InfoMsg </label>
+<br>
+<label ><b>Debug Info:</b> @InfoMsg </label>
 
 

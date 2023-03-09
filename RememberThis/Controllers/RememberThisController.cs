@@ -33,6 +33,16 @@ public class RememberThisController : ControllerBase
         return Ok(getItem);
     }
 
+
+[HttpGet(Name = "GetRememberThis")]
+    public ActionResult<string> Get(string itemId)
+    {
+        // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+        string GetOneReturnMsg = "you made it to Get One End Point";
+
+        return Ok(GetOneReturnMsg);
+    }
+
     [HttpPost]    
     public async Task<ActionResult> RememberThisUpload()
     {
