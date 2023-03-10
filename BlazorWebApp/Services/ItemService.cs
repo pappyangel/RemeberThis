@@ -5,11 +5,11 @@ using SharedModels;
 
 namespace BlazorWebApp.Services
 {
-    public class PersistItem
+    public class ItemService
     {
         private readonly IConfiguration _configuration = null!;
 
-        private string PersistItemsReturnMsg = string.Empty;
+        private string ItemServicesReturnMsg = string.Empty;
 
         private IHttpClientFactory _ClientFactory = null!;
         //private IHttpClientFactory ClientFactory { get; set; }
@@ -20,7 +20,7 @@ namespace BlazorWebApp.Services
 
         public string apiUrl { get; set; } = string.Empty;
 
-        public PersistItem(IConfiguration configuration, IHttpClientFactory ClientFactory)
+        public ItemService(IConfiguration configuration, IHttpClientFactory ClientFactory)
         {
             // _logger = logger
             _configuration = configuration;
@@ -33,12 +33,12 @@ namespace BlazorWebApp.Services
             return "You got to Test Access inside Persist Item";
         }
 
-        public async Task<string> GetOneItemAsync(string ItemToGet)
+        public async Task<string> GetOneItemAsync(int ItemToGet)
         {
 
-            PersistItemsReturnMsg = "GetOneItem started";
+            ItemServicesReturnMsg = "GetOneItem started";
 
-            apiUrl = apiBase + apiRoute + "id/" + ItemToGet;
+            apiUrl = apiBase + apiRoute + "id/" + ItemToGet.ToString();
 
             
             using HttpClient apiClient = _ClientFactory.CreateClient();
@@ -52,40 +52,40 @@ namespace BlazorWebApp.Services
                 switch (response1.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:
-                        PersistItemsReturnMsg = await response1.Content.ReadAsStringAsync();
+                        ItemServicesReturnMsg = await response1.Content.ReadAsStringAsync();
                         break;
                     case System.Net.HttpStatusCode.NoContent:
-                        PersistItemsReturnMsg = "No content";
+                        ItemServicesReturnMsg = "No content";
                         break;
                     case System.Net.HttpStatusCode.NotFound:
-                        PersistItemsReturnMsg = "API Route not found!";
+                        ItemServicesReturnMsg = "API Route not found!";
                         break;
                     case System.Net.HttpStatusCode.Forbidden:
-                        PersistItemsReturnMsg = "Your Access to this API route is Forbidden!";
+                        ItemServicesReturnMsg = "Your Access to this API route is Forbidden!";
                         break;
                     case System.Net.HttpStatusCode.Unauthorized:
-                        PersistItemsReturnMsg = "Your Access to this API route is Unauthorized!";
+                        ItemServicesReturnMsg = "Your Access to this API route is Unauthorized!";
                         break;
                     default:
-                        PersistItemsReturnMsg = "Unhandled Error!";
+                        ItemServicesReturnMsg = "Unhandled Error!";
                         break;
                 }
             }
             catch (Exception Ex)
             {
                 // Opps!  Did we forget to start the API?!?
-                PersistItemsReturnMsg = Ex.Message;
-                PersistItemsReturnMsg = "API not available";
+                ItemServicesReturnMsg = Ex.Message;
+                ItemServicesReturnMsg = "API not available";
                 // throw;
             }
 
 
-            return PersistItemsReturnMsg;
+            return ItemServicesReturnMsg;
 
         }
         public async Task<string> AddItem(rtItem ItemtoAdd, MemoryStream ImageToAdd, string FileName, string FileType)
         {
-            PersistItemsReturnMsg = "AddItems started";
+            ItemServicesReturnMsg = "AddItems started";
 
             //long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
@@ -110,22 +110,22 @@ namespace BlazorWebApp.Services
                 switch (response1.StatusCode)
                 {
                     case System.Net.HttpStatusCode.OK:
-                        PersistItemsReturnMsg = await response1.Content.ReadAsStringAsync();
+                        ItemServicesReturnMsg = await response1.Content.ReadAsStringAsync();
                         break;
                     case System.Net.HttpStatusCode.NoContent:
-                        PersistItemsReturnMsg = "No content";
+                        ItemServicesReturnMsg = "No content";
                         break;
                     case System.Net.HttpStatusCode.NotFound:
-                        PersistItemsReturnMsg = "API Route not found!";
+                        ItemServicesReturnMsg = "API Route not found!";
                         break;
                     case System.Net.HttpStatusCode.Forbidden:
-                        PersistItemsReturnMsg = "Your Access to this API route is Forbidden!";
+                        ItemServicesReturnMsg = "Your Access to this API route is Forbidden!";
                         break;
                     case System.Net.HttpStatusCode.Unauthorized:
-                        PersistItemsReturnMsg = "Your Access to this API route is Unauthorized!";
+                        ItemServicesReturnMsg = "Your Access to this API route is Unauthorized!";
                         break;
                     default:
-                        PersistItemsReturnMsg = "Unhandled Error!";
+                        ItemServicesReturnMsg = "Unhandled Error!";
                         break;
 
                 }
@@ -134,15 +134,15 @@ namespace BlazorWebApp.Services
             catch (Exception Ex)
             {
                 // Opps!  Did we forget to start the API?!?
-                PersistItemsReturnMsg = Ex.Message;
-                PersistItemsReturnMsg = "API not available";
+                ItemServicesReturnMsg = Ex.Message;
+                ItemServicesReturnMsg = "API not available";
                 // throw;
             }
 
 
 
 
-            return PersistItemsReturnMsg;
+            return ItemServicesReturnMsg;
         }
 
 

@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
-builder.Services.AddTransient<PersistItem>();
+builder.Services.AddTransient<ItemService>();
 
 
 var app = builder.Build();

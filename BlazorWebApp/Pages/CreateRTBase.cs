@@ -47,7 +47,7 @@ namespace BlazorWebApp.Pages
         protected IConfiguration Config { get; set; } = null!;
 
         [Inject]
-        protected PersistItem _PersistItem { get; set; } = null!;
+        protected ItemService _ItemService { get; set; } = null!;
 
         protected override void OnInitialized()
         {
@@ -98,7 +98,7 @@ namespace BlazorWebApp.Pages
             await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
             ms.Position = 0;
 
-            PersistReturnMsg = await _PersistItem.AddItem(thisrtItem, ms, file.Name, file.ContentType);
+            PersistReturnMsg = await _ItemService.AddItem(thisrtItem, ms, file.Name, file.ContentType);
 
             InfoMsg = PersistReturnMsg;
 

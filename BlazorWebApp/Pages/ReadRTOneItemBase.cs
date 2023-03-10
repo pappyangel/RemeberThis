@@ -16,7 +16,7 @@ public class ReadRTOneItemBase : ComponentBase
     protected string? ChildModalBody { get; set; } = string.Empty;
 
     [Inject]
-    protected PersistItem _PersistItem { get; set; } = null!;
+    protected ItemService _ItemService { get; set; } = null!;
 
 
 
@@ -33,7 +33,7 @@ public class ReadRTOneItemBase : ComponentBase
         thisrtItem.rtImagePath = "./Images/Cosmo-sox.png";
 
 
-        InfoMsg =  await _PersistItem.GetOneItemAsync("1001");
+        InfoMsg =  await _ItemService.GetOneItemAsync(1001);
 
         //InfoMsg = "back from API";
 
