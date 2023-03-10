@@ -10,7 +10,8 @@ using SharedModels;
 namespace RememberThis.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+// [Route("[controller]")]
+[Route("RememberThis")]
 public class RememberThisController : ControllerBase
 {
 
@@ -34,14 +35,17 @@ public class RememberThisController : ControllerBase
         return Ok(getItem);
     }
 
-    // [HttpGet("id/{id:string}")]
-    // public ActionResult<string> GetOne(string itemId)
-    // {
-    //     // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
-    //     string GetOneReturnMsg = "you made it to Get One End Point";
+    // [HttpGet("id/{id:int}")]
+    [HttpGet("id/{itemId}")]
+    public ActionResult<string> GetOne(int itemId)
+    {
+        // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+        // string GetOneReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
-    //     return Ok(GetOneReturnMsg);
-    // }
+        string GetOneReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
+
+        return Ok(GetOneReturnMsg);
+    }
 
     [HttpPost]
     public async Task<ActionResult> RememberThisUpload()

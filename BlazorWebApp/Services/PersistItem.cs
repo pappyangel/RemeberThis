@@ -38,7 +38,7 @@ namespace BlazorWebApp.Services
 
             PersistItemsReturnMsg = "GetOneItem started";
 
-            apiUrl = apiBase + apiRoute + ItemToGet;
+            apiUrl = apiBase + apiRoute + "id/" + ItemToGet;
 
             
             using HttpClient apiClient = _ClientFactory.CreateClient();
