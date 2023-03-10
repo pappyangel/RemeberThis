@@ -20,7 +20,7 @@ public class ReadRTOneItemBase : ComponentBase
 
 
 
-    protected async override void OnInitialized()
+    protected async override Task OnInitializedAsync()
     {
         InfoMsg = "OnInitializedXX";
         //Replace below with call to API
@@ -35,7 +35,7 @@ public class ReadRTOneItemBase : ComponentBase
 
         InfoMsg =  await _PersistItem.GetOneItemAsync("1001");
 
-        InfoMsg = "back from API";
+        //InfoMsg = "back from API";
 
 
 
