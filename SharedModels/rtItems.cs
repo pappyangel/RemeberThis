@@ -26,7 +26,7 @@ public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
 
     public override string ToString()
     {
-        return "Id: " + rtId + ", User: " + rtUserName + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime;
+        return "Id: " + rtId + " File: " + rtImagePath + ", User: " + rtUserName + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime;
     }
 
 }

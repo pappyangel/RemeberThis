@@ -120,7 +120,7 @@ namespace RememberThis.DB
         private async Task<int> CRUDAsync(string sqlStatetment)
         {
             SqlCommand command;
-            int rowsAffected;
+            int rowsAffected = 0;
 
             SqlConnection SQLCn = GetSQLCn();
             await SQLCn.OpenAsync();
