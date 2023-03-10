@@ -25,25 +25,25 @@ public class RememberThisController : ControllerBase
         _config = config;
     }
 
-    [HttpGet(Name = "GetRememberThis")]
-    public ActionResult<rtItem> Get()
+    // [HttpGet(Name = "GetRememberThis")]
+    [HttpGet]
+    public ActionResult<rtItem> GetAll()
     {
         rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
 
         return Ok(getItem);
     }
 
+    // [HttpGet("id/{id:string}")]
+    // public ActionResult<string> GetOne(string itemId)
+    // {
+    //     // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+    //     string GetOneReturnMsg = "you made it to Get One End Point";
 
-[HttpGet(Name = "GetRememberThis")]
-    public ActionResult<string> Get(string itemId)
-    {
-        // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
-        string GetOneReturnMsg = "you made it to Get One End Point";
+    //     return Ok(GetOneReturnMsg);
+    // }
 
-        return Ok(GetOneReturnMsg);
-    }
-
-    [HttpPost]    
+    [HttpPost]
     public async Task<ActionResult> RememberThisUpload()
     {
 
@@ -66,14 +66,14 @@ public class RememberThisController : ControllerBase
 
         if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            rtItemFromPost.rtImagePath = await WritetoAzureStorage(ms, unsafeFileNameAndExt); 
+            rtItemFromPost.rtImagePath = await WritetoAzureStorage(ms, unsafeFileNameAndExt);
             SqlDb sqlDb = new(_config);
             int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
 
-            _logger.LogInformation("Received request to add this item: {@Item}", rtItemFromPost);            
+            _logger.LogInformation("Received request to add this item: {@Item}", rtItemFromPost);
 
         }
-        
+
         //return $"Row(s) inserted were: {rowsAffected}";
         return Ok(returnMsg);
     }
