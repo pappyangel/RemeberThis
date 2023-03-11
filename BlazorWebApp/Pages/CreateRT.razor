@@ -22,7 +22,10 @@
         margin-left: auto;
         margin-right: auto;
     }
+   
 </style>
+
+
 
 
 <RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
@@ -76,7 +79,7 @@
     </div>
 </div>
 
-<label >@InfoMsg </label>
+@InfoMsg
 
   <NavigationLock ConfirmExternalNavigation="@(rtItemEditContext!.IsModified())" 
                   OnBeforeInternalNavigation="ConfirmInternalNavigation" />

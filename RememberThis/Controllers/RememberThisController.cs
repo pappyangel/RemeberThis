@@ -18,7 +18,7 @@ public class RememberThisController : ControllerBase
 
     private readonly ILogger<RememberThisController> _logger;
     private readonly IConfiguration _config;
-    private string returnMsg = "Controller Start";
+    private string apiReturnMsg = "Controller Start";
     private string[] permittedExtensions = new string[] { ".gif", ".png", ".jpg", ".jpeg" };
     public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config)
     {
@@ -40,11 +40,11 @@ public class RememberThisController : ControllerBase
     public ActionResult<string> GetOne(int itemId)
     {
         // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
-        // string GetOneReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
+        // string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
-        string GetOneReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
+        string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
-        return Ok(GetOneReturnMsg);
+        return Ok(GetOneapiReturnMsg);
     }
 
     [HttpPost]
@@ -75,7 +75,7 @@ public class RememberThisController : ControllerBase
             if (StorageErrorOrFileName.StartsWith("ERROR"))
             {
                 // do error with storage process
-                returnMsg = StorageErrorOrFileName;
+                apiReturnMsg = StorageErrorOrFileName;
             }
             else
             {
@@ -83,14 +83,16 @@ public class RememberThisController : ControllerBase
                 rtItemFromPost.rtImagePath = StorageErrorOrFileName;
                 SqlDb sqlDb = new(_config);
                 int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
-                if (!(rowsAffected==1))
-                // if ((rowsAffected==1))
-                {
-                    // roll back azure storage write
-                    int dog = 0;
-                    dog++;
-                }
 
+                if ((rowsAffected == 0))
+                {   
+                    // roll back azure storage write                    
+                    apiReturnMsg = "SQL Insert failed, Storage rolled back";
+                }
+                else
+                {
+                    apiReturnMsg += " - SQL Insert Success";
+                }
 
             }
 
@@ -99,12 +101,12 @@ public class RememberThisController : ControllerBase
         }
 
         //return $"Row(s) inserted were: {rowsAffected}";
-        return Ok(returnMsg);
+        return Ok(apiReturnMsg);
     }
 
     private async Task<string> WritetoAzureStorage(MemoryStream _ms, string filename)
     {
-
+        apiReturnMsg = "StorageStart";
         string methodReturnValue = string.Empty;
         string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"];
         string ImageContainer = _config["ImageContainer"];
@@ -125,6 +127,7 @@ public class RememberThisController : ControllerBase
         try
         {
             await blobClient.UploadAsync(_ms, OverWrite);
+            apiReturnMsg = "StorageWriteSuccess";
         }
         catch (Exception Ex)
         {
@@ -132,7 +135,7 @@ public class RememberThisController : ControllerBase
             methodReturnValue = "ERROR-Storage";
             // throw;
         }
-        
+
 
         return methodReturnValue;
 
@@ -141,8 +144,8 @@ public class RememberThisController : ControllerBase
     {
 
         // might need to go somehwere higher in stack
-        returnMsg = "Validation Method Start";
-        returnMsg = "file check start";
+        apiReturnMsg = "Validation Method Start";
+        apiReturnMsg = "file check start";
 
         MemoryStream data = new MemoryStream();
         streamParam.Position = 0;
@@ -151,21 +154,21 @@ public class RememberThisController : ControllerBase
         // this is generally checked by the file upload control itself - but we can double check it here
         if (data == null || data.Length == 0)
         {
-            returnMsg = "file empty";
+            apiReturnMsg = "file empty";
             return false;
         }
 
         var filenameonly = Path.GetFileNameWithoutExtension(fileName);
         if (string.IsNullOrEmpty(filenameonly))
         {
-            returnMsg = "file name not valid";
+            apiReturnMsg = "file name not valid";
             return false;
         }
 
         var ext = Path.GetExtension(fileName).ToLowerInvariant();
         if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
         {
-            returnMsg = "file extension not valid";
+            apiReturnMsg = "file extension not valid";
             return false;
         }
 
@@ -179,7 +182,7 @@ public class RememberThisController : ControllerBase
             bool fileSigCorrect = signatures.Any(signature =>
                 headerBytes.Take(signature.Length).SequenceEqual(signature));
 
-            returnMsg = fileSigCorrect ? "file check good" : "file signiture invalid";
+            apiReturnMsg = fileSigCorrect ? "file check good" : "file signiture invalid";
 
             return fileSigCorrect;
 
