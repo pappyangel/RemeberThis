@@ -1,0 +1,163 @@
+@page "/OneItem"
+@using SharedModels;
+
+
+@* 
+This is a shared component that will display 1 single item in a Bootstrp card for editing
+it takes the following parameters
+    * an instance of the item to display
+    * and event call back for the submit button
+    * Card title
+    * IBrowserFile reference to store file selected
+ *@
+
+<style>
+    div {
+        margin-bottom: 10px;
+    }
+    label {
+        display: inline-block;
+        width: 150px;
+        text-align: right;
+    }
+    textarea {
+        vertical-align: middle;
+    }
+    img {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+
+
+
+<RTModalComponent>
+    <Title> <i>Remember This</i> Status</Title>
+
+    <Body> @ChildModalBody </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick="DisplayBtnClicked("OK")">
+            <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+    </Footer>
+</RTModalComponent>
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h3 style="text-align:center">Add a memory you want to save and share later!</h3>
+    </div>
+    <div class="card-body">
+        @* <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm"> *@
+        <EditForm EditContext="@rtItemChildEditContext" OnValidSubmit="SubmitECB">
+            <div class="row">
+                <div class="column">
+                    <label for="rtUser">User Name: </label>
+                    <InputText id="rtUser" @bind-Value="@thisChildrtItem.rtUserName" class="form-control" />
+                    <br><br>
+                    <label for="rtLocation">Location : </label>
+                    <InputText id="rtLocation" @bind-Value="@thisChildrtItem.rtLocation" class="form-control" />
+                    <br><br>
+                    <label for="rtDateTime">Date/Time: </label>
+                    <InputDate id="rtDateTime" @bind-Value="@thisChildrtItem.rtDateTime" class="form-control" />
+                    <br><br>
+                    <label for="rtDescription">Description: </label>
+                    <InputTextArea id="rtDescription" rows="3" cols="23" @bind-Value="@thisChildrtItem.rtDescription"
+                        class="form-control">
+                    </InputTextArea>
+                </div>
+                <div class="column">
+                    <InputFile id="blazIF1" OnChange="SelectedFileProcess" class="form-control"
+                        accept=".png,.jpg,.jpeg,.gif,.bmp" />
+                    <br>
+                    <img id="pageimage" height=auto width="175" src="./Images/No Image Selected.png"
+                        alt="Select an image to share">
+                </div>
+            </div>
+            <div class="card-footer d-flex align-items-center">
+                <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i> memory!
+                </button>
+
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@InfoMsg
+
+<NavigationLock ConfirmExternalNavigation="@(rtItemChildEditContext!.IsModified())"
+    OnBeforeInternalNavigation="ConfirmInternalNavigation" />
+
+
+@code
+{
+    protected RTModalComponent childmodal { get; set; } = null!;
+    protected string? InfoMsg { get; set; } = "API Return Message";
+    protected string? ChildModalBody { get; set; } = string.Empty;
+
+    [Inject]
+    protected IJSRuntime jsRuntime { get; set; } = null!;
+
+    [Inject]
+    protected IConfiguration Config { get; set; } = null!;
+
+    [Parameter]
+    IBrowserFile childFile { get; set; } = null!;
+
+    [Parameter]
+    protected rtItem thisChildrtItem { get; set; } = null!;
+    
+    [Parameter]
+    public EventCallback<string> CallParentSubmit { get; set; }
+    public EditContext? rtItemChildEditContext;
+
+    protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
+    {
+        long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
+
+        if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
+        {
+            ChildModalBody = "File size invalid";
+            childmodal.Open();
+            await jsRuntime.InvokeVoidAsync("ResetFilePicker");
+
+        }
+        else
+        {
+            // file size is good so save to class variable and update preview on screen
+            childFile = e.File;
+            await jsRuntime.InvokeVoidAsync("loadFileJS");
+        }
+    }
+
+
+    protected async Task ConfirmInternalNavigation(LocationChangingContext context)
+    {
+        var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
+
+        if (!confirmed)
+        {
+            context.PreventNavigation();
+        }
+    }
+
+    protected void DisplayBtnClicked(string _btnClicked)
+    {
+        InfoMsg = _btnClicked;
+
+    }
+
+     public async Task SubmitECB()
+    {        
+        // HasDelegate appears to be a best practice so you don't invoke a callback if a call back listener (delegate) has not been set up.
+        if (CallParentSubmit.HasDelegate)
+        {
+            await CallParentSubmit.InvokeAsync();
+        }       
+
+    }
+}

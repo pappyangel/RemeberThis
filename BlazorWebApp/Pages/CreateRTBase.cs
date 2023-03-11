@@ -14,8 +14,8 @@ namespace BlazorWebApp.Pages
     public class CreateRTBase : ComponentBase
     {
         protected IBrowserFile file = null!;
-        protected string? InfoMsg { get; set; } = "API Return Message";
-        protected string? ChildModalBody { get; set; } = string.Empty;
+    
+        
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
@@ -23,7 +23,7 @@ namespace BlazorWebApp.Pages
         public string apiUrl { get; set; } = string.Empty;
         protected bool ShowPopUp { get; set; } = false;
 
-        //pre-build item in dev mode so we don;t have to type one in each time we test
+        //pre-build item in dev mode so we don't have to type one in each time we test
         protected rtItem thisrtItem { get; set; } =
             new rtItem
             {
@@ -35,16 +35,10 @@ namespace BlazorWebApp.Pages
             };
         protected EditContext? rtItemEditContext;
 
-        protected RTModalComponent childmodal { get; set; } = null!;
-
-        [Inject]
-        protected IJSRuntime jsRuntime { get; set; } = null!;
-
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; } = null!;
 
-        [Inject]
-        protected IConfiguration Config { get; set; } = null!;
+   
 
         [Inject]
         protected ItemService _ItemService { get; set; } = null!;
@@ -54,40 +48,11 @@ namespace BlazorWebApp.Pages
             rtItemEditContext = new(thisrtItem);
         }
 
-        protected void DisplayBtnClicked(string _btnClicked)
-        {
-            InfoMsg = _btnClicked;
+       
 
-        }
+       
 
-        protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
-        {
-            long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
-
-            if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
-            {
-                ChildModalBody = "File size invalid";
-                childmodal.Open();
-                await jsRuntime.InvokeVoidAsync("ResetFilePicker");
-
-            }
-            else
-            {
-                // file size is good so save to class variable and update preview on screen
-                file = e.File;
-                await jsRuntime.InvokeVoidAsync("loadFileJS");
-            }
-        }
-
-        protected async Task ConfirmInternalNavigation(LocationChangingContext context)
-        {
-            var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
-
-            if (!confirmed)
-            {
-                context.PreventNavigation();
-            }
-        }
+      
 
         protected async Task SubmitForm()
         {

@@ -61,7 +61,7 @@
         modalClass = "";
         showBackdrop = false;
         
-
+        // HasDelegate appears to be a best practice so you don't invoke a callback if a call back listener (delegate) has not been set up.
         if (SendBtnClickedBackToParent.HasDelegate)
         {
             await SendBtnClickedBackToParent.InvokeAsync(BtnName);

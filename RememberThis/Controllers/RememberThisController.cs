@@ -14,8 +14,6 @@ namespace RememberThis.Controllers;
 [Route("RememberThis")]
 public class RememberThisController : ControllerBase
 {
-
-
     private readonly ILogger<RememberThisController> _logger;
     private readonly IConfiguration _config;
     private string apiReturnMsg = "Controller Start";
@@ -37,14 +35,19 @@ public class RememberThisController : ControllerBase
 
     // [HttpGet("id/{id:int}")]
     [HttpGet("id/{itemId}")]
-    public ActionResult<string> GetOne(int itemId)
+    public ActionResult<rtItem> GetOne(int itemId)
     {
-        // rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
-        // string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
+        rtItem getItemId = new rtItem { 
+            rtId = itemId, 
+            rtUserName = "Cosmo", 
+            rtDescription = "fun time digging hole for bone", 
+            rtLocation = "backyard", 
+            rtImagePath = "Martini.jpg",
+            rtDateTime = DateTime.UtcNow };        
 
         string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
-        return Ok(GetOneapiReturnMsg);
+        return Ok(getItemId);
     }
 
     [HttpPost]
