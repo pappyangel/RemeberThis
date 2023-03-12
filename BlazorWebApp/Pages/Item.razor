@@ -2,23 +2,48 @@
 @using SharedModels;
 
 
-<RTModalComponent>
-    <Title> <i>Remember This</i> Status</Title>
+<button type="button" class="btn btn-primary" @onclick="OpenModal">
+    <span class="oi oi-cloud" aria-hidden="true"></span> OK
+</button>
+
+
+
+<RTModalComponent  @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
+    <Title><i>Remember This</i> Status</Title>
     <Body> ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
-            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
+            @onclick='() => childmodal!.SendModalButtonClicked("OK")'>
             <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick='() => childmodal!.SendModalButtonClicked("Not OK")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> Not OK
         </button>
     </Footer>
 </RTModalComponent>
 
+@ChildReturnValue
 
-@code{
-    protected RTModalComponent childmodal { get; set; } = null!;
-      protected void DisplayBtnClicked(string _btnClicked)
+
+@code {
+    
+    protected string ChildModalBody = string.Empty;
+    protected string ChildReturnValue = string.Empty;
+    protected RTModalComponent? childmodal { get; set; } 
+    protected void DisplayBtnClicked(string _btnClicked)
     {
-        // placeholder method.  if we need to know which button was pressed on modal
+        // placeholder method. if we need to know which button was pressed on modal
+        ChildReturnValue = _btnClicked;
+
+    }
+
+ 
+
+    protected void OpenModal()
+    {
+        ChildModalBody = "Testing calling the modal";
+        childmodal!.Open();
 
     }
 
