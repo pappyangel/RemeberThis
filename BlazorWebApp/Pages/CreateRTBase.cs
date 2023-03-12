@@ -47,14 +47,30 @@ namespace BlazorWebApp.Pages
         [Inject]
         protected ItemService _ItemService { get; set; } = null!;
 
+         [Inject]
+        protected IConfiguration Config { get; set; } = null!;
+
         protected override void OnInitialized()
         {
             rtItemEditContext = new(thisrtItem);
         }
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {
-            file = e.File;
-            await jsRuntime.InvokeVoidAsync("loadFileJS");
+                long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
+
+            if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
+            {
+                ChildModalBody = "File size invalid";
+                childmodal.Open();
+                await jsRuntime.InvokeVoidAsync("ResetFilePicker");
+
+            }
+            else
+            {
+                // file size is good so save to class variable and update preview on screen
+                file = e.File;
+                await jsRuntime.InvokeVoidAsync("loadFileJS");
+            }
         }
 
         protected void DisplayBtnClicked(string _btnClicked)
