@@ -3,7 +3,7 @@
 <h1>We are trying to open a child modal.</h1>
 
 
-<button class="btn btn-primary" @onclick="() => childmodal.Open()">Click here to open a child modal.</button>
+<button class="btn btn-primary" @onclick="() => childmodal!.Open()">Click here to open a child modal.</button>
 
 <ECBModalChild EventCallbackToParentMethod="ParentLocalMethod" @ref="childmodal">
     <Title>This is a <em>Title!</em></Title>
@@ -20,7 +20,7 @@
 <label>@modalButtonClicked </label>
 
 @code {
-    private ECBModalChild childmodal { get; set; }
+    private ECBModalChild? childmodal { get; set; }
     private string modalButtonClicked = "InitVal";
 
     private void ParentLocalMethod(string message)
