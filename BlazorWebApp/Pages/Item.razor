@@ -1,0 +1,25 @@
+@page "/Item"
+@using SharedModels;
+
+
+<RTModalComponent>
+    <Title> <i>Remember This</i> Status</Title>
+    <Body> ChildModalBody </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+    </Footer>
+</RTModalComponent>
+
+
+@code{
+    protected RTModalComponent childmodal { get; set; } = null!;
+      protected void DisplayBtnClicked(string _btnClicked)
+    {
+        // placeholder method.  if we need to know which button was pressed on modal
+
+    }
+
+}

@@ -11,12 +11,13 @@ using Microsoft.AspNetCore.Components.Routing;
 namespace BlazorWebApp.Pages
 {
 
-    public class CreateRTBase : ComponentBase
+    public class CreateRTBaseNEW : ComponentBase
     {
         protected IBrowserFile file = null!;
 
-        protected RTModalComponent childmodal { get; set; } = null!;
-        protected string? InfoMsg { get; set; } = "API Return Message";
+        protected OneItem childOneItem { get; set; } = null!;
+    
+        
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
@@ -25,8 +26,23 @@ namespace BlazorWebApp.Pages
         protected bool ShowPopUp { get; set; } = false;
 
         //pre-build item in dev mode so we don't have to type one in each time we test
-        protected rtItem thisrtItem { get; set; } =
-            new rtItem
+        protected rtItem? thisrtItem { get; set; } = null!;
+        
+        
+        protected EditContext? rtItemEditContext;
+        protected string? InfoMsg { get; set; } = "API Return Message";
+
+        [Inject]
+        protected IHttpClientFactory ClientFactory { get; set; } = null!;
+
+   
+
+        [Inject]
+        protected ItemService _ItemService { get; set; } = null!;
+
+        protected override void OnInitialized()
+        {
+            thisrtItem = new rtItem
             {
                 rtId = 1001,
                 rtUserName = "Cosmo",
@@ -34,45 +50,15 @@ namespace BlazorWebApp.Pages
                 rtLocation = "backyard",
                 rtDateTime = DateTime.UtcNow
             };
-        protected EditContext? rtItemEditContext;
-        protected string ChildModalBody { get; set; } = string.Empty;
 
-
-        [Inject]
-        protected IHttpClientFactory ClientFactory { get; set; } = null!;
-
-        [Inject]
-        protected IJSRuntime jsRuntime { get; set; } = null!;
-
-        [Inject]
-        protected ItemService _ItemService { get; set; } = null!;
-
-        protected override void OnInitialized()
-        {
             rtItemEditContext = new(thisrtItem);
         }
-        protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
-        {
-            file = e.File;
-            await jsRuntime.InvokeVoidAsync("loadFileJS");
-        }
 
-        protected void DisplayBtnClicked(string _btnClicked)
-        {
-            InfoMsg = _btnClicked;
+       
 
-        }
+       
 
-        protected async Task ConfirmInternalNavigation(LocationChangingContext context)
-        {
-            var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
-
-            if (!confirmed)
-            {
-                context.PreventNavigation();
-            }
-        }
-
+      
 
         protected async Task SubmitForm()
         {
@@ -85,6 +71,7 @@ namespace BlazorWebApp.Pages
 
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem, ms, file.Name, file.ContentType);
 
+            
             InfoMsg = PersistReturnMsg;
 
 

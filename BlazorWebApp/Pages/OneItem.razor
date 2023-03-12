@@ -6,7 +6,8 @@
 This is a shared component that will display 1 single item in a Bootstrp card for editing
 it takes the following parameters
     * an instance of the item to display
-    * and event call back for the submit button
+    * an event call back for the submit button
+    * an event call back for which button was clicked on modal, if needed
     * Card title
     * IBrowserFile reference to store file selected
  *@
@@ -35,11 +36,10 @@ it takes the following parameters
 
 <RTModalComponent>
     <Title> <i>Remember This</i> Status</Title>
-
     <Body> @ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
-            @onclick="DisplayBtnClicked("OK")">
+            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
             <span class="oi oi-cloud" aria-hidden="true"></span> OK
         </button>
     </Footer>
@@ -87,7 +87,6 @@ it takes the following parameters
     </div>
 </div>
 
-@InfoMsg
 
 <NavigationLock ConfirmExternalNavigation="@(rtItemChildEditContext!.IsModified())"
     OnBeforeInternalNavigation="ConfirmInternalNavigation" />
@@ -96,8 +95,8 @@ it takes the following parameters
 @code
 {
     protected RTModalComponent childmodal { get; set; } = null!;
-    protected string? InfoMsg { get; set; } = "API Return Message";
-    protected string? ChildModalBody { get; set; } = string.Empty;
+
+    protected string ChildModalBody { get; set; } = string.Empty;
 
     [Inject]
     protected IJSRuntime jsRuntime { get; set; } = null!;
@@ -106,13 +105,14 @@ it takes the following parameters
     protected IConfiguration Config { get; set; } = null!;
 
     [Parameter]
-    IBrowserFile childFile { get; set; } = null!;
+    public IBrowserFile childFile { get; set; } = null!;
 
     [Parameter]
-    protected rtItem thisChildrtItem { get; set; } = null!;
+    public rtItem? thisChildrtItem { get; set; } = null!;
     
     [Parameter]
-    public EventCallback<string> CallParentSubmit { get; set; }
+    public EventCallback CallParentSubmit { get; set; }
+
     public EditContext? rtItemChildEditContext;
 
     protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
@@ -147,7 +147,7 @@ it takes the following parameters
 
     protected void DisplayBtnClicked(string _btnClicked)
     {
-        InfoMsg = _btnClicked;
+        // placeholder method.  if we need to know which button was pressed on modal
 
     }
 
