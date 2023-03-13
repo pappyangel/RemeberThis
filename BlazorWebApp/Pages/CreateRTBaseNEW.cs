@@ -13,9 +13,9 @@ namespace BlazorWebApp.Pages
 
     public class CreateRTBaseNEW : ComponentBase
     {
-        protected IBrowserFile file = null!;
+        protected IBrowserFile? file = null!;
 
-        protected OneItem childOneItem { get; set; } = null!;
+        protected OneItem? childOneItem { get; set; } = null!;
     
         
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
@@ -24,6 +24,7 @@ namespace BlazorWebApp.Pages
 
         public string apiUrl { get; set; } = string.Empty;
         protected bool ShowPopUp { get; set; } = false;
+        public string parentMyStuff { get; set; } = "Parent";
 
         //pre-build item in dev mode so we don't have to type one in each time we test
         protected rtItem? thisrtItem { get; set; } = null!;
@@ -46,12 +47,12 @@ namespace BlazorWebApp.Pages
             {
                 rtId = 1001,
                 rtUserName = "Cosmo",
-                rtDescription = "fun time digging hole for bone",
-                rtLocation = "backyard",
+                rtDescription = string.Empty,
+                rtLocation = string.Empty,
                 rtDateTime = DateTime.UtcNow
             };
 
-            rtItemEditContext = new(thisrtItem);
+            // rtItemEditContext = new(thisrtItem);
         }
 
        
@@ -60,9 +61,11 @@ namespace BlazorWebApp.Pages
 
       
 
-        protected async Task SubmitForm()
+        protected async Task SubmitForm(IBrowserFile fileFromChild)
         {
             string PersistReturnMsg = string.Empty;
+
+            file = fileFromChild;
 
             // need to add code to handle no image selected
             var ms = new MemoryStream();

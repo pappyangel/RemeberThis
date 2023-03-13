@@ -56,7 +56,7 @@ namespace BlazorWebApp.Pages
         }
         protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
         {
-                long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
+            long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
             if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
             {

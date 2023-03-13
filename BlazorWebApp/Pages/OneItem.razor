@@ -2,28 +2,31 @@
 @using SharedModels;
 
 
-@* 
+@*
 This is a shared component that will display 1 single item in a Bootstrp card for editing
 it takes the following parameters
-    * an instance of the item to display
-    * an event call back for the submit button
-    * an event call back for which button was clicked on modal, if needed
-    * Card title
-    * IBrowserFile reference to store file selected
- *@
+* an instance of the item to display
+* an event call back for the submit button
+* an event call back for which button was clicked on modal, if needed
+* Card title
+* IBrowserFile reference to store file selected
+*@
 
 <style>
     div {
         margin-bottom: 10px;
     }
+
     label {
         display: inline-block;
         width: 150px;
         text-align: right;
     }
+
     textarea {
         vertical-align: middle;
     }
+
     img {
         display: block;
         margin-left: auto;
@@ -34,18 +37,17 @@ it takes the following parameters
 
 
 
-<RTModalComponent>
+<RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
     <Title> <i>Remember This</i> Status</Title>
+
     <Body> @ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
-            @onclick='() => childmodal.SendModalButtonClicked("OK")'>
+            @onclick='() => childmodal!.SendModalButtonClicked("OK")'>
             <span class="oi oi-cloud" aria-hidden="true"></span> OK
         </button>
     </Footer>
 </RTModalComponent>
-
-
 
 <div class="card">
     <div class="card-header">
@@ -94,7 +96,8 @@ it takes the following parameters
 
 @code
 {
-    protected RTModalComponent childmodal { get; set; } = null!;
+    //Modal for filesize error
+    protected RTModalComponent? childmodal { get; set; }
 
     protected string ChildModalBody { get; set; } = string.Empty;
 
@@ -104,17 +107,21 @@ it takes the following parameters
     [Inject]
     protected IConfiguration Config { get; set; } = null!;
 
-    [Parameter]
     public IBrowserFile childFile { get; set; } = null!;
+     
 
     [Parameter]
     public rtItem? thisChildrtItem { get; set; } = null!;
-    
+
     [Parameter]
-    public EventCallback CallParentSubmit { get; set; }
+    public EventCallback<IBrowserFile> CallParentSubmit { get; set; }
 
     public EditContext? rtItemChildEditContext;
 
+    protected override void OnInitialized()
+    {
+        rtItemChildEditContext = new(thisChildrtItem!);
+    }
     protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
     {
         long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
@@ -147,17 +154,17 @@ it takes the following parameters
 
     protected void DisplayBtnClicked(string _btnClicked)
     {
-        // placeholder method.  if we need to know which button was pressed on modal
+        // placeholder method. if we need to know which button was pressed on modal
 
     }
 
-     public async Task SubmitECB()
+    public async Task SubmitECB()
     {        
         // HasDelegate appears to be a best practice so you don't invoke a callback if a call back listener (delegate) has not been set up.
-        if (CallParentSubmit.HasDelegate)
+    if (CallParentSubmit.HasDelegate)
         {
-            await CallParentSubmit.InvokeAsync();
-        }       
+            await CallParentSubmit.InvokeAsync(childFile);
+        }
 
     }
 }
