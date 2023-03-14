@@ -43,7 +43,7 @@ else
 
 }
 
-//  app.UseHttpsRedirection();
+ app.UseHttpsRedirection();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
 {
