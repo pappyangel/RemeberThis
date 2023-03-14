@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
-    
+
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
@@ -38,13 +38,24 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
     app.UseHttpsRedirection();
 }
+else
+{
 
+}
+
+//  app.UseHttpsRedirection();
 
 app.UseCookiePolicy(new CookiePolicyOptions()
-    {
-        // MinimumSameSitePolicy = SameSiteMode.Lax
-        MinimumSameSitePolicy = SameSiteMode.None
-    });
+{
+    // MinimumSameSitePolicy = SameSiteMode.Lax,
+    // MinimumSameSitePolicy = SameSiteMode.None,
+    // Secure = CookieSecurePolicy.Always
+
+    // HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always
+    // MinimumSameSitePolicy = SameSiteMode.None,
+    // Secure = CookieSecurePolicy.Always
+
+});
 
 app.UseStaticFiles();
 
