@@ -16,7 +16,7 @@ namespace BlazorWebApp.Pages
         protected IBrowserFile file = null!;
 
         protected RTModalComponent childmodal { get; set; } = null!;
-        protected string? InfoMsg { get; set; } = "API Return Message";
+        protected string? DebugMsg { get; set; } = "API Return Message";
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
@@ -75,7 +75,7 @@ namespace BlazorWebApp.Pages
 
         protected void DisplayBtnClicked(string _btnClicked)
         {
-            InfoMsg = _btnClicked;
+            DebugMsg = _btnClicked;
 
         }
 
@@ -101,7 +101,7 @@ namespace BlazorWebApp.Pages
 
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem, ms, file.Name, file.ContentType);
 
-            InfoMsg = PersistReturnMsg;
+            DebugMsg = PersistReturnMsg;
 
 
         }

@@ -31,7 +31,7 @@ namespace BlazorWebApp.Pages
         
         
         protected EditContext? rtItemEditContext;
-        protected string? InfoMsg { get; set; } = "API Return Message";
+        protected string? DebugMsg { get; set; } = "API Return Message";
 
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; } = null!;
@@ -53,13 +53,7 @@ namespace BlazorWebApp.Pages
             };
 
             // rtItemEditContext = new(thisrtItem);
-        }
-
-       
-
-       
-
-      
+        }      
 
         protected async Task SubmitForm(IBrowserFile fileFromChild)
         {
@@ -72,10 +66,10 @@ namespace BlazorWebApp.Pages
             await file.OpenReadStream(1024 * 1024 * 10).CopyToAsync(ms);
             ms.Position = 0;
 
-            PersistReturnMsg = await _ItemService.AddItem(thisrtItem, ms, file.Name, file.ContentType);
+            PersistReturnMsg = await _ItemService.AddItem(thisrtItem!, ms, file.Name, file.ContentType);
 
             
-            InfoMsg = PersistReturnMsg;
+            DebugMsg = PersistReturnMsg;
 
 
         }

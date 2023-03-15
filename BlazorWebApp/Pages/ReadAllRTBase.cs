@@ -22,7 +22,7 @@ namespace BlazorWebApp.Pages;
         // [Inject]
         // protected IConfiguration Config { get; set; } = null!;
         
-        protected string? InfoMsg { get; set; } = "Read All Start Message";
+        protected string? DebugMsg { get; set; } = "Read All Start Message";
 
         // pre-build item in dev mode so we don;t have to type one in each time we test
         

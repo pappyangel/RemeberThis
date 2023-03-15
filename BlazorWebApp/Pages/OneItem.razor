@@ -59,7 +59,7 @@ it takes the following parameters
             <div class="row">
                 <div class="column">
                     <label for="rtUser">User Name: </label>
-                    <InputText id="rtUser" @bind-Value="@thisChildrtItem.rtUserName" class="form-control" />
+                    <InputText id="rtUser" @bind-Value="@thisChildrtItem!.rtUserName" class="form-control" />
                     <br><br>
                     <label for="rtLocation">Location : </label>
                     <InputText id="rtLocation" @bind-Value="@thisChildrtItem.rtLocation" class="form-control" />
@@ -129,7 +129,7 @@ it takes the following parameters
         if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
         {
             ChildModalBody = "File size invalid";
-            childmodal.Open();
+            childmodal!.Open();
             await jsRuntime.InvokeVoidAsync("ResetFilePicker");
 
         }

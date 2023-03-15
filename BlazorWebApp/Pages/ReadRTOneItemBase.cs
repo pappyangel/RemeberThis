@@ -9,7 +9,7 @@ public class ReadRTOneItemBase : ComponentBase
 {
     protected long myTicks = DateTime.Now.Ticks;
     protected string myTicksString = string.Empty;
-    protected string? InfoMsg { get; set; } = "Read All Start Message";
+    protected string? DebugMsg { get; set; } = "Read All Start Message";
 
     protected rtItem thisrtItem { get; set; } = new();
     //protected IBrowserFile file = null!;    
@@ -22,7 +22,7 @@ public class ReadRTOneItemBase : ComponentBase
 
     protected async override Task OnInitializedAsync()
     {
-        InfoMsg = "OnInitializedXX";
+        DebugMsg = "OnInitializedXX";
         //Replace below with call to API
         thisrtItem.rtId = 1001;
         thisrtItem.rtUserName = "Cosmo-1001";
@@ -33,9 +33,9 @@ public class ReadRTOneItemBase : ComponentBase
         thisrtItem.rtImagePath = "./Images/Cosmo-sox.png";
 
 
-        InfoMsg =  await _ItemService.GetOneItemAsync(1001);
+        DebugMsg =  await _ItemService.GetOneItemAsync(1001);
 
-        //InfoMsg = "back from API";
+        //DebugMsg = "back from API";
 
 
 
