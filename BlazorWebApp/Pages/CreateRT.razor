@@ -1,77 +1,20 @@
 @page "/CreateRT"
 @inherits CreateRTBase
 
-<style>
-    div {
-        margin-bottom: 10px;
-    }
-    label {
-        display: inline-block;
-        width: 150px;
-        text-align: right;
-    }
-    textarea {
-        vertical-align: middle;
-    }
-    img {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }   
-</style>
-
-<RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
-    <Title> Add a Memory Status</Title>
-    <Body> @ChildModalBody </Body>
-    <Footer>
-        <button type="button" class="btn btn-primary" data-dismiss="modal"
-            @onclick='() => childmodal!.SendModalButtonClicked("OK")'>
-            <span class="oi oi-cloud" aria-hidden="true"></span> OK
-        </button>
-      </Footer>
-</RTModalComponent>
 
 
-<div class="card">
-    <div class="card-header">
-        <h3 style="text-align:center">Add a memory you want to save and share later!</h3>
-    </div>
-    <div class="card-body">
-        @* <EditForm Model="thisrtItem" OnValidSubmit="SubmitForm"> *@
-        <EditForm EditContext="@rtItemEditContext" OnValidSubmit="SubmitForm">
-            <div class="row">
-                <div class="column">
-                    <label for="rtUser">User Name: </label>
-                    <InputText id="rtUser" @bind-Value="@thisrtItem.rtUserName" class="form-control" />
-                    <br><br>
-                    <label for="rtLocation">Location : </label>
-                    <InputText id="rtLocation" @bind-Value="@thisrtItem.rtLocation" class="form-control" />
-                    <br><br>
-                    <label for="rtDateTime">Date/Time: </label>
-                    <InputDate id="rtDateTime" @bind-Value="@thisrtItem.rtDateTime" class="form-control" />
-                    <br><br>
-                    <label for="rtDescription">Description: </label>
-                    <InputTextArea id="rtDescription" rows="3" cols="23" @bind-Value="@thisrtItem.rtDescription" class="form-control">
-                    </InputTextArea>
-                </div>
-                <div class="column">
-                    <InputFile id="blazIF1" OnChange="SelectedFileProcess" class="form-control"
-                        accept=".png,.jpg,.jpeg,.gif,.bmp"  />                        
-                    <br>
-                    <img id="pageimage" height=auto width="175" src="./Images/No Image Selected.png"
-                        alt="Select an image to share">
-                </div>
-            </div>
-            <div class="card-footer d-flex align-items-center">
-                <button class="btn btn-primary mx-auto" type="submit">Click here to <i>Remember This</i> memory! </button>                
-                               
-            </div>
-        </EditForm>
-    </div>
-</div>
+<OneItem    @ref="childOneItem"             
+            childCardTitle="@createCardTitle"
+            thisChildrtItem="thisrtItem"             
+            CallParentSubmit="SubmitForm"
+            >
+</OneItem>
+
+
+
 
 @DebugMsg
 
-  <NavigationLock ConfirmExternalNavigation="@(rtItemEditContext!.IsModified())" 
-                  OnBeforeInternalNavigation="ConfirmInternalNavigation" />
+
+
 
