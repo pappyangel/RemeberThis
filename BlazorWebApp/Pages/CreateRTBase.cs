@@ -15,7 +15,7 @@ namespace BlazorWebApp.Pages
     {
         protected IBrowserFile file = null!;
 
-        protected RTModalComponent childmodal { get; set; } = null!;
+        protected RTModalComponent? childmodal { get; set; } = null!;
         protected string? DebugMsg { get; set; } = "API Return Message";
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
@@ -61,7 +61,7 @@ namespace BlazorWebApp.Pages
             if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
             {
                 ChildModalBody = "File size invalid";
-                childmodal.Open();
+                childmodal!.Open();
                 await jsRuntime.InvokeVoidAsync("ResetFilePicker");
 
             }
