@@ -59,12 +59,12 @@ public class RememberThisController : ControllerBase
         // get class data from key value pair out of multi part
         StringValues rtItemJson;
         multipartRequest.Form.TryGetValue("classdata", out rtItemJson);
-        rtItem rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]);
-        rtItemFromPost.rtImagePath = multipartRequest.Form.Files["file"].FileName.ToString();
+        rtItem? rtItemFromPost = JsonSerializer.Deserialize<rtItem>(rtItemJson[0]!);
+        rtItemFromPost!.rtImagePath = multipartRequest.Form.Files["file"]?.FileName.ToString();
 
         var form = await multipartRequest.ReadFormAsync();
         var formFile = form.Files["file"];
-        string unsafeFileNameAndExt = formFile.FileName;
+        string unsafeFileNameAndExt = formFile!.FileName;
 
         await using var stream = formFile.OpenReadStream();
         using var ms = new MemoryStream();
@@ -111,8 +111,8 @@ public class RememberThisController : ControllerBase
     {
         apiReturnMsg = "StorageStart";
         string methodReturnValue = string.Empty;
-        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"];
-        string ImageContainer = _config["ImageContainer"];
+        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
+        string ImageContainer = _config["ImageContainer"]!;
         Boolean OverWrite = true;
 
         string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
