@@ -1,6 +1,21 @@
 # RememberThis
-The following list includes the work done in this iteration.
 
+### The following list includes the work done in the Read Branch
+- Added Persist service
+- file size check moved to file picker method
+- start of ReadlAll
+- rounded cirlces
+- NavigationLock
+- PoC - SAS & Stream
+- PoC - ticks and milliseconds 
+- changed safe file name to datetime vs. guid
+- made a re-usable component for 1 Item
+- Bing CoPilot suggested Persist Service name to ItemService
+- added logic for group transaction of SQL and Storage
+- cleaned up multiple null refernce warning messages
+- tested successfully with new B2C tenant and app registration 
+
+### The following list includes the work done in the MultiPart Branch
 
 - Added a B2C project as a template
 - Blazor Component calling an API

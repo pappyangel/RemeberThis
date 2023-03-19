@@ -120,7 +120,7 @@ namespace RememberThis.DB
         private async Task<int> CRUDAsync(string sqlStatetment)
         {
             SqlCommand command;
-            int rowsAffected;
+            int rowsAffected = 0;
 
             SqlConnection SQLCn = GetSQLCn();
             await SQLCn.OpenAsync();
@@ -180,7 +180,7 @@ namespace RememberThis.DB
             //List<rtItem> sqlrtItems = sqlCommand.ExecuteReader
             object jsonObject = sqlCommand.ExecuteScalar();
 
-            _rtItems = JsonSerializer.Deserialize<List<rtItem>>(jsonObject.ToString());
+            _rtItems = JsonSerializer.Deserialize<List<rtItem>>(jsonObject.ToString()!)!;
             return _rtItems;
 
 

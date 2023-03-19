@@ -1,0 +1,53 @@
+﻿@page "/Stream"
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+
+<PageTitle>Stream</PageTitle>
+
+<h1>Stream Image</h1>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="w-25 p-3">
+            <div class="card">
+                <div class="ratio ratio-1x1 rounded-circle overflow-hidden">
+                    @* <img src="https://sa01files.blob.core.windows.net/rt-images/10c2fa60-8f93-4be7-986e-4b5076026b45.jpg?sp=r&st=2023-03-07T02:29:54Z&se=2023-03-07T10:29:54Z&spr=https&sv=2021-06-08&sr=b&sig=JroM7%2FyX9qDfYcjUU5pvia64fmvogQy%2Fj1gwofg7z3w%3D" class="card-img-top img-cover" alt="Manhattan at Baba"> *@
+                    <img src="https://scontent-bos5-1.xx.fbcdn.net/v/t39.30808-6/330012360_2821861331277573_193284587730108549_n.jpg?stp=cp6_dst-jpg_s640x640&_nc_cat=107&ccb=1-7&_nc_sid=730e14&_nc_ohc=Ob4-G_QomGwAX-unY4L&_nc_ht=scontent-bos5-1.xx&oh=00_AfAxQ4sVvgIn5reUvWucUKb7eSN3FRDDWTI3n7TgOAGddg&oe=640B6C9E" class="card-img-top img-cover" alt="Manhattan at Baba">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+
+
+
+
+<p>
+    <img id="image" />
+</p>
+
+<button @onclick="SetImageAsync">
+    Set Image
+</button>
+
+@code {
+    private async Task<System.IO.Stream> GetImageStreamAsync()
+    {
+        @* return await Http.GetStreamAsync("https://avatars.githubusercontent.com/u/9141961"); *@
+        return await Http.GetStreamAsync("https://cocktailsfrontend.azurewebsites.net/images/78d6434d-1b86-47a5-bfb8-f6848e71ae58_ElijahCraig.jpg");
+        @* return await Http.GetStreamAsync(""); *@
+        
+        
+    }
+
+    private async Task SetImageAsync()
+    {
+        var imageStream = await GetImageStreamAsync();
+        var dotnetImageStream = new DotNetStreamReference(imageStream);
+        await JS.InvokeVoidAsync("setImage", "image", dotnetImageStream);
+    }
+}
