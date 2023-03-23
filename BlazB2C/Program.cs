@@ -24,7 +24,7 @@ builder.Services.AddAuthorization(options =>
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
-builder.Services.AddHttpContextAccessor();
+// builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<WeatherForecastService>();
 
