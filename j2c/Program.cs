@@ -1,10 +1,32 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using j2c.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+builder.Services.AddServerSideBlazor()
+    .AddMicrosoftIdentityConsentHandler();
+
+builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
+    .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
+
+builder.Services.AddControllersWithViews()
+    .AddMicrosoftIdentityUI();
+
+builder.Services.AddAuthorization(options =>
+{
+    // By default, all incoming requests will be authorized according to the default policy
+    options.FallbackPolicy = options.OpenIdConnectDefaults;
+    // options.FallbackPolicy = options.DefaultPolicy;
+});
+
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
@@ -25,7 +47,14 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.Run();
+if (app.Environment.IsDevelopment())
+    app.Run("https://localhost:7122");
+else
+    app.Run();

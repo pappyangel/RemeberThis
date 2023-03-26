@@ -62,6 +62,18 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "build-j2c",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "build",
+                "${workspaceFolder}/j2c/j2c.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary"
+            ],
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "publish-API",
             "command": "dotnet",
             "type": "process",

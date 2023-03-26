@@ -22,6 +22,11 @@ dotnet add package BootstrapBlazor
 dotnet add package Azure.Storage.Blobs 
 dotnet add package Microsoft.Data.SqlClient
 
+dotnet add package Microsoft.Identity.Web
+dotnet add package Microsoft.AspNetCore.Authentication.OpenIdConnect --version 7.0.4
+dotnet add package Microsoft.AspNetCore.Authentication.JwtBearer --version 7.0.4
+dotnet add package Microsoft.Identity.Web.UI --version 2.6.1
+
 ##### Hot Reload
 https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-watch
 move to project folder

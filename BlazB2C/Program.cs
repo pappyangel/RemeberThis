@@ -18,11 +18,11 @@ builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
-builder.Services.AddAuthorization(options =>
-{
-    // By default, all incoming requests will be authorized according to the default policy
-    options.FallbackPolicy = options.DefaultPolicy;
-});
+// builder.Services.AddAuthorization(options =>
+// {
+//     // By default, all incoming requests will be authorized according to the default policy
+//     options.FallbackPolicy = options.DefaultPolicy;
+// });
 
 builder.Services.AddRazorPages();
 
