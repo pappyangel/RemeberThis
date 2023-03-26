@@ -8,6 +8,9 @@ using BlazB2C.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddServerSideBlazor()
+    .AddMicrosoftIdentityConsentHandler();
 // Add services to the container.
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
@@ -22,8 +25,7 @@ builder.Services.AddAuthorization(options =>
 });
 
 builder.Services.AddRazorPages();
-builder.Services.AddServerSideBlazor()
-    .AddMicrosoftIdentityConsentHandler();
+
 // builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<WeatherForecastService>();
@@ -36,31 +38,21 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-    app.UseHttpsRedirection();
+    // app.UseHttpsRedirection();
 }
 else
 {
 
 }
 
- app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 
-app.UseCookiePolicy(new CookiePolicyOptions()
-{
-    // MinimumSameSitePolicy = SameSiteMode.Lax,
-    // MinimumSameSitePolicy = SameSiteMode.None,
-    // Secure = CookieSecurePolicy.Always
-
-    // HttpOnly = Microsoft.AspNetCore.CookiePolicy.HttpOnlyPolicy.Always
-    // MinimumSameSitePolicy = SameSiteMode.None,
-    // Secure = CookieSecurePolicy.Always
-
-});
 
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
