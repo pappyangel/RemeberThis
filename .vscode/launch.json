@@ -55,14 +55,14 @@
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": "BlazBS",
+            "name": "BlazB2C",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build-BlazBS",
+            "preLaunchTask": "build-BlazB2C",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/blazBS/bin/Debug/net7.0/blazBS.dll",
+            "program": "${workspaceFolder}/BlazB2C/bin/Debug/net7.0/BlazB2C.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/blazBS",
+            "cwd": "${workspaceFolder}/BlazB2C",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             // "serverReadyAction": {
@@ -80,14 +80,14 @@
             // Use IntelliSense to find out which attributes exist for C# debugging
             // Use hover for the description of the existing attributes
             // For further information visit https://github.com/OmniSharp/omnisharp-vscode/blob/master/debugger-launchjson.md
-            "name": "BlazB2C",
+            "name": "j2c",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build-BlazB2C",
+            "preLaunchTask": "build-j2c",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/BlazB2C/bin/Debug/net7.0/BlazB2C.dll",
+            "program": "${workspaceFolder}/j2c/bin/Debug/net7.0/j2c.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/BlazB2C",
+            "cwd": "${workspaceFolder}/j2c",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             // "serverReadyAction": {

@@ -1,33 +1,34 @@
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.Identity.Web;
-using Microsoft.Identity.Web.UI;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
-using BlazB2C.Data;
+using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.UI;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using j2c.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
-// Add services to the container.
+
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
 
 builder.Services.AddControllersWithViews()
     .AddMicrosoftIdentityUI();
 
-// builder.Services.AddAuthorization(options =>
-// {
-//     // By default, all incoming requests will be authorized according to the default policy
-//     options.FallbackPolicy = options.DefaultPolicy;
-// });
+builder.Services.AddAuthorization(options =>
+{
+    // By default, all incoming requests will be authorized according to the default policy
+    // options.FallbackPolicy = options.OpenIdConnectDefaults;
+    // options.FallbackPolicy = options.DefaultPolicy;
+});
+
+
 
 builder.Services.AddRazorPages();
-
-// builder.Services.AddHttpContextAccessor();
-
+builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
@@ -38,15 +39,9 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-    // app.UseHttpsRedirection();
-}
-else
-{
-
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseStaticFiles();
 
@@ -59,4 +54,7 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-app.Run();
+if (app.Environment.IsDevelopment())
+    app.Run("https://localhost:7122");
+else
+    app.Run();
