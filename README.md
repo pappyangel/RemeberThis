@@ -1,6 +1,15 @@
 # RememberThis
 
 ### The following list includes the work done in the B2C Branch
+- PR on 3/30/23
+- Fixed B2C
+  - Identity Options
+  - Default policy
+- cleaned up numerous Null Reference Warnings using ? and !
+- refactored code to display item for Create & Update process
+- Used ChatGPT to come up with name for Item Service
+- PoC ticks and milliseconds
+- PoC for SAS and Stream
 
 
 ### The following list includes the work done in the Read Branch
