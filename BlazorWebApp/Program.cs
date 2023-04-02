@@ -49,8 +49,8 @@ app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
-// app.Run();
-if (app.Environment.IsDevelopment())
-    app.Run("https://localhost:7122");
-else
-    app.Run();
+app.Run();
+// if (app.Environment.IsDevelopment())
+//     app.Run("https://localhost:7122");
+// else
+//     app.Run();
