@@ -12,7 +12,7 @@ it takes the following parameters
 *@
 
 <style>
-    div {
+    @* div {
         margin-bottom: 10px;
     }
 
@@ -20,7 +20,7 @@ it takes the following parameters
         display: inline-block;
         width: 150px;
         text-align: right;
-    }
+    } *@
 
     textarea {
         vertical-align: middle;
@@ -38,7 +38,6 @@ it takes the following parameters
 
 <RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
     <Title> <i>Remember This</i> Status</Title>
-
     <Body> @ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
@@ -55,22 +54,17 @@ it takes the following parameters
     <div class="card-body">        
         <EditForm EditContext="@rtItemChildEditContext" OnValidSubmit="SubmitECB">
             <div class="row">
-                <div class="column">
-                    <label for="rtUser">User Name: </label>
-                    <InputText id="rtUser" @bind-Value="@thisChildrtItem!.rtUserName" class="form-control" />
-                    <br><br>
+                <div class="column">     
                     <label for="rtLocation">Location : </label>
-                    <InputText id="rtLocation" @bind-Value="@thisChildrtItem.rtLocation" class="form-control" />
-                    <br><br>
-                    <label for="rtDateTime">Date/Time: </label>
-                    <InputDate id="rtDateTime" @bind-Value="@thisChildrtItem.rtDateTime" class="form-control" />
-                    <br><br>
+                    <InputText id="rtLocation" @bind-Value="@thisChildrtItem!.rtLocation" class="form-control" />
+                    <br><br>                    
                     <label for="rtDescription">Description: </label>
                     <InputTextArea id="rtDescription" rows="3" cols="23" @bind-Value="@thisChildrtItem.rtDescription"
                         class="form-control">
                     </InputTextArea>
                 </div>
                 <div class="column">
+                    <br>
                     <InputFile id="blazIF1" OnChange="SelectedFileProcess" class="form-control"
                         accept=".png,.jpg,.jpeg,.gif,.bmp" />
                     <br>
