@@ -1,12 +1,14 @@
 @page "/CreateRT"
+@attribute [Authorize]
 @inherits CreateRTBase
+
 
 
 
 <OneItem    @ref="childOneItem"             
             childCardTitle="@createCardTitle"
             thisChildrtItem="thisrtItem"             
-            CallParentSubmit="SubmitForm"
+            CallParentSubmit="SubmitFormAsync"
             >
 </OneItem>
 
