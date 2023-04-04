@@ -50,7 +50,7 @@ namespace BlazorWebApp.Pages
             thisrtItem = new rtItem
             {
                 rtId = 0,
-                rtUserName = string.Empty,
+                rtUserObjectId = string.Empty,
                 rtDescription = string.Empty,
                 rtLocation = string.Empty,
                 rtDateTime = DateTime.UtcNow
@@ -69,7 +69,7 @@ namespace BlazorWebApp.Pages
             .GetAuthenticationStateAsync();
             var user = authState.User;
             
-            thisrtItem!.rtUserName = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;            
+            thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;            
             //thisrtItem.rtDateTime = DateTime.UtcNow;
 
             // need to add code to handle no image selected

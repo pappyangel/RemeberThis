@@ -28,7 +28,7 @@ public class RememberThisController : ControllerBase
     [HttpGet]
     public ActionResult<rtItem> GetAll()
     {
-        rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+        rtItem getItem = new rtItem { rtId = 1001, rtUserObjectId = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
 
         return Ok(getItem);
     }
@@ -39,7 +39,7 @@ public class RememberThisController : ControllerBase
     {
         rtItem getItemId = new rtItem { 
             rtId = itemId, 
-            rtUserName = "Cosmo", 
+            rtUserObjectId = "Cosmo", 
             rtDescription = "fun time digging hole for bone", 
             rtLocation = "backyard", 
             rtImagePath = "Martini.jpg",

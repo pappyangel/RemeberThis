@@ -60,7 +60,7 @@ namespace RememberThis.DB
                 sqlrtItems.Add(new rtItem()
                 {
                     rtId = dataReader.GetInt32(0),
-                    rtUserName = dataReader.GetString(1),
+                    rtUserObjectId = dataReader.GetString(1),
                     rtDescription = dataReader.GetString(2),
                     rtLocation = dataReader.GetString(3),
                     rtDateTime = dataReader.GetDateTime(4),
@@ -148,7 +148,7 @@ namespace RememberThis.DB
         public async Task<int> UpdatertItembyId(rtItem rtItem)
         {
             int crudResult;
-            string sql = $"Update t Set t.user = '{rtItem.rtUserName}', t.Description = {rtItem.rtDescription}, t.Location = {rtItem.rtLocation}, t.Dt = {rtItem.rtDateTime},  t.ImagePath = '{rtItem.rtImagePath}'"
+            string sql = $"Update t Set t.UserObjectId = '{rtItem.rtUserObjectId}', t.Description = {rtItem.rtDescription}, t.Location = {rtItem.rtLocation}, t.Dt = {rtItem.rtDateTime},  t.ImagePath = '{rtItem.rtImagePath}'"
              + $" From {tblName} t where t.id = {rtItem.rtId}";
 
             crudResult = await CRUDAsync(sql);
@@ -158,7 +158,7 @@ namespace RememberThis.DB
         public async Task<int> InsertrtItem(rtItem rtItem)
         {
             int crudResult;
-            string sql = $"Insert into {tblName} ([User], Description, Location, Dt, ImagePath) values ('{rtItem.rtUserName}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
+            string sql = $"Insert into {tblName} (UserObjectId, Description, Location, Dt, ImagePath) values ('{rtItem.rtUserObjectId}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
 
             crudResult = await CRUDAsync(sql);
 

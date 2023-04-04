@@ -29,7 +29,7 @@ public class BAPIModel : PageModel
     public IFormFile Upload { get; set; } = null!;
     
     [BindProperty]
-    public rtItem thisrtItem { get; set; } = new rtItem{ rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
+    public rtItem thisrtItem { get; set; } = new rtItem{ rtId = 1001, rtUserObjectId = "Cosmo", rtDescription = "fun time digging hole for bone",rtLocation = "backyard", rtDateTime =  DateTime.UtcNow };
 
     public void OnGet()
     {

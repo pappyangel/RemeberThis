@@ -33,28 +33,28 @@ namespace BlazorWebApp.Pages;
         {
             new rtItem
             {   rtId = 1001,
-                rtUserName = "Cosmo1",
+                rtUserObjectId = "Cosmo1",
                 rtDescription = "fun time digging hole for bone",
                 rtLocation = "backyard1",
                 rtDateTime = DateTime.UtcNow
             },
             new rtItem
             {   rtId = 1002,
-                rtUserName = "Cosmo2",
+                rtUserObjectId = "Cosmo2",
                 rtDescription = "fun time digging hole for bone",
                 rtLocation = "backyard2",
                 rtDateTime = DateTime.UtcNow
             },
             new rtItem
             {   rtId = 1003,
-                rtUserName = "Cosmo3",
+                rtUserObjectId = "Cosmo3",
                 rtDescription = "fun time digging hole for bone",
                 rtLocation = "backyard3",
                 rtDateTime = DateTime.UtcNow
             },
             new rtItem
             {   rtId = 1004,
-                rtUserName = "Cosmo4",
+                rtUserObjectId = "Cosmo4",
                 rtDescription = "fun time digging hole for bone",
                 rtLocation = "backyard4",
                 rtDateTime = DateTime.UtcNow

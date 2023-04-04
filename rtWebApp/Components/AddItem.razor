@@ -9,7 +9,7 @@
 
 @* <EditForm Model="thisrtItem"> *@
     <div >
-        @* <label for="thisrtItem.rtUser">User Name: </label>    
+        @* <label for="thisrtItem.rtUserObjectId">User Name: </label>    
     <InputText id="firetruck" class="form-control" @bind-Value="thisrtItem" /> *@
 
         @* <InputText id=> </InputText> *@
@@ -19,8 +19,8 @@
 @*   <InputText id="lastName" class="form-control" @bind-Value="newCustomer.LastName" /> *@
 
 
- @* <label for="thisrtItem.rtUser">User Name: </label>
-                    <input type="text" asp-for="thisrtItem.rtUser" placeholder="user"><br> *@
+ @* <label for="thisrtItem.rtUserObjectId">User Name: </label>
+                    <input type="text" asp-for="thisrtItem.rtUserObjectId" placeholder="user"><br> *@
 @code
 {
     string thisrtItem = "Dog";

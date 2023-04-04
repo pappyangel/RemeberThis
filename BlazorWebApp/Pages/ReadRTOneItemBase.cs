@@ -25,7 +25,7 @@ public class ReadRTOneItemBase : ComponentBase
         DebugMsg = "OnInitializedXX";
         //Replace below with call to API
         thisrtItem.rtId = 1001;
-        thisrtItem.rtUserName = "Cosmo-1001";
+        thisrtItem.rtUserObjectId = "Cosmo-1001";
         thisrtItem.rtDescription = "fun time digging hole for bone";
         thisrtItem.rtLocation = "backyard";
         thisrtItem.rtDateTime = DateTime.UtcNow;
