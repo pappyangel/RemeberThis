@@ -41,7 +41,7 @@ namespace RememberThis.DB
             return sqlDBCn;
         }
 
-        
+
         public async Task<int> ExecuteQueryAsync(string qry)
         {
             int queryReturnCode = 1;
@@ -116,7 +116,7 @@ namespace RememberThis.DB
 
             return sqlrtItems;
 
-        }        
+        }
         private async Task<int> CRUDAsync(string sqlStatetment)
         {
             SqlCommand command;
@@ -127,7 +127,19 @@ namespace RememberThis.DB
 
             command = new SqlCommand(sqlStatetment, SQLCn);
             command.CommandType = CommandType.Text;
-            rowsAffected = await command.ExecuteNonQueryAsync();
+
+            try
+            {
+                rowsAffected = await command.ExecuteNonQueryAsync();   
+            }
+            catch (Exception Ex)
+            {
+               string methodReturnValue = Ex.Message;
+               rowsAffected = -1;
+                // throw;
+            }
+
+            
 
             command.Dispose();
             SQLCn.Close();
@@ -159,6 +171,8 @@ namespace RememberThis.DB
         {
             int crudResult;
             string sql = $"Insert into {tblName} (UserObjectId, Description, Location, Dt, ImagePath) values ('{rtItem.rtUserObjectId}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
+            //below line used to cause a sql error for testing purposes
+            //string sql = $"Insert into {tblName} (User, Description, Location, Dt, ImagePath) values ('{rtItem.rtUserObjectId}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
 
             crudResult = await CRUDAsync(sql);
 
