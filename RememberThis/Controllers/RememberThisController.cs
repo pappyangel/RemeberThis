@@ -94,8 +94,13 @@ public class RememberThisController : ControllerBase
                 else
                 {
                     // roll back azure storage write        
-                    await DeleteFromAzureStorageAsync(StorageErrorOrFileName);
-                    apiReturnMsg = "SQL Insert failed, Storage rolled back";
+                    string deleteStorageMsg =  await DeleteFromAzureStorageAsync(StorageErrorOrFileName);
+                    if (deleteStorageMsg == "DeleteBlobSuccess")
+                        apiReturnMsg = "SQL Insert failed, Storage roll-back success";
+                    else
+                        apiReturnMsg = "SQL Insert failed, Storage roll-back failed";
+
+                    // throw;                   
                     
                 }
 

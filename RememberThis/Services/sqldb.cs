@@ -36,6 +36,7 @@ namespace RememberThis.DB
             // var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
             builder.Password = _configuration.GetValue<string>("SQLPW");
 
+            // candidate for retry logic 
             SqlConnection sqlDBCn = new SqlConnection(builder.ConnectionString);
 
             return sqlDBCn;
