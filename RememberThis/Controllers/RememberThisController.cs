@@ -85,6 +85,7 @@ public class RememberThisController : ControllerBase
                 // write to sql process
                 rtItemFromPost.rtImagePath = StorageErrorOrFileName;
                 SqlDb sqlDb = new(_config);
+                // int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
                 int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
 
                 if ((rowsAffected == 1))
@@ -127,7 +128,7 @@ private async Task<string> DeleteFromAzureStorageAsync(string fileName)
         try
         {
             await blobClient.DeleteIfExistsAsync();
-            apiReturnMsg = "DeleteBlobSuccess";
+            methodReturnValue = "DeleteBlobSuccess";
         }
         catch (Exception Ex)
         {
