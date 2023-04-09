@@ -7,6 +7,8 @@ using System.Text.Json;
 using System.Net.Http.Headers;
 using BlazorWebApp.Services;
 using Microsoft.AspNetCore.Components.Routing;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 namespace BlazorWebApp.Pages
 {
@@ -36,8 +38,9 @@ namespace BlazorWebApp.Pages
 
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; } = null!;
-
    
+        [Inject]
+        protected AuthenticationStateProvider authenticationStateProvider { get; set; } = null!;
 
         [Inject]
         protected ItemService _ItemService { get; set; } = null!;
@@ -46,8 +49,8 @@ namespace BlazorWebApp.Pages
         {
             thisrtItem = new rtItem
             {
-                rtId = 1001,
-                rtUserName = "Cosmo",
+                rtId = 0,
+                rtUserObjectId = string.Empty,
                 rtDescription = string.Empty,
                 rtLocation = string.Empty,
                 rtDateTime = DateTime.UtcNow
@@ -56,11 +59,18 @@ namespace BlazorWebApp.Pages
             // rtItemEditContext = new(thisrtItem);
         }      
 
-        protected async Task SubmitForm(IBrowserFile fileFromChild)
+        protected async Task SubmitFormAsync(IBrowserFile fileFromChild)
         {
             string PersistReturnMsg = string.Empty;
 
             file = fileFromChild;
+
+            var authState = await authenticationStateProvider
+            .GetAuthenticationStateAsync();
+            var user = authState.User;
+            
+            thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;            
+            //thisrtItem.rtDateTime = DateTime.UtcNow;
 
             // need to add code to handle no image selected
             var ms = new MemoryStream();

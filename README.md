@@ -1,6 +1,14 @@
 # RememberThis
 
 ### The following list includes the work done in the B2C Branch
+
+- imlemented SQL Command Parameters
+- Azure Storage Rollback logic
+- changed User to UserObjectId
+- discovered Properties\launchsettings.json and added https support
+- minimze3d the meta data collected on the insert page
+- moved AuthN code from B2C proj into blazorWebApp
+
 - PR on 3/30/23
 - Fixed B2C
   - Identity Options

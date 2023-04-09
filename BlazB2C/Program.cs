@@ -8,10 +8,10 @@ using BlazB2C.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
+// Add services to the container.
 builder.Services.AddServerSideBlazor()
     .AddMicrosoftIdentityConsentHandler();
-// Add services to the container.
+
 builder.Services.AddAuthentication(OpenIdConnectDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApp(builder.Configuration.GetSection("AzureAdB2C"));
 
@@ -25,9 +25,6 @@ builder.Services.AddControllersWithViews()
 // });
 
 builder.Services.AddRazorPages();
-
-// builder.Services.AddHttpContextAccessor();
-
 builder.Services.AddSingleton<WeatherForecastService>();
 
 var app = builder.Build();
@@ -46,7 +43,6 @@ else
 }
 
 app.UseHttpsRedirection();
-
 
 app.UseStaticFiles();
 

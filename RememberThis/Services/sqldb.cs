@@ -36,12 +36,13 @@ namespace RememberThis.DB
             // var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
             builder.Password = _configuration.GetValue<string>("SQLPW");
 
+            // candidate for retry logic  
             SqlConnection sqlDBCn = new SqlConnection(builder.ConnectionString);
 
             return sqlDBCn;
         }
 
-        
+
         public async Task<int> ExecuteQueryAsync(string qry)
         {
             int queryReturnCode = 1;
@@ -60,7 +61,7 @@ namespace RememberThis.DB
                 sqlrtItems.Add(new rtItem()
                 {
                     rtId = dataReader.GetInt32(0),
-                    rtUserName = dataReader.GetString(1),
+                    rtUserObjectId = dataReader.GetString(1),
                     rtDescription = dataReader.GetString(2),
                     rtLocation = dataReader.GetString(3),
                     rtDateTime = dataReader.GetDateTime(4),
@@ -116,31 +117,47 @@ namespace RememberThis.DB
 
             return sqlrtItems;
 
-        }        
-        private async Task<int> CRUDAsync(string sqlStatetment)
+        }
+        private async Task<int> CRUDAsync(string sqlStatetment, rtItem rtItem)        
         {
-            SqlCommand command;
-            int rowsAffected = 0;
+            int rowsAffected = 0;            
+            
+            SqlConnection SQLCn = GetSQLCn();       
 
-            SqlConnection SQLCn = GetSQLCn();
-            await SQLCn.OpenAsync();
+            SqlCommand crudCommand = new SqlCommand(sqlStatetment, SQLCn);
+            crudCommand.CommandType = CommandType.Text;           
+            
+            crudCommand.Parameters.Add("@rtUserObjectId", SqlDbType.VarChar, 100).Value = rtItem.rtUserObjectId;
+            crudCommand.Parameters.Add("@rtDescription", SqlDbType.VarChar, 255).Value= rtItem.rtDescription;
+            crudCommand.Parameters.Add("@rtLocation", SqlDbType.VarChar, 100).Value= rtItem.rtLocation;
+            crudCommand.Parameters.Add("@rtDateTime", SqlDbType.DateTime).Value= rtItem.rtDateTime;
+            crudCommand.Parameters.Add("@rtImagePath", SqlDbType.VarChar, 255).Value= rtItem.rtImagePath;                
 
-            command = new SqlCommand(sqlStatetment, SQLCn);
-            command.CommandType = CommandType.Text;
-            rowsAffected = await command.ExecuteNonQueryAsync();
+            try
+            {
+                await SQLCn.OpenAsync();
+                rowsAffected = await crudCommand.ExecuteNonQueryAsync();   
+            }
+            catch (Exception Ex)
+            {
+               string methodReturnValue = Ex.Message;
+               rowsAffected = -1;
+                // throw;
+            }            
 
-            command.Dispose();
+            crudCommand.Dispose();
             SQLCn.Close();
 
             return rowsAffected;
 
         }
-        public async Task<int> DeletertItembyId(int id)
+        // public async Task<int> DeletertItembyId(int id)
+         public int DeletertItembyId(int id)
         {
-            int crudResult;
+            int crudResult = 0;
             string sql = $"Delete from {tblName} where Id = {id}";
 
-            crudResult = await CRUDAsync(sql);
+            // crudResult = await CRUDAsync(sql);
 
             return crudResult;
         }
@@ -148,21 +165,53 @@ namespace RememberThis.DB
         public async Task<int> UpdatertItembyId(rtItem rtItem)
         {
             int crudResult;
-            string sql = $"Update t Set t.user = '{rtItem.rtUserName}', t.Description = {rtItem.rtDescription}, t.Location = {rtItem.rtLocation}, t.Dt = {rtItem.rtDateTime},  t.ImagePath = '{rtItem.rtImagePath}'"
+            string sql = $"Update t Set t.UserObjectId = '{rtItem.rtUserObjectId}', t.Description = {rtItem.rtDescription}, t.Location = {rtItem.rtLocation}, t.Dt = {rtItem.rtDateTime},  t.ImagePath = '{rtItem.rtImagePath}'"
              + $" From {tblName} t where t.id = {rtItem.rtId}";
 
-            crudResult = await CRUDAsync(sql);
+            crudResult = await CRUDAsync(sql, rtItem);
 
             return crudResult;
         }
-        public async Task<int> InsertrtItem(rtItem rtItem)
+
+        public async Task<int> InsertrtItem2(rtItem rtItem)
         {
-            int crudResult;
-            string sql = $"Insert into {tblName} ([User], Description, Location, Dt, ImagePath) values ('{rtItem.rtUserName}', '{rtItem.rtDescription}', '{rtItem.rtLocation}', '{rtItem.rtDateTime}', '{rtItem.rtImagePath}')";
+            int crudResult = 0;
+            
+            string sql = $"Insert into {tblName} (UserObjectId, Description, Location, Dt, ImagePath) values (@rtUserObjectId, @rtDescription, @rtLocation, @rtDateTime, @rtImagePath)";
+                    
+            SqlConnection SQLCn = GetSQLCn();       
+            
+            SqlCommand command = new SqlCommand(sql, SQLCn);
+            command.CommandType = CommandType.Text;            
+            command.Parameters.Add("@rtDescription", SqlDbType.VarChar,255).Value= rtItem.rtDescription;            
 
-            crudResult = await CRUDAsync(sql);
+            try
+            {                
+                await SQLCn.OpenAsync();     
+                crudResult = await command.ExecuteNonQueryAsync();
+                Console.WriteLine("RowsAffected: {0}", crudResult);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
 
-            return crudResult;
+            //crudResult = await CRUDAsync(sql, rtItem);
+
+            return crudResult;  
+
+        }
+        public async Task<int> InsertrtItem(rtItem rtItem)
+        //public int InsertrtItem(rtItem rtItem)
+        {            
+            int crudResult;                     
+
+            string sql = $"Insert into {tblName} (UserObjectId, Description, Location, Dt, ImagePath) values (@rtUserObjectId, @rtDescription, @rtLocation, @rtDateTime, @rtImagePath)";
+            
+            crudResult = await CRUDAsync(sql, rtItem);
+
+            return crudResult;                        
+           
         }
         public List<rtItem> GetAllrtItemsJSON()
         {

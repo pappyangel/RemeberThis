@@ -28,7 +28,7 @@ public class RememberThisController : ControllerBase
     [HttpGet]
     public ActionResult<rtItem> GetAll()
     {
-        rtItem getItem = new rtItem { rtId = 1001, rtUserName = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+        rtItem getItem = new rtItem { rtId = 1001, rtUserObjectId = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
 
         return Ok(getItem);
     }
@@ -39,7 +39,7 @@ public class RememberThisController : ControllerBase
     {
         rtItem getItemId = new rtItem { 
             rtId = itemId, 
-            rtUserName = "Cosmo", 
+            rtUserObjectId = "Cosmo", 
             rtDescription = "fun time digging hole for bone", 
             rtLocation = "backyard", 
             rtImagePath = "Martini.jpg",
@@ -73,7 +73,7 @@ public class RememberThisController : ControllerBase
 
         if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            string StorageErrorOrFileName = await WritetoAzureStorage(ms, unsafeFileNameAndExt);
+            string StorageErrorOrFileName = await WritetoAzureStorageAsync(ms, unsafeFileNameAndExt);
 
             if (StorageErrorOrFileName.StartsWith("ERROR"))
             {
@@ -85,16 +85,24 @@ public class RememberThisController : ControllerBase
                 // write to sql process
                 rtItemFromPost.rtImagePath = StorageErrorOrFileName;
                 SqlDb sqlDb = new(_config);
+                // int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
                 int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
 
-                if ((rowsAffected == 0))
-                {   
-                    // roll back azure storage write                    
-                    apiReturnMsg = "SQL Insert failed, Storage rolled back";
+                if ((rowsAffected == 1))
+                {                       
+                    apiReturnMsg += " - SQL Insert Success";                    
                 }
                 else
                 {
-                    apiReturnMsg += " - SQL Insert Success";
+                    // roll back azure storage write        
+                    string deleteStorageMsg =  await DeleteFromAzureStorageAsync(StorageErrorOrFileName);
+                    if (deleteStorageMsg == "DeleteBlobSuccess")
+                        apiReturnMsg = "SQL Insert failed, Storage roll-back success";
+                    else
+                        apiReturnMsg = "SQL Insert failed, Storage roll-back failed";
+
+                    // throw;                   
+                    
                 }
 
             }
@@ -107,7 +115,33 @@ public class RememberThisController : ControllerBase
         return Ok(apiReturnMsg);
     }
 
-    private async Task<string> WritetoAzureStorage(MemoryStream _ms, string filename)
+
+private async Task<string> DeleteFromAzureStorageAsync(string fileName)
+    {       
+        string methodReturnValue = string.Empty;
+        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
+        string ImageContainer = _config["ImageContainer"]!;     
+
+        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);        
+
+        try
+        {
+            await blobClient.DeleteIfExistsAsync();
+            methodReturnValue = "DeleteBlobSuccess";
+        }
+        catch (Exception Ex)
+        {
+            methodReturnValue = Ex.Message;
+            methodReturnValue = "ERROR-Blob Delete";
+            // throw;
+        }
+
+        return methodReturnValue;
+
+    }  // end of write to azure storage
+
+    private async Task<string> WritetoAzureStorageAsync(MemoryStream _ms, string filename)
     {
         apiReturnMsg = "StorageStart";
         string methodReturnValue = string.Empty;
@@ -138,7 +172,6 @@ public class RememberThisController : ControllerBase
             methodReturnValue = "ERROR-Storage";
             // throw;
         }
-
 
         return methodReturnValue;
 

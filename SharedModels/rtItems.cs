@@ -3,7 +3,7 @@
 public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
 {
     public int rtId { get; set; }
-    public string? rtUserName { get; set; } //= null;
+    public string? rtUserObjectId { get; set; } //= null;
     public string? rtDescription { get; set; } //= null;
     public string? rtLocation { get; set; }
     public DateTime rtDateTime { get; set; }
@@ -26,7 +26,7 @@ public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
 
     public override string ToString()
     {
-        return "Id: " + rtId + " File: " + rtImagePath + ", User: " + rtUserName + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime;
+        return "Id: " + rtId + " File: " + rtImagePath + ", UserObjectId: " + rtUserObjectId + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime;
     }
 
 }

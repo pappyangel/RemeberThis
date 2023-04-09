@@ -1,0 +1,40 @@
+@using Microsoft.Identity.Web
+@using Microsoft.Extensions.Options
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+@inject IOptionsMonitor<MicrosoftIdentityOptions> microsoftIdentityOptions
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+
+<AuthorizeView>
+    <Authorized>
+        @if (canEditProfile)
+        {            
+            <a href="MicrosoftIdentity/Account/EditProfile">Hello @userFname</a>
+        }
+        else
+        {            
+            <text>Hello @userFname</text>
+        }
+        <a href="MicrosoftIdentity/Account/SignOut">Log out</a>
+    </Authorized>
+    <NotAuthorized>
+        <a href="MicrosoftIdentity/Account/SignIn">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private bool canEditProfile;
+    private string? userFname;
+
+    protected override async Task OnInitializedAsync()
+    {        
+        var options = microsoftIdentityOptions.Get(OpenIdConnectDefaults.AuthenticationScheme);
+        canEditProfile = !string.IsNullOrEmpty(options.EditProfilePolicyId);        
+
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;        
+
+        userFname = !(String.IsNullOrWhiteSpace(user.FindFirst(c => c.Type == ClaimTypes.GivenName)?.Value)) ? user.FindFirst(c => c.Type == ClaimTypes.GivenName)?.Value : "[No Name]";
+    }
+}
