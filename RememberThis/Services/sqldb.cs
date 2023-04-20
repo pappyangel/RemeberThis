@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using SharedModels;
 using Microsoft.Extensions.Configuration;
 
-namespace RememberThis.DB
+namespace RememberThis.Services
 {
     public class SqlDb
     {
