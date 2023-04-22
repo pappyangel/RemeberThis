@@ -18,10 +18,10 @@ public class RememberThisController : ControllerBase
     private readonly IConfiguration _config;
     private readonly BlobStorage _BlobStorage;
     private readonly SqlDb _SqlDb;
-    
+
     private string apiReturnMsg = "Controller Start";
     private string[] permittedExtensions = new string[] { ".gif", ".png", ".jpg", ".jpeg" };
-    public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config,BlobStorage BlobStorage,SqlDb SqlDb)
+    public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config, BlobStorage BlobStorage, SqlDb SqlDb)
     {
         _logger = logger;
         _config = config;
@@ -43,17 +43,36 @@ public class RememberThisController : ControllerBase
     [HttpGet("id/{itemId}")]
     public ActionResult<rtItem> GetOne(int itemId)
     {
-        rtItem getItemId = new rtItem { 
-            rtId = itemId, 
-            rtUserObjectId = "Cosmo", 
-            rtDescription = "fun time digging hole for bone", 
-            rtLocation = "backyard", 
+        rtItem getItemId = new rtItem
+        {
+            rtId = itemId,
+            rtUserObjectId = "Cosmo",
+            rtDescription = "fun time digging hole for bone",
+            rtLocation = "backyard",
             rtImagePath = "Martini.jpg",
-            rtDateTime = DateTime.UtcNow };        
+            rtDateTime = DateTime.UtcNow
+        };
 
         string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
         return Ok(getItemId);
+    }
+
+    //[HttpDelete("id/{id:int}")]
+    [HttpDelete]
+    public async Task<ActionResult<string>> DeleteItem(rtItem ItemtoDelete)
+    {
+        int RowsAffected = await _SqlDb.DeleteItem(ItemtoDelete.rtId);
+        string DeleteReturnMsg = (RowsAffected == 1) ? "Item Deleted from SQL" : "Error in SQL Delete";
+
+        string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(ItemtoDelete.rtImagePath!);
+        if (deleteStorageMsg == "DeleteBlobSuccess")
+            DeleteReturnMsg += " - Item Deleted from Storage";
+        else
+            DeleteReturnMsg += " and Storage Delete";
+
+        return DeleteReturnMsg;
+
     }
 
     [HttpPost]
@@ -91,24 +110,24 @@ public class RememberThisController : ControllerBase
                 // write to sql process
                 rtItemFromPost.rtImagePath = StorageErrorOrFileName;
                 apiReturnMsg = "StorageWriteSuccess";
-               
+
                 int rowsAffected = await _SqlDb.InsertrtItem(rtItemFromPost);
 
                 if ((rowsAffected == 1))
-                {                       
-                    apiReturnMsg += " - SQL Insert Success";                    
+                {
+                    apiReturnMsg += " - SQL Insert Success";
                 }
                 else
                 {
                     // roll back azure storage write        
-                    string deleteStorageMsg =  await _BlobStorage.DeleteFromAzureStorageAsync(StorageErrorOrFileName);
+                    string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(StorageErrorOrFileName);
                     if (deleteStorageMsg == "DeleteBlobSuccess")
                         apiReturnMsg = "SQL Insert failed, Storage roll-back success";
                     else
                         apiReturnMsg = "SQL Insert failed, Storage roll-back failed";
 
                     // throw;                   
-                    
+
                 }
 
             }
