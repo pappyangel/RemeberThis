@@ -127,13 +127,18 @@ namespace RememberThis.Services
             using SqlCommand crudCommand = new SqlCommand(sqlStatetment, SQLCn);
             crudCommand.CommandType = CommandType.Text;
 
-            crudCommand.Parameters.Add("@ItemId", SqlDbType.VarChar, 255).Value = rtItem.rtId;
-            crudCommand.Parameters.Add("@rtUserObjectId", SqlDbType.VarChar, 100).Value = rtItem.rtUserObjectId;
-            crudCommand.Parameters.Add("@rtDescription", SqlDbType.VarChar, 255).Value = rtItem.rtDescription;
-            crudCommand.Parameters.Add("@rtLocation", SqlDbType.VarChar, 100).Value = rtItem.rtLocation;
-            crudCommand.Parameters.Add("@rtDateTime", SqlDbType.DateTime).Value = rtItem.rtDateTime;
-            crudCommand.Parameters.Add("@rtImagePath", SqlDbType.VarChar, 255).Value = rtItem.rtImagePath;
+            bool IgnoreCase = true;
+            if (sqlStatetment.StartsWith("D",IgnoreCase, null) | sqlStatetment.StartsWith("U",IgnoreCase, null))
+                crudCommand.Parameters.Add("@ItemId", SqlDbType.Int).Value = rtItem.rtId;
             
+            if (sqlStatetment.StartsWith("I",IgnoreCase, null) | sqlStatetment.StartsWith("U",IgnoreCase, null))
+            {
+                crudCommand.Parameters.Add("@rtUserObjectId", SqlDbType.VarChar, 100).Value = rtItem.rtUserObjectId;
+                crudCommand.Parameters.Add("@rtDescription", SqlDbType.VarChar, 255).Value = rtItem.rtDescription;
+                crudCommand.Parameters.Add("@rtLocation", SqlDbType.VarChar, 100).Value = rtItem.rtLocation;
+                crudCommand.Parameters.Add("@rtDateTime", SqlDbType.DateTime).Value = rtItem.rtDateTime;
+                crudCommand.Parameters.Add("@rtImagePath", SqlDbType.VarChar, 255).Value = rtItem.rtImagePath;
+            }            
 
             try
             {
@@ -153,21 +158,10 @@ namespace RememberThis.Services
             return rowsAffected;
 
         }
-        public async Task<int> DeleteItem(int id)
+        public async Task<int> DeleteItem(rtItem deleteItem)
         {
             int crudResult = 0;
-            string sql = $"Delete from {tblName} where Id = @ItemId";
-
-
-            rtItem deleteItem = new rtItem
-            {
-                rtId = id,
-                rtUserObjectId = String.Empty,
-                rtDescription = String.Empty,
-                rtLocation = String.Empty,
-                rtImagePath = String.Empty,
-                rtDateTime = DateTime.UtcNow
-            };
+            string sql = $"Delete from {tblName} where Id = @ItemId";           
 
             crudResult = await CRUDAsync(sql, deleteItem);
 

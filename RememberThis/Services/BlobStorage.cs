@@ -27,7 +27,7 @@ public class BlobStorage
 
         try
         {
-            await blobClient.DeleteIfExistsAsync();
+            bool storageReturnCode = await blobClient.DeleteIfExistsAsync();
             methodReturnValue = "DeleteBlobSuccess";
         }
         catch (Exception Ex)

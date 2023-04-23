@@ -62,7 +62,7 @@ public class RememberThisController : ControllerBase
     [HttpDelete]
     public async Task<ActionResult<string>> DeleteItem(rtItem ItemtoDelete)
     {
-        int RowsAffected = await _SqlDb.DeleteItem(ItemtoDelete.rtId);
+        int RowsAffected = await _SqlDb.DeleteItem(ItemtoDelete);
         string DeleteReturnMsg = (RowsAffected == 1) ? "Item Deleted from SQL" : "Error in SQL Delete";
 
         string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(ItemtoDelete.rtImagePath!);
