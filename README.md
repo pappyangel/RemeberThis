@@ -1,5 +1,16 @@
 # RememberThis
 
+### The following list includes the work done in the Service Refactor Branch
+
+- cleaned up SQLDB service removing unused lines of code and bad copy/paste from Cocktail project
+- Created ImageService, which provides image file validation logic
+- Minor fixes in Insert and Delete logic
+- Implemented Delete Item logic in SQL Service, Storage Service and Controller
+- Created Azure Storage Class a Service
+- Created SQLDB Class a service
+
+
+
 ### The following list includes the work done in the B2C Branch
 
 - imlemented SQL Command Parameters

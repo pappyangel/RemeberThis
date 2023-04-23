@@ -3,7 +3,7 @@ using System.Text.Json;
 using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
-using RememberThis.DB;
+using RememberThis.Services;
 using SharedModels;
 
 
@@ -16,12 +16,21 @@ public class RememberThisController : ControllerBase
 {
     private readonly ILogger<RememberThisController> _logger;
     private readonly IConfiguration _config;
+    private readonly BlobStorage _BlobStorage;
+    private readonly SqlDb _SqlDb;
+    private readonly ImageService _ImageService;
+
     private string apiReturnMsg = "Controller Start";
-    private string[] permittedExtensions = new string[] { ".gif", ".png", ".jpg", ".jpeg" };
-    public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config)
+
+    public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config,
+            BlobStorage BlobStorage, SqlDb SqlDb, ImageService ImageService)
     {
         _logger = logger;
         _config = config;
+        _BlobStorage = BlobStorage;
+        _SqlDb = SqlDb;
+        _ImageService = ImageService;
+
     }
 
     // [HttpGet(Name = "GetRememberThis")]
@@ -37,17 +46,36 @@ public class RememberThisController : ControllerBase
     [HttpGet("id/{itemId}")]
     public ActionResult<rtItem> GetOne(int itemId)
     {
-        rtItem getItemId = new rtItem { 
-            rtId = itemId, 
-            rtUserObjectId = "Cosmo", 
-            rtDescription = "fun time digging hole for bone", 
-            rtLocation = "backyard", 
+        rtItem getItemId = new rtItem
+        {
+            rtId = itemId,
+            rtUserObjectId = "Cosmo",
+            rtDescription = "fun time digging hole for bone",
+            rtLocation = "backyard",
             rtImagePath = "Martini.jpg",
-            rtDateTime = DateTime.UtcNow };        
+            rtDateTime = DateTime.UtcNow
+        };
 
         string GetOneapiReturnMsg = "You sent this to Get One End Point: " + itemId.ToString();
 
         return Ok(getItemId);
+    }
+
+    //[HttpDelete("id/{id:int}")]
+    [HttpDelete]
+    public async Task<ActionResult<string>> DeleteItem(rtItem ItemtoDelete)
+    {
+        int RowsAffected = await _SqlDb.DeleteItem(ItemtoDelete);
+        string DeleteReturnMsg = (RowsAffected == 1) ? "Item Deleted from SQL" : "Error in SQL Delete";
+
+        string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(ItemtoDelete.rtImagePath!);
+        if (deleteStorageMsg == "DeleteBlobSuccess")
+            DeleteReturnMsg += " - Item Deleted from Storage";
+        else
+            DeleteReturnMsg += " and Storage Delete";
+
+        return DeleteReturnMsg;
+
     }
 
     [HttpPost]
@@ -71,9 +99,9 @@ public class RememberThisController : ControllerBase
 
         await stream.CopyToAsync(ms);
 
-        if (IsValidFileExtensionAndSignature(formFile.FileName, ms))
+        if (_ImageService.IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            string StorageErrorOrFileName = await WritetoAzureStorageAsync(ms, unsafeFileNameAndExt);
+            string StorageErrorOrFileName = await _BlobStorage.WritetoAzureStorageAsync(ms, unsafeFileNameAndExt);
 
             if (StorageErrorOrFileName.StartsWith("ERROR"))
             {
@@ -84,25 +112,25 @@ public class RememberThisController : ControllerBase
             {
                 // write to sql process
                 rtItemFromPost.rtImagePath = StorageErrorOrFileName;
-                SqlDb sqlDb = new(_config);
-                // int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
-                int rowsAffected = await sqlDb.InsertrtItem(rtItemFromPost);
+                apiReturnMsg = "StorageWriteSuccess";
+
+                int rowsAffected = await _SqlDb.InsertrtItem(rtItemFromPost);
 
                 if ((rowsAffected == 1))
-                {                       
-                    apiReturnMsg += " - SQL Insert Success";                    
+                {
+                    apiReturnMsg += " - SQL Insert Success";
                 }
                 else
                 {
                     // roll back azure storage write        
-                    string deleteStorageMsg =  await DeleteFromAzureStorageAsync(StorageErrorOrFileName);
+                    string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(StorageErrorOrFileName);
                     if (deleteStorageMsg == "DeleteBlobSuccess")
                         apiReturnMsg = "SQL Insert failed, Storage roll-back success";
                     else
                         apiReturnMsg = "SQL Insert failed, Storage roll-back failed";
 
                     // throw;                   
-                    
+
                 }
 
             }
@@ -116,135 +144,7 @@ public class RememberThisController : ControllerBase
     }
 
 
-private async Task<string> DeleteFromAzureStorageAsync(string fileName)
-    {       
-        string methodReturnValue = string.Empty;
-        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
-        string ImageContainer = _config["ImageContainer"]!;     
 
-        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
-        BlobClient blobClient = containerClient.GetBlobClient(fileName);        
-
-        try
-        {
-            await blobClient.DeleteIfExistsAsync();
-            methodReturnValue = "DeleteBlobSuccess";
-        }
-        catch (Exception Ex)
-        {
-            methodReturnValue = Ex.Message;
-            methodReturnValue = "ERROR-Blob Delete";
-            // throw;
-        }
-
-        return methodReturnValue;
-
-    }  // end of write to azure storage
-
-    private async Task<string> WritetoAzureStorageAsync(MemoryStream _ms, string filename)
-    {
-        apiReturnMsg = "StorageStart";
-        string methodReturnValue = string.Empty;
-        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
-        string ImageContainer = _config["ImageContainer"]!;
-        Boolean OverWrite = true;
-
-        string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
-        // string trustedNewFileName = Guid.NewGuid().ToString();
-        string trustedNewFileName = string.Format("{0:MM-dd-yyyy-H:mm:ss.fff}", DateTime.UtcNow);
-        string trustedFileNameAndExt = trustedNewFileName + trustedExtension;
-
-        methodReturnValue = trustedFileNameAndExt;
-
-        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
-        BlobClient blobClient = containerClient.GetBlobClient(trustedFileNameAndExt);
-
-        _ms.Position = 0;
-
-        try
-        {
-            await blobClient.UploadAsync(_ms, OverWrite);
-            apiReturnMsg = "StorageWriteSuccess";
-        }
-        catch (Exception Ex)
-        {
-            methodReturnValue = Ex.Message;
-            methodReturnValue = "ERROR-Storage";
-            // throw;
-        }
-
-        return methodReturnValue;
-
-    }  // end of write to azure storage
-    public bool IsValidFileExtensionAndSignature(string fileName, MemoryStream streamParam)
-    {
-
-        // might need to go somehwere higher in stack
-        apiReturnMsg = "Validation Method Start";
-        apiReturnMsg = "file check start";
-
-        MemoryStream data = new MemoryStream();
-        streamParam.Position = 0;
-        streamParam.CopyTo(data);
-
-        // this is generally checked by the file upload control itself - but we can double check it here
-        if (data == null || data.Length == 0)
-        {
-            apiReturnMsg = "file empty";
-            return false;
-        }
-
-        var filenameonly = Path.GetFileNameWithoutExtension(fileName);
-        if (string.IsNullOrEmpty(filenameonly))
-        {
-            apiReturnMsg = "file name not valid";
-            return false;
-        }
-
-        var ext = Path.GetExtension(fileName).ToLowerInvariant();
-        if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
-        {
-            apiReturnMsg = "file extension not valid";
-            return false;
-        }
-
-        data.Position = 0;
-
-        using (var reader = new BinaryReader(data))
-        {
-            var signatures = _fileSignature[ext];
-            var headerBytes = reader.ReadBytes(signatures.Max(m => m.Length));
-
-            bool fileSigCorrect = signatures.Any(signature =>
-                headerBytes.Take(signature.Length).SequenceEqual(signature));
-
-            apiReturnMsg = fileSigCorrect ? "file check good" : "file signiture invalid";
-
-            return fileSigCorrect;
-
-        }
-
-    } // End IsValidFileExtensionAndSignature
-
-    private static readonly Dictionary<string, List<byte[]>> _fileSignature = new Dictionary<string, List<byte[]>>
-        {
-            { ".gif", new List<byte[]> { new byte[] { 0x47, 0x49, 0x46, 0x38 } } },
-            { ".png", new List<byte[]> { new byte[] { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A } } },
-            { ".jpeg", new List<byte[]>
-                {
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE2 },
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE3 },
-                }
-            },
-            { ".jpg", new List<byte[]>
-                {
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE0 },
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE1 },
-                    new byte[] { 0xFF, 0xD8, 0xFF, 0xE8 },
-                }
-            }
-        };
 
 
 } // end class rememberthis
