@@ -10,20 +10,19 @@ namespace RememberThis.Services;
 
 public class SqlDb
 {
-    // private readonly ILogger<SqlDb> _logger;
+    private readonly ILogger<SqlDb> _logger;
     private readonly IConfiguration _configuration;
 
     private List<rtItem> sqlrtItems = new();
     private string tblName = "Items";
-    private string viewName = "vw_Items";
+    private string viewName = "vw_Items";    
+    
+    //This line is brioken.  Needs to be a valid select selecing the columns
+    private string selectClause = String.Empty;
 
-    //private string selectClause = "Select id, name, price, rating, coalesce(imagepath,'', imagepath) ";
-    private string selectClause = "Select id, name, price, rating, imagepath ";
-
-    //public SqlDb(ILogger<SqlDb> logger, IConfiguration configuration)
-    public SqlDb(IConfiguration configuration)
+    public SqlDb(ILogger<SqlDb> logger, IConfiguration configuration)    
     {
-        // _logger = logger
+        _logger = logger;
         _configuration = configuration;
 
     }
@@ -35,8 +34,7 @@ public class SqlDb
 
         // var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
         builder.Password = _configuration.GetValue<string>("SQLPW");
-
-        // candidate for retry logic  
+        
         SqlConnection sqlDBCn = new SqlConnection(builder.ConnectionString);
 
         return sqlDBCn;
@@ -86,28 +84,6 @@ public class SqlDb
         return sqlrtItems;
 
     } // end get by Id
-
-
-    public async Task<List<rtItem>> GetrtItemsByPrice(decimal price)
-    {
-        string qryPrice = selectClause + $"from {viewName} where price <= {price} order by Id";
-
-        await ExecuteQueryAsync(qryPrice);
-
-        return sqlrtItems;
-
-    } // end get by price
-
-    public async Task<List<rtItem>> GetrtItemsByRating(decimal rating)
-    {
-        string qryRating = selectClause + $"from {viewName} where rating >= {rating} order by Id";
-
-        await ExecuteQueryAsync(qryRating);
-
-        return sqlrtItems;
-
-    } // end get by rating
-
     public async Task<List<rtItem>> GetAllrtItems()
     {
         // define variables          
@@ -150,10 +126,7 @@ public class SqlDb
             string methodReturnValue = Ex.Message;
             rowsAffected = -1;
             // throw;
-        }
-
-        //crudCommand.Dispose();
-        //SQLCn.Close();
+        }    
 
         return rowsAffected;
 
@@ -180,8 +153,7 @@ public class SqlDb
     }
 
     
-    public async Task<int> InsertrtItem(rtItem rtItem)
-    //public int InsertrtItem(rtItem rtItem)
+    public async Task<int> InsertrtItem(rtItem rtItem)    
     {
         int crudResult;
 
