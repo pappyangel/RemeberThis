@@ -34,13 +34,65 @@ public class RememberThisController : ControllerBase
     }
 
     // [HttpGet(Name = "GetRememberThis")]
-    [HttpGet]
-    public ActionResult<rtItem> GetAll()
+    //[HttpGet]
+     [HttpGet("User/{UserObjectId}")]
+    public ActionResult<List<rtItem>> GetAll(string UserObjectId)
     {
-        rtItem getItem = new rtItem { rtId = 1001, rtUserObjectId = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
 
-        return Ok(getItem);
+        string fakeUserObjectId = String.Empty;
+        string fakeDesc = String.Empty;
+        string fakeLocation = String.Empty;
+        string fakeImageName = String.Empty;
+        Random rd = new Random();
+        int rand_num = rd.Next(1000, 9999);
+
+        if (UserObjectId == "Cosmo")
+        {
+            fakeUserObjectId = "Cosmo";
+            fakeDesc = "fun time digging hole for bone";
+            fakeLocation = "backyard";
+            fakeImageName = "bone1.jpg";
+        }
+        else
+        if(UserObjectId == "64ecf344-71fe-4901-8722-b716f64f58bd")
+        {
+            fakeUserObjectId = "False";
+            fakeDesc = "setting up external monitor";
+            fakeLocation = "Boston";
+            fakeImageName = "monitor1.jpg";
+        }
+        else
+        if(UserObjectId == "a387ff55-c87d-4ed6-a8d6-0e6cb3be3443")
+        {
+            fakeUserObjectId = "True";
+            fakeDesc = "sampling new cocktails while writing code!";
+            fakeLocation = "4wbl";
+            fakeImageName = "bcocktail1.jpg";
+        }
+
+        List<rtItem> rtItemList = new List<rtItem>();
+
+        
+        for (int i = 0; i < 11; i++)
+        {
+            rtItemList.Add(new rtItem
+            {
+                rtId = rd.Next(1000, 9999),
+                rtUserObjectId = fakeUserObjectId,
+                rtDescription = fakeDesc,
+                rtLocation = fakeLocation,
+                rtDateTime = DateTime.UtcNow,
+                rtImagePath = DateTime.UtcNow.ToString("s")+".jpg"
+            }
+            );
+        }
+
+        return Ok(rtItemList);
     }
+
+
+
+
 
     // [HttpGet("id/{id:int}")]
     [HttpGet("id/{itemId}")]
@@ -142,9 +194,6 @@ public class RememberThisController : ControllerBase
         //return $"Row(s) inserted were: {rowsAffected}";
         return Ok(apiReturnMsg);
     }
-
-
-
 
 
 } // end class rememberthis
