@@ -1,0 +1,35 @@
+@page "/ReadJustMine"
+@inherits ReadJustMineBase
+
+
+
+<div class="container">
+    <div class="row">
+        @foreach (var item in ItemsList!)
+        {
+             <div class="col-md-4" style="max-width: 18rem; max-height: 50rem;">                        
+                <div class="card">
+                    <div class="card-header">
+                        <p style="font-size: 8px;" class="card-text">UniqueId: @item.rtId</p>
+                        <p style="font-size: 8px;" class="card-text">WHEN: @item.rtDateTime</p>
+                        <p style="font-size: 8px;" class="card-text">WHERE: @item.rtLocation.</p>
+                    </div>
+                    <div class="card-body">                       
+                        <img src=@((rand.NextDouble() >= 0.5) ? "./Images/BabaMan.jpg" : "./Images/Cosmo-sox.png")
+                        height=auto width="50" class="card-img-top" alt="Manhattan at Baba">
+                    </div>
+                    <div class="card-footer">
+                        <p class="card-text">What: @item.rtDescription</p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+
+<br>
+<label><b>Debug Info:</b> @DebugMsg </label>
+
+

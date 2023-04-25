@@ -9,7 +9,7 @@ namespace BlazorWebApp.Services
     {
         private readonly IConfiguration _configuration = null!;
 
-        private string ItemServicesReturnMsg = string.Empty;
+        private string ItemServicesReturnMsg = string.Empty;      
 
         private IHttpClientFactory _ClientFactory = null!;
         //private IHttpClientFactory ClientFactory { get; set; }
@@ -86,8 +86,10 @@ namespace BlazorWebApp.Services
 
         public async Task<List<rtItem>> GetAllItemsAsync(string rtUserObjectId)
         {
-            List<rtItem> rtItems = new();
+            
+
             ItemServicesReturnMsg = "GetAllItemsAsync started";
+             List<rtItem> rtItems  = new();
 
             //User/Cosmo
             apiUrl = apiBase + apiRoute + "User/" + rtUserObjectId;
