@@ -4,7 +4,7 @@
 
 
 <div class="container">
-    <div class="row">
+    <div class="row gy-3">
         @foreach (var item in ItemsList!)
         {
              <div class="col-md-4" style="max-width: 18rem; max-height: 50rem;">                        
@@ -15,7 +15,7 @@
                         <p style="font-size: 8px;" class="card-text">WHERE: @item.rtLocation.</p>
                     </div>
                     <div class="card-body">                       
-                        <img src=@((rand.NextDouble() >= 0.5) ? "./Images/BabaMan.jpg" : "./Images/Cosmo-sox.png")
+                        <img src=@((rand.NextDouble() >= 0.5) ? "./Images/AcelaOldFashion.jpg" : "./Images/Cosmo-sox.png")
                         height=auto width="50" class="card-img-top" alt="Manhattan at Baba">
                     </div>
                     <div class="card-footer">
