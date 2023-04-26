@@ -27,7 +27,7 @@ public class SqlDb
 
     }
 
-    public SqlConnection GetSQLCn()
+    private string GetSQLCnStr()
     {
         var builder = new SqlConnectionStringBuilder(
             _configuration["ConnectionStrings:defaultSQLConnection"]);
@@ -35,24 +35,22 @@ public class SqlDb
         // var keyVaultSecretLookup = _configuration["AzureKeyVaultSecret:defaultSecret"];
         builder.Password = _configuration.GetValue<string>("SQLPW");
         
-        SqlConnection sqlDBCn = new SqlConnection(builder.ConnectionString);
-
-        return sqlDBCn;
+        return builder.ConnectionString;
     }
 
 
-    public async Task<int> ExecuteQueryAsync(string qry)
+    public async Task<int> ExecuteQueryAsync(string qry, string UserObjectId)
     {
-        int queryReturnCode = 1;
-        SqlCommand command;
-        SqlDataReader dataReader;
+        int queryReturnCode = 1;        
+        
+            
+        using SqlConnection SQLCn = new SqlConnection(GetSQLCnStr());        
+        using SqlCommand command = new SqlCommand(qry, SQLCn);
+        command.CommandType = CommandType.StoredProcedure;
+        command.Parameters.Add("@selecteduser", SqlDbType.VarChar, 100).Value = UserObjectId;
 
-        SqlConnection SQLCn = GetSQLCn();
-        // check for valid Open and set return code
         await SQLCn.OpenAsync();
-        command = new SqlCommand(qry, SQLCn);
-        // check for valid Command and set return code
-        dataReader = await command.ExecuteReaderAsync();
+        SqlDataReader dataReader = await command.ExecuteReaderAsync();
 
         while (dataReader.Read())
         {
@@ -75,21 +73,22 @@ public class SqlDb
         return queryReturnCode;
 
     }
-    public async Task<List<rtItem>> GetrtItemsById(int id)
+    public async Task<List<rtItem>> GetrtItemsById(int id, string UserObjectId)
     {
         string qryId = selectClause + $"from {viewName} where Id = {id} order by Id";
 
-        await ExecuteQueryAsync(qryId);
+        await ExecuteQueryAsync(qryId, UserObjectId);
 
         return sqlrtItems;
 
     } // end get by Id
-    public async Task<List<rtItem>> GetAllrtItems()
+
+    public async Task<List<rtItem>> GetAllItemsbyUser(string UserObjectId)
     {
         // define variables          
-        string qryAllrtItems = selectClause + $"from {viewName} order by Id";
+        string spGetAllItemsbyUser = "usp_GetAllItemsbyUser";
 
-        await ExecuteQueryAsync(qryAllrtItems);
+        await ExecuteQueryAsync(spGetAllItemsbyUser, UserObjectId);
 
         return sqlrtItems;
 
@@ -98,7 +97,7 @@ public class SqlDb
     {
         int rowsAffected = 0;
 
-        using SqlConnection SQLCn = GetSQLCn();
+        using SqlConnection SQLCn = new SqlConnection(GetSQLCnStr());
 
         using SqlCommand crudCommand = new SqlCommand(sqlStatetment, SQLCn);
         crudCommand.CommandType = CommandType.Text;
@@ -170,8 +169,9 @@ public class SqlDb
         string tblName = "rtItems";
         List<rtItem> _rtItems = new();
 
+        using SqlConnection _pluralCn = new SqlConnection(GetSQLCnStr());
 
-        SqlConnection _pluralCn = GetSQLCn();
+        
         _pluralCn.Open();
 
         string qry = $"Select * from {tblName} order by Id for json auto";
