@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 
+
 namespace RememberThis.Services;
 
 public class BlobStorage
@@ -23,7 +24,7 @@ public class BlobStorage
         string ImageContainer = _config["ImageContainer"]!;     
 
         BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
-        BlobClient blobClient = containerClient.GetBlobClient(fileName);        
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);    
 
         try
         {
@@ -44,8 +45,15 @@ public class BlobStorage
     public async Task<string> WritetoAzureStorageAsync(MemoryStream _ms, string filename)
     {       
         string methodReturnValue = string.Empty;
-        string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
-        string ImageContainer = _config["ImageContainer"]!;
+        string StorageConnectionStringOLD = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
+        //account name, account string
+        string StorageAccountName = _config["StorageConnectionString:AccountName"]!;
+        string StorageAccountKey = _config["StorageConnectionString:AccountKey"]!;
+        string StorageContainerName = _config["StorageConnectionString:ContainerName"]!;
+        //string StorageConnectionString = $"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey};EndpointSuffix=core.windows.net";
+        string StorageConnectionString = $"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey}";
+
+         //DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net"
         Boolean OverWrite = true;
 
         string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
@@ -55,7 +63,7 @@ public class BlobStorage
 
         methodReturnValue = trustedFileNameAndExt;
 
-        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
+        BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, StorageContainerName);
         BlobClient blobClient = containerClient.GetBlobClient(trustedFileNameAndExt);
 
         _ms.Position = 0;
