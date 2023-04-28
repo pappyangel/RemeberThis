@@ -2,43 +2,69 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Storage;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
+using Azure.Storage.Sas;
+using SharedModels;
 
 
 namespace RememberThis.Services;
 
 public class BlobService
 {
-     private readonly IConfiguration _config;
-     
-      public BlobService(IConfiguration configuration)
-        {
-            // _logger = logger
-            _config = configuration;
+    private readonly IConfiguration _config;
 
-        }
-    public async Task<string> GetImageSaSUrl(string fileName)
+    public BlobService(IConfiguration configuration)
     {
+        // _logger = logger
+        _config = configuration;
 
+    }
+    public List<rtItem> GetImageSaSUrl(List<rtItem> Items)
+    {
         string StorageAccountName = _config["StorageConnectionString:AccountName"]!;
         string StorageAccountKey = _config["StorageConnectionString:AccountKey"]!;
         string StorageContainerName = _config["StorageConnectionString:ContainerName"]!;
 
-        BlobContainerClient containerClient = new BlobContainerClient(StorageAccountName, StorageContainerName);
-        BlobClient blobClient = containerClient.GetBlobClient(fileName);    
-        bool storageReturnCode = await blobClient.DeleteIfExistsAsync();
+        Uri blobContainerUri = new(string.Format("https://{0}.blob.core.windows.net/{1}", StorageAccountName, StorageContainerName));
+        StorageSharedKeyCredential storageSharedKeyCredential = new(StorageAccountName, StorageAccountKey);
+        BlobContainerClient blobContainerClient = new(blobContainerUri, storageSharedKeyCredential);
 
-        return "hello";
+        foreach (var item in Items)
+        {
+            BlobClient blobClient = blobContainerClient.GetBlobClient(item.rtImagePath);
+
+            // Check whether this BlobClient object has been authorized with Shared Key.
+            if (blobClient.CanGenerateSasUri)
+            {
+                // Create a SAS token that's valid for one hour.
+                BlobSasBuilder sasBuilder = new BlobSasBuilder()
+                {
+                    BlobContainerName = blobClient.GetParentBlobContainerClient().Name,
+                    BlobName = blobClient.Name,
+                    Resource = "b"
+                };
+                sasBuilder.ExpiresOn = DateTimeOffset.UtcNow.AddHours(1);
+                sasBuilder.SetPermissions(BlobSasPermissions.Read);
+                Uri sasUri = blobClient.GenerateSasUri(sasBuilder);
+                
+                item.rtLocation = sasUri.ToString();
+            }           
+
+        }
+
+        return Items;
 
     }
     public async Task<string> DeleteFromAzureStorageAsync(string fileName)
-    {       
+    {
         string methodReturnValue = string.Empty;
         string StorageConnectionString = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
-        string ImageContainer = _config["ImageContainer"]!;     
+        string ImageContainer = _config["ImageContainer"]!;
 
         BlobContainerClient containerClient = new BlobContainerClient(StorageConnectionString, ImageContainer);
-        BlobClient blobClient = containerClient.GetBlobClient(fileName);    
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);
 
         try
         {
@@ -57,7 +83,7 @@ public class BlobService
     }  // end of write to azure storage
 
     public async Task<string> WritetoAzureStorageAsync(MemoryStream _ms, string filename)
-    {       
+    {
         string methodReturnValue = string.Empty;
         string StorageConnectionStringOLD = _config["AZURE_STORAGE_CONNECTION_STRING"]!;
         //account name, account string
@@ -67,7 +93,7 @@ public class BlobService
         //string StorageConnectionString = $"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey};EndpointSuffix=core.windows.net";
         string StorageConnectionString = $"DefaultEndpointsProtocol=https;AccountName={StorageAccountName};AccountKey={StorageAccountKey}";
 
-         //DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net"
+        //DefaultEndpointsProtocol=https;AccountName=;AccountKey=;EndpointSuffix=core.windows.net"
         Boolean OverWrite = true;
 
         string trustedExtension = Path.GetExtension(filename).ToLowerInvariant();
@@ -85,7 +111,7 @@ public class BlobService
         try
         {
             await blobClient.UploadAsync(_ms, OverWrite);
-    
+
         }
         catch (Exception Ex)
         {
@@ -97,5 +123,5 @@ public class BlobService
         return methodReturnValue;
 
     }  // end of write to azure storage
-    
+
 }

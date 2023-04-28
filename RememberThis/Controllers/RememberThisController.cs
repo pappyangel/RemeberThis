@@ -37,11 +37,11 @@ public class RememberThisController : ControllerBase
     //[HttpGet]
      [HttpGet("User/{UserObjectId}")]
     public async Task<ActionResult<List<rtItem>>> GetAll(string UserObjectId)
-    {        
-        
+    {           
         List<rtItem> rtItemList = await _SqlDb.GetAllItemsbyUser(UserObjectId);
-
+        rtItemList = _BlobService.GetImageSaSUrl(rtItemList);
         return Ok(rtItemList);
+
     }
 
 
