@@ -7,16 +7,30 @@ using Azure.Storage.Blobs;
 
 namespace RememberThis.Services;
 
-public class BlobStorage
+public class BlobService
 {
      private readonly IConfiguration _config;
      
-      public BlobStorage(IConfiguration configuration)
+      public BlobService(IConfiguration configuration)
         {
             // _logger = logger
             _config = configuration;
 
         }
+    public async Task<string> GetImageSaSUrl(string fileName)
+    {
+
+        string StorageAccountName = _config["StorageConnectionString:AccountName"]!;
+        string StorageAccountKey = _config["StorageConnectionString:AccountKey"]!;
+        string StorageContainerName = _config["StorageConnectionString:ContainerName"]!;
+
+        BlobContainerClient containerClient = new BlobContainerClient(StorageAccountName, StorageContainerName);
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);    
+        bool storageReturnCode = await blobClient.DeleteIfExistsAsync();
+
+        return "hello";
+
+    }
     public async Task<string> DeleteFromAzureStorageAsync(string fileName)
     {       
         string methodReturnValue = string.Empty;
