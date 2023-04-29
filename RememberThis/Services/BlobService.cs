@@ -49,7 +49,7 @@ public class BlobService
                 sasBuilder.SetPermissions(BlobSasPermissions.Read);
                 Uri sasUri = blobClient.GenerateSasUri(sasBuilder);
                 
-                item.rtLocation = sasUri.ToString();
+                item.ImageUrl = sasUri.ToString();
             }           
 
         }
