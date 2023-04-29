@@ -89,7 +89,7 @@ namespace BlazorWebApp.Services
             
 
             ItemServicesReturnMsg = "GetAllItemsAsync started";
-             List<rtItem> rtItems  = new();
+             List<rtItem>? rtItems  = new();
 
             //User/Cosmo
             apiUrl = apiBase + apiRoute + "User/" + rtUserObjectId;

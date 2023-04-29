@@ -38,7 +38,7 @@ public class ReadJustMineBase : ComponentBase
         else
             thisrtItem.rtImagePath = "./Images/Cosmo-sox.png";
         string userTrue = "a387ff55-c87d-4ed6-a8d6-0e6cb3be3443";
-        string userFalse = "64ecf344-71fe-4901-8722-b716f64f58bd";
+        //string userFalse = "64ecf344-71fe-4901-8722-b716f64f58bd";
 
         ItemsList = await _ItemService.GetAllItemsAsync(userTrue);
 
