@@ -1,6 +1,8 @@
 using BlazorWebApp.Services;
 using Microsoft.AspNetCore.Components;
 using SharedModels;
+using Microsoft.AspNetCore.Components.Authorization;
+using System.Security.Claims;
 
 
 namespace BlazorWebApp.Pages;
@@ -20,40 +22,32 @@ public class ReadJustMineBase : ComponentBase
 
     [Inject]
     protected ItemService _ItemService { get; set; } = null!;
+    [Inject]
+    protected AuthenticationStateProvider authenticationStateProvider { get; set; } = null!;
+
 
 
 
     protected async override Task OnInitializedAsync()
     {
         DebugMsg = "OnInitializedXX";
-        //Replace below with call to API
-        thisrtItem.rtId = 1001;
-        thisrtItem.rtUserObjectId = "Cosmo-1001";
-        thisrtItem.rtDescription = "fun time digging hole for bone";
-        thisrtItem.rtLocation = "backyard";
-        thisrtItem.rtDateTime = DateTime.UtcNow;
-      
-        if (rand.NextDouble() >= 0.5)
-            thisrtItem.rtImagePath = "./Images/BabaMan.jpg";
-        else
-            thisrtItem.rtImagePath = "./Images/Cosmo-sox.png";
+
+        var authState = await authenticationStateProvider
+                                      .GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        //thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+        string? userObjectId = String.Empty;
+        userObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+
         // string userTrue = "a387ff55-c87d-4ed6-a8d6-0e6cb3be3443";
-        string userFalse = "64ecf344-71fe-4901-8722-b716f64f58bd";
+        // string userFalse = "64ecf344-71fe-4901-8722-b716f64f58bd";
 
-        ItemsList = await _ItemService.GetAllItemsAsync(userFalse);
-
-
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
-        // ItemsList?.Add(thisrtItem);
+        ItemsList = await _ItemService.GetAllItemsAsync(userObjectId!);
 
 
-       DebugMsg = "back from API";
+
+        DebugMsg = "back from API";
 
 
     }
