@@ -2,57 +2,57 @@
 @inherits ReadJustMineBase
 
 <style>
-.center {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 50%;
-}
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
 </style>
 
 @* <div class="container">
-    <div class="row gy-3">
-        @foreach (var item in ItemsList!)
-        {
-             <div class="col-md-4" style="max-width: 18rem; max-height: 50rem;">                        
-                <div class="card">
-                    <div class="card-header">
-                        <p style="font-size: 8px;" class="card-text">UniqueId: @item.rtId</p>
-                        <p style="font-size: 8px;" class="card-text">WHEN: @item.rtDateTime</p>
-                        <p style="font-size: 8px;" class="card-text">WHERE: @item.rtLocation.</p>
-                    </div>
-                    <div class="card-body">                       
-                        <img src=@((rand.NextDouble() >= 0.5) ? "./Images/AcelaOldFashion.jpg" : "./Images/Cosmo-sox.png")
-                        height=auto width="50" class="card-img-top" alt="Manhattan at Baba">
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-text">What: @item.rtDescription</p>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+<div class="row gy-3">
+@foreach (var item in ItemsList!)
+{
+<div class="col-md-4" style="max-width: 18rem; max-height: 50rem;">
+<div class="card">
+<div class="card-header">
+<p style="font-size: 8px;" class="card-text">UniqueId: @item.rtId</p>
+<p style="font-size: 8px;" class="card-text">WHEN: @item.rtDateTime</p>
+<p style="font-size: 8px;" class="card-text">WHERE: @item.rtLocation.</p>
+</div>
+<div class="card-body">
+<img src=@((rand.NextDouble() >= 0.5) ? "./Images/AcelaOldFashion.jpg" : "./Images/Cosmo-sox.png")
+height=auto width="50" class="card-img-top" alt="Manhattan at Baba">
+</div>
+<div class="card-footer">
+<p class="card-text">What: @item.rtDescription</p>
+</div>
+</div>
+</div>
+}
+</div>
 </div> *@
 
- <div class="row gy-3">
- 
-        @foreach (var item in ItemsList!)
-        {
-             
-                <div class="card" style="width: 40rem;">
-                    <div class="card-header">
-                        <p style="font-size: 12px;" class="card-text">Item ID: @item.rtId  -- WHEN: @item.rtDateTime -- WHERE: @item.rtLocation</p>                      
-                    </div>
-                    <div class="card-body">                                               
-                        <img src=@item.ImageUrl class="center" height=auto width="175" alt="Remember This Image">
-                    </div>
-                    <div class="card-footer">
-                        <p class="card-text">What: @item.rtDescription</p>
-                    </div>
-                </div>
-          
-        }
+
+
+@foreach (var item in ItemsList!)
+{
+    <div class="row">
+        <div class="card gy-3" style="width: 40rem;">
+            <div class="card-header">
+                <p style="font-size: 12px;" class="card-text">Item ID: @item.rtId -- WHEN: @item.rtDateTime -- WHERE:
+                    @item.rtLocation</p>
+            </div>
+            <div class="card-body">
+                <img src=@item.ImageUrl class="center" height=auto width="175" alt="Remember This Image">
+            </div>
+            <div class="card-footer">
+                <p class="card-text">What: @item.rtDescription</p>
+            </div>
         </div>
+    </div>
+}
 
 
 
