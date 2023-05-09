@@ -45,10 +45,7 @@ public class ReadJustMineBase : ComponentBase
 
         ItemsList = await _ItemService.GetAllItemsAsync(userObjectId!);
 
-
-
         DebugMsg = "back from API";
-
 
     }
 

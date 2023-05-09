@@ -12,17 +12,7 @@ it takes the following parameters
 *@
 
 <style>
-    @* div {
-        margin-bottom: 10px;
-    }
-
-    label {
-        display: inline-block;
-        width: 150px;
-        text-align: right;
-    } *@
-
-    textarea {
+    @*div{margin-bottom:10px;}label{display:inline-block;width:150px;text-align:right;}*@textarea {
         vertical-align: middle;
     }
 
@@ -38,10 +28,11 @@ it takes the following parameters
 
 <RTModalComponent @ref="childmodal" SendBtnClickedBackToParent="DisplayBtnClicked">
     <Title> <i>Remember This</i> Status</Title>
+
     <Body> @ChildModalBody </Body>
     <Footer>
         <button type="button" class="btn btn-primary" data-dismiss="modal"
-            @onclick='() => childmodal!.SendModalButtonClicked("OK")'>
+        @onclick='() => childmodal!.SendModalButtonClicked("OK")'>
             <span class="oi oi-cloud" aria-hidden="true"></span> OK
         </button>
     </Footer>
@@ -51,13 +42,13 @@ it takes the following parameters
     <div class="card-header">
         <h3 style="text-align:center">@childCardTitle</h3>
     </div>
-    <div class="card-body">        
+    <div class="card-body">
         <EditForm EditContext="@rtItemChildEditContext" OnValidSubmit="SubmitECB">
             <div class="row">
-                <div class="column">     
+                <div class="column">
                     <label for="rtLocation">Location : </label>
                     <InputText id="rtLocation" @bind-Value="@thisChildrtItem!.rtLocation" class="form-control" />
-                    <br><br>                    
+                    <br><br>
                     <label for="rtDescription">Description: </label>
                     <InputTextArea id="rtDescription" rows="3" cols="23" @bind-Value="@thisChildrtItem.rtDescription"
                         class="form-control">
@@ -91,6 +82,8 @@ it takes the following parameters
     //Modal for filesize error
     protected RTModalComponent? childmodal { get; set; }
 
+    protected bool childOKtoLeavePage { get; set; }
+
     protected string ChildModalBody { get; set; } = string.Empty;
 
     [Inject]
@@ -100,13 +93,14 @@ it takes the following parameters
     protected IConfiguration Config { get; set; } = null!;
 
     public IBrowserFile childFile { get; set; } = null!;
-     
+
 
     [Parameter]
     public string? childCardTitle { get; set; } = null!;
-    
+
     [Parameter]
-    public rtItem? thisChildrtItem { get; set; } = null!;
+    public rtItem? thisChildrtItem { get; set; } = null!;    
+    
 
     [Parameter]
     public EventCallback<IBrowserFile> CallParentSubmit { get; set; }
@@ -139,14 +133,21 @@ it takes the following parameters
 
     protected async Task ConfirmInternalNavigation(LocationChangingContext context)
     {
-        var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
-
-        if (!confirmed)
+        if (!childOKtoLeavePage)
         {
-            context.PreventNavigation();
-        }
-    }
+            var confirmed = await jsRuntime.InvokeAsync<bool>("confirm", "Discard your changes?");
 
+            if (!confirmed)
+            {
+                context.PreventNavigation();
+            }
+        }
+
+    }
+    public void NavAwaycheck(bool parentOKtoLeavePage)
+    {
+        childOKtoLeavePage = parentOKtoLeavePage;        
+    }
     protected void DisplayBtnClicked(string _btnClicked)
     {
         // placeholder method. if we need to know which button was pressed on modal
@@ -154,9 +155,11 @@ it takes the following parameters
     }
 
     public async Task SubmitECB()
-    {        
-        // HasDelegate appears to be a best practice so you don't invoke a callback if a call back listener (delegate) has not been set up.
-    if (CallParentSubmit.HasDelegate)
+    {
+        // HasDelegate appears to be a best practice so you don't invoke a callback if a
+        // call back listener (delegate) has not been set up.
+
+        if (CallParentSubmit.HasDelegate)
         {
             await CallParentSubmit.InvokeAsync(childFile);
         }

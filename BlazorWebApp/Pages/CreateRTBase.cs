@@ -21,10 +21,10 @@ namespace BlazorWebApp.Pages
 
         public string apiUrl { get; set; } = string.Empty;
         protected bool ShowPopUp { get; set; } = false;
-
-
-        //pre-build item in dev mode so we don't have to type one in each time we test
+        
         protected rtItem? thisrtItem { get; set; } = null!;
+
+        protected bool OKtoLeavePage = false;
 
         protected string createCardTitle { get; set; } = "Add a memory you want to save and share later!";
 
@@ -78,6 +78,13 @@ namespace BlazorWebApp.Pages
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem!, ms, file.Name, file.ContentType);
 
             //check return code and display error or redirect to summary
+            
+            if (PersistReturnMsg.Equals("StorageWriteSuccess - SQL Insert Success"))
+            {
+                OKtoLeavePage = true;    
+            }           
+            
+            childOneItem!.NavAwaycheck(OKtoLeavePage);
             NavManager.NavigateTo("/ReadJustMine");
 
             DebugMsg = PersistReturnMsg;
