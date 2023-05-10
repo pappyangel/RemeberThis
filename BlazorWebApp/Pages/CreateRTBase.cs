@@ -13,7 +13,10 @@ namespace BlazorWebApp.Pages
         protected IBrowserFile? file = null!;
 
         protected OneItem? childOneItem { get; set; } = null!;
-
+   
+        //Modal for API return results
+        protected RTModalComponent? createChildModal { get; set; }
+        protected string ChildModalBody { get; set; } = string.Empty;
 
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
@@ -56,9 +59,20 @@ namespace BlazorWebApp.Pages
 
             // rtItemEditContext = new(thisrtItem);
         }
+        protected void DisplayBtnClicked(string _btnClicked)
+            {
+                // placeholder method. if we need to know which button was pressed on modal
+                int dog =0;
 
+                dog++;
+
+            }
         protected async Task SubmitFormAsync(IBrowserFile fileFromChild)
         {
+            
+            
+            
+
             string PersistReturnMsg = string.Empty;
 
             file = fileFromChild;
@@ -77,17 +91,28 @@ namespace BlazorWebApp.Pages
 
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem!, ms, file.Name, file.ContentType);
 
-            //check return code and display error or redirect to summary
+            //check return code and display error or redirect to summary            
+            
             
             if (PersistReturnMsg.Equals("StorageWriteSuccess - SQL Insert Success"))
             {
                 OKtoLeavePage = true;    
-            }           
+                childOneItem!.NavAwaycheck(OKtoLeavePage);
+                NavManager.NavigateTo("/ReadJustMine");
+            }   
+            else
+            {
+                OKtoLeavePage = false;
+                childOneItem!.NavAwaycheck(OKtoLeavePage);
+                createCardTitle = "Error - Please try again";
+                ChildModalBody = PersistReturnMsg;
+                DebugMsg = PersistReturnMsg;
+                createChildModal!.Open();
+            }        
             
-            childOneItem!.NavAwaycheck(OKtoLeavePage);
-            NavManager.NavigateTo("/ReadJustMine");
+            
 
-            DebugMsg = PersistReturnMsg;
+            
 
 
         }
