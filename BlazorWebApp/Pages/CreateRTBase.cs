@@ -61,18 +61,11 @@ namespace BlazorWebApp.Pages
         }
         protected void DisplayBtnClicked(string _btnClicked)
             {
-                // placeholder method. if we need to know which button was pressed on modal
-                int dog =0;
-
-                dog++;
+                // placeholder method. if we need to know which button was pressed on modal                
 
             }
         protected async Task SubmitFormAsync(IBrowserFile fileFromChild)
         {
-            
-            
-            
-
             string PersistReturnMsg = string.Empty;
 
             file = fileFromChild;
