@@ -97,7 +97,7 @@ namespace BlazorWebApp.Pages
             {
                 OKtoLeavePage = false;
                 childOneItem!.NavAwaycheck(OKtoLeavePage);
-                createCardTitle = "Error - Please try again";
+                //createCardTitle = "Error - Please try again";
                 ChildModalBody = PersistReturnMsg;
                 DebugMsg = PersistReturnMsg;
                 createChildModal!.Open();
