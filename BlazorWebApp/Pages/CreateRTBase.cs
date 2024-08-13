@@ -78,10 +78,8 @@ namespace BlazorWebApp.Pages
             ms.Position = 0;
 
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem!, ms, file.Name, file.ContentType);
-
             
             DebugMsg = PersistReturnMsg;
-
 
         }
 
