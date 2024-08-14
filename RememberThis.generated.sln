@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModels\SharedModels.csproj", "{D96A209A-1C78-4A29-B6BE-B12CB9DEF9DF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedModels", "SharedModels\SharedModels.csproj", "{89700910-DA56-4A0A-91CE-AB0B78169742}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RememberThis", "RememberThis\RememberThis.csproj", "{6CCA0641-5517-4FB9-8989-0A32D87F751B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RememberThis", "RememberThis\RememberThis.csproj", "{B9E99BA2-CD95-440D-8A9A-B71B9A531A36}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rtFrontEnd", "rtFrontEnd\rtFrontEnd.csproj", "{BC99CF9F-B033-4367-9403-A34C6EADE69A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rtFrontEnd", "rtFrontEnd\rtFrontEnd.csproj", "{20DC0A65-EC9B-4719-84D6-3CDF43850CEA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApp", "BlazorWebApp\BlazorWebApp.csproj", "{3AFA7D93-1BAE-48EB-A0B7-67A7EFDD7DFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorWebApp", "BlazorWebApp\BlazorWebApp.csproj", "{BD8F67CE-DE88-4CEE-AFAB-E1CBC5972AAB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,22 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{D96A209A-1C78-4A29-B6BE-B12CB9DEF9DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D96A209A-1C78-4A29-B6BE-B12CB9DEF9DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D96A209A-1C78-4A29-B6BE-B12CB9DEF9DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D96A209A-1C78-4A29-B6BE-B12CB9DEF9DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6CCA0641-5517-4FB9-8989-0A32D87F751B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6CCA0641-5517-4FB9-8989-0A32D87F751B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6CCA0641-5517-4FB9-8989-0A32D87F751B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6CCA0641-5517-4FB9-8989-0A32D87F751B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BC99CF9F-B033-4367-9403-A34C6EADE69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BC99CF9F-B033-4367-9403-A34C6EADE69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BC99CF9F-B033-4367-9403-A34C6EADE69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BC99CF9F-B033-4367-9403-A34C6EADE69A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3AFA7D93-1BAE-48EB-A0B7-67A7EFDD7DFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3AFA7D93-1BAE-48EB-A0B7-67A7EFDD7DFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3AFA7D93-1BAE-48EB-A0B7-67A7EFDD7DFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3AFA7D93-1BAE-48EB-A0B7-67A7EFDD7DFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89700910-DA56-4A0A-91CE-AB0B78169742}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89700910-DA56-4A0A-91CE-AB0B78169742}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89700910-DA56-4A0A-91CE-AB0B78169742}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89700910-DA56-4A0A-91CE-AB0B78169742}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9E99BA2-CD95-440D-8A9A-B71B9A531A36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9E99BA2-CD95-440D-8A9A-B71B9A531A36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9E99BA2-CD95-440D-8A9A-B71B9A531A36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9E99BA2-CD95-440D-8A9A-B71B9A531A36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20DC0A65-EC9B-4719-84D6-3CDF43850CEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20DC0A65-EC9B-4719-84D6-3CDF43850CEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20DC0A65-EC9B-4719-84D6-3CDF43850CEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20DC0A65-EC9B-4719-84D6-3CDF43850CEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD8F67CE-DE88-4CEE-AFAB-E1CBC5972AAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD8F67CE-DE88-4CEE-AFAB-E1CBC5972AAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD8F67CE-DE88-4CEE-AFAB-E1CBC5972AAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD8F67CE-DE88-4CEE-AFAB-E1CBC5972AAB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
