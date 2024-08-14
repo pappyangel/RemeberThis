@@ -48,3 +48,18 @@ dotnet add reference -h|--help
   <ItemGroup>
     <ProjectReference Include="..\SharedModels\SharedModels.csproj" />   
   </ItemGroup>
+
+# Blazor dotnet 8
+
+  dotnet new blazor 
+    -int|--interactivity <None|Server|Webassembly|Auto > 
+    [-o|--output <OUTPUT_DIRECTORY>]
+    --empty Omits sample pages
+    -au|--auth <AUTHENTICATION_TYPE> [None|Individual]
+        [Individual|SingleOrg|MultiOrg]
+    -ai|--all-interactive Makes every page interactive by applying an interactive render mode at the top level.
+    --use-program-main If specified, an explicit Program class and Main method is generated instead of top-level statements.
+    --no-https If specified, HTTPS is not enabled.
+
+
+dotnet new blazor -au none -int Server -o rtFrontEnd

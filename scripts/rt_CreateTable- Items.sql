@@ -7,6 +7,7 @@ GO
 
 if OBJECT_ID('dbo.Items','U') is not null
 	drop table dbo.Items;
+	
 CREATE TABLE [dbo].[Items](
 	[Id] [int] identity(1001,1) PRIMARY KEY NOT NULL,
 	[UserObjectId] [varchar](100) NOT NULL,

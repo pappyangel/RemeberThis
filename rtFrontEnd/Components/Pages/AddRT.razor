@@ -1,0 +1,41 @@
+﻿@page "/AddRT"
+@rendermode InteractiveServer
+@using SharedModels;
+
+<PageTitle>Add a Memory</PageTitle>
+
+<h1>Add a Memory</h1>
+
+<p role="status">Current count: </p>
+
+<EditForm Enhance FormName="AddItem" Model="@item" OnSubmit="HandleValidSubmit">
+    <div>
+        <label for="item">Item ID:</label>
+        <InputNumber id="itemId" @bind-Value="item.rtId" />
+    </div>
+    <div>
+        <label for="item">User ID:</label>
+        <InputText id="itemrtUserObjectId" @bind-Value="item.rtUserObjectId" />
+    </div>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+
+    private void HandleValidSubmit()
+    {
+        Console.WriteLine("OnValidSubmit");
+        Console.WriteLine(item.ToString());
+    }
+
+    private rtItem item = new rtItem
+    {
+        rtId = 1001,
+        rtUserObjectId = "Jim",
+        rtDescription = string.Empty,
+        rtLocation = string.Empty,
+        rtDateTime = DateTime.Now,        
+        rtImagePath = string.Empty
+    };
+
+}
