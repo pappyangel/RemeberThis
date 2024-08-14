@@ -16,31 +16,37 @@ public class RememberThisController : ControllerBase
 {
     private readonly ILogger<RememberThisController> _logger;
     private readonly IConfiguration _config;
-    private readonly BlobStorage _BlobStorage;
+    private readonly BlobService _BlobService;
     private readonly SqlDb _SqlDb;
     private readonly ImageService _ImageService;
 
     private string apiReturnMsg = "Controller Start";
 
     public RememberThisController(ILogger<RememberThisController> logger, IConfiguration config,
-            BlobStorage BlobStorage, SqlDb SqlDb, ImageService ImageService)
+            BlobService BlobService, SqlDb SqlDb, ImageService ImageService)
     {
         _logger = logger;
         _config = config;
-        _BlobStorage = BlobStorage;
+        _BlobService = BlobService;
         _SqlDb = SqlDb;
         _ImageService = ImageService;
 
     }
 
     // [HttpGet(Name = "GetRememberThis")]
-    [HttpGet]
-    public ActionResult<rtItem> GetAll()
-    {
-        rtItem getItem = new rtItem { rtId = 1001, rtUserObjectId = "Cosmo", rtDescription = "fun time digging hole for bone", rtLocation = "backyard", rtDateTime = DateTime.UtcNow };
+    //[HttpGet]
+     [HttpGet("User/{UserObjectId}")]
+    public async Task<ActionResult<List<rtItem>>> GetAll(string UserObjectId)
+    {           
+        List<rtItem> rtItemList = await _SqlDb.GetAllItemsbyUser(UserObjectId);
+        rtItemList = _BlobService.GetImageSaSUrl(rtItemList);
+        return Ok(rtItemList);
 
-        return Ok(getItem);
     }
+
+
+
+
 
     // [HttpGet("id/{id:int}")]
     [HttpGet("id/{itemId}")]
@@ -68,7 +74,7 @@ public class RememberThisController : ControllerBase
         int RowsAffected = await _SqlDb.DeleteItem(ItemtoDelete);
         string DeleteReturnMsg = (RowsAffected == 1) ? "Item Deleted from SQL" : "Error in SQL Delete";
 
-        string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(ItemtoDelete.rtImagePath!);
+        string deleteStorageMsg = await _BlobService.DeleteFromAzureStorageAsync(ItemtoDelete.rtImagePath!);
         if (deleteStorageMsg == "DeleteBlobSuccess")
             DeleteReturnMsg += " - Item Deleted from Storage";
         else
@@ -101,7 +107,7 @@ public class RememberThisController : ControllerBase
 
         if (_ImageService.IsValidFileExtensionAndSignature(formFile.FileName, ms))
         {
-            string StorageErrorOrFileName = await _BlobStorage.WritetoAzureStorageAsync(ms, unsafeFileNameAndExt);
+            string StorageErrorOrFileName = await _BlobService.WritetoAzureStorageAsync(ms, unsafeFileNameAndExt);
 
             if (StorageErrorOrFileName.StartsWith("ERROR"))
             {
@@ -123,7 +129,7 @@ public class RememberThisController : ControllerBase
                 else
                 {
                     // roll back azure storage write        
-                    string deleteStorageMsg = await _BlobStorage.DeleteFromAzureStorageAsync(StorageErrorOrFileName);
+                    string deleteStorageMsg = await _BlobService.DeleteFromAzureStorageAsync(StorageErrorOrFileName);
                     if (deleteStorageMsg == "DeleteBlobSuccess")
                         apiReturnMsg = "SQL Insert failed, Storage roll-back success";
                     else
@@ -142,9 +148,6 @@ public class RememberThisController : ControllerBase
         //return $"Row(s) inserted were: {rowsAffected}";
         return Ok(apiReturnMsg);
     }
-
-
-
 
 
 } // end class rememberthis

@@ -8,6 +8,7 @@ public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
     public string? rtLocation { get; set; }
     public DateTime rtDateTime { get; set; }
     public string? rtImagePath { get; set; } //= string.Empty;        
+    public string? ImageUrl { get; set; } //= string.Empty;        
 
     public bool Equals(rtItem? other)
     {
@@ -26,7 +27,7 @@ public class rtItem : IComparable<rtItem>, IEquatable<rtItem>
 
     public override string ToString()
     {
-        return "Id: " + rtId + " File: " + rtImagePath + ", UserObjectId: " + rtUserObjectId + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime;
+        return "Id: " + rtId + " File: " + rtImagePath + ", UserObjectId: " + rtUserObjectId + ", Desc: " + rtDescription + ", Location: " + rtLocation + ", When: " + rtDateTime+ ", Url: " + ImageUrl;
     }
 
 }

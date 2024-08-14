@@ -8,7 +8,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddTransient<BlobStorage>();
+builder.Services.AddTransient<BlobService>();
 builder.Services.AddTransient<SqlDb>();
 builder.Services.AddTransient<ImageService>();
 

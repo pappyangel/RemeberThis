@@ -1,0 +1,36 @@
+@page "/ReadJustMine"
+@inherits ReadJustMineBase
+
+
+<style>
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+</style>
+
+@foreach (var item in ItemsList!)
+{
+    <div class="row">
+        <div class="card gy-3" style="width: 40rem;">
+            <div class="card-header">
+                <p style="font-size: 12px;" class="card-text">Item ID: @item.rtId -- WHEN: @item.rtDateTime -- WHERE:
+                    @item.rtLocation</p>
+            </div>
+            <div class="card-body">
+                <img src=@item.ImageUrl class="center" height=auto width="175" alt="Remember This Image">
+            </div>
+            <div class="card-footer">
+                <p class="card-text">What: @item.rtDescription</p>
+            </div>
+        </div>
+    </div>
+}
+
+
+<br>
+<label><b>Debug Info:</b> @DebugMsg </label>
+
+

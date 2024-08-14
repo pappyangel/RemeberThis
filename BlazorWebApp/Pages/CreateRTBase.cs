@@ -1,12 +1,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 using SharedModels;
-using Microsoft.JSInterop;
-using System.Net.Http;
-using System.Text.Json;
-using System.Net.Http.Headers;
 using BlazorWebApp.Services;
-using Microsoft.AspNetCore.Components.Routing;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
 
@@ -18,8 +13,11 @@ namespace BlazorWebApp.Pages
         protected IBrowserFile? file = null!;
 
         protected OneItem? childOneItem { get; set; } = null!;
-    
-        
+   
+        //Modal for API return results
+        protected RTModalComponent? createChildModal { get; set; }
+        protected string ChildModalBody { get; set; } = string.Empty;
+
         protected string apiBase { get; set; } = "http://127.0.0.1:5026";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
@@ -27,23 +25,26 @@ namespace BlazorWebApp.Pages
         public string apiUrl { get; set; } = string.Empty;
         protected bool ShowPopUp { get; set; } = false;
         
-
-        //pre-build item in dev mode so we don't have to type one in each time we test
         protected rtItem? thisrtItem { get; set; } = null!;
-        
+
+        protected bool OKtoLeavePage = false;
+
         protected string createCardTitle { get; set; } = "Add a memory you want to save and share later!";
-        
+
         protected EditContext? rtItemEditContext;
         protected string? DebugMsg { get; set; } = "API Return Message";
 
         [Inject]
         protected IHttpClientFactory ClientFactory { get; set; } = null!;
-   
+
         [Inject]
         protected AuthenticationStateProvider authenticationStateProvider { get; set; } = null!;
 
         [Inject]
         protected ItemService _ItemService { get; set; } = null!;
+
+        [Inject]
+        protected NavigationManager NavManager { get; set; } = null!;
 
         protected override void OnInitialized()
         {
@@ -57,8 +58,12 @@ namespace BlazorWebApp.Pages
             };
 
             // rtItemEditContext = new(thisrtItem);
-        }      
+        }
+        protected void DisplayBtnClicked(string _btnClicked)
+            {
+                // placeholder method. if we need to know which button was pressed on modal                
 
+            }
         protected async Task SubmitFormAsync(IBrowserFile fileFromChild)
         {
             string PersistReturnMsg = string.Empty;
@@ -66,10 +71,10 @@ namespace BlazorWebApp.Pages
             file = fileFromChild;
 
             var authState = await authenticationStateProvider
-            .GetAuthenticationStateAsync();
+                                    .GetAuthenticationStateAsync();
             var user = authState.User;
-            
-            thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;            
+
+            thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
             //thisrtItem.rtDateTime = DateTime.UtcNow;
 
             // need to add code to handle no image selected
@@ -78,8 +83,31 @@ namespace BlazorWebApp.Pages
             ms.Position = 0;
 
             PersistReturnMsg = await _ItemService.AddItem(thisrtItem!, ms, file.Name, file.ContentType);
+
+
+            //check return code and display error or redirect to summary            
             
-            DebugMsg = PersistReturnMsg;
+            
+            if (PersistReturnMsg.Equals("StorageWriteSuccess - SQL Insert Success"))
+            {
+                OKtoLeavePage = true;    
+                childOneItem!.NavAwaycheck(OKtoLeavePage);
+                NavManager.NavigateTo("/ReadJustMine");
+            }   
+            else
+            {
+                OKtoLeavePage = false;
+                childOneItem!.NavAwaycheck(OKtoLeavePage);
+                //createCardTitle = "Error - Please try again";
+                ChildModalBody = PersistReturnMsg;
+                DebugMsg = PersistReturnMsg;
+                createChildModal!.Open();
+            }        
+            
+            
+
+
+            
 
         }
 

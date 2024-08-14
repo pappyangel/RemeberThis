@@ -9,7 +9,7 @@ namespace BlazorWebApp.Services
     {
         private readonly IConfiguration _configuration = null!;
 
-        private string ItemServicesReturnMsg = string.Empty;
+        private string ItemServicesReturnMsg = string.Empty;      
 
         private IHttpClientFactory _ClientFactory = null!;
         //private IHttpClientFactory ClientFactory { get; set; }
@@ -81,6 +81,60 @@ namespace BlazorWebApp.Services
 
 
             return ItemServicesReturnMsg;
+
+        }
+
+        public async Task<List<rtItem>> GetAllItemsAsync(string rtUserObjectId)
+        {
+            
+
+            ItemServicesReturnMsg = "GetAllItemsAsync started";
+             List<rtItem>? rtItems  = new();
+
+            //User/Cosmo
+            apiUrl = apiBase + apiRoute + "User/" + rtUserObjectId;
+            
+            using HttpClient apiClient = _ClientFactory.CreateClient();
+
+            var request = new HttpRequestMessage(HttpMethod.Get, apiUrl);
+
+            try
+            {
+                
+                var response1 = await apiClient.SendAsync(request);
+
+                switch (response1.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.OK:                        
+                       rtItems = await response1.Content.ReadFromJsonAsync<List<rtItem>>();
+                        break;
+                    case System.Net.HttpStatusCode.NoContent:
+                        ItemServicesReturnMsg = "No content";
+                        break;
+                    case System.Net.HttpStatusCode.NotFound:
+                        ItemServicesReturnMsg = "API Route not found!";
+                        break;
+                    case System.Net.HttpStatusCode.Forbidden:
+                        ItemServicesReturnMsg = "Your Access to this API route is Forbidden!";
+                        break;
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        ItemServicesReturnMsg = "Your Access to this API route is Unauthorized!";
+                        break;
+                    default:
+                        ItemServicesReturnMsg = "Unhandled Error!";
+                        break;
+                }
+            }
+            catch (Exception Ex)
+            {
+                // Opps!  Did we forget to start the API?!?
+                ItemServicesReturnMsg = Ex.Message;
+                ItemServicesReturnMsg = "API not available";
+                // throw;
+            }
+
+
+            return rtItems!;
 
         }
         public async Task<string> AddItem(rtItem ItemtoAdd, MemoryStream ImageToAdd, string FileName, string FileType)
