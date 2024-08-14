@@ -52,7 +52,8 @@ dotnet add reference -h|--help
 # Blazor dotnet 8
 
   dotnet new blazor 
-    -int|--interactivity <None|Server|Webassembly|Auto > [-o|--output <OUTPUT_DIRECTORY>]
+    -int|--interactivity <None|Server|Webassembly|Auto > 
+    [-o|--output <OUTPUT_DIRECTORY>]
     --empty Omits sample pages
     -au|--auth <AUTHENTICATION_TYPE> [None|Individual]
         [Individual|SingleOrg|MultiOrg]
