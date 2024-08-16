@@ -61,5 +61,12 @@ dotnet add reference -h|--help
     --use-program-main If specified, an explicit Program class and Main method is generated instead of top-level statements.
     --no-https If specified, HTTPS is not enabled.
 
-
 dotnet new blazor -au none -int Server -o rtFrontEnd
+
+dotnet new sln -n RememberThisSolution
+    dotnet sln RememberThisSolution.sln add RememberThis/RememberThis.csproj
+    dotnet sln RememberThisSolution.sln add rtFrontEnd/rtFrontEnd.csproj
+    dotnet sln RememberThisSolution.sln add SharedModels/SharedModels.csproj
+
+    
+    
