@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using SharedModels;
-using rtFrontEnd.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using System.Security.Claims;
+using rtFrontEnd.Components.Pages;
+using SharedModels;
+using rtFrontEnd.Services;
 
-namespace rtFrontEnd.Pages
+
+namespace rtFrontEnd.Components.Pages
 {
 
     public class CreateRTBase : ComponentBase
