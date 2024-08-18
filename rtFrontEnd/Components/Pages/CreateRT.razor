@@ -1,0 +1,29 @@
+@page "/CreateRT"
+@* @attribute [Authorize] *@
+@inherits CreateRTBase
+
+
+<OneItem    @ref="childOneItem"             
+            childCardTitle="@createCardTitle"
+            thisChildrtItem="thisrtItem"             
+            CallParentSubmit="SubmitFormAsync"            
+            >
+</OneItem>
+
+<RTModalComponent @ref="createChildModal" SendBtnClickedBackToParent="DisplayBtnClicked">
+    <Title> <i>Add a Memory</i> Status</Title>
+    <Body> @ChildModalBody </Body>
+    <Footer>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"
+        @onclick='() => createChildModal!.SendModalButtonClicked("OK")'>
+            <span class="oi oi-cloud" aria-hidden="true"></span> OK
+        </button>
+    </Footer>
+</RTModalComponent>
+
+
+@DebugMsg
+
+
+
+
