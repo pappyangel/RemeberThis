@@ -103,21 +103,28 @@ it takes the following parameters
     }
     protected async Task SelectedFileProcess(InputFileChangeEventArgs e)
     {
+        var module = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./Components/Pages/OneItem.razor.js");
+        
+            
         long _fileSizeLimit = Config.GetValue<long>("FileSizeLimit");
 
         if (!((e.File.Size > 0) && (e.File.Size < _fileSizeLimit)))
         {
             ChildModalBody = "File size invalid";
             childmodal!.Open();
-            await jsRuntime.InvokeVoidAsync("ResetFilePicker");
+            await module.InvokeVoidAsync("ResetFilePicker");
 
         }
         else
         {
             // file size is good so save to class variable and update preview on screen
             childFile = e.File;
-            await jsRuntime.InvokeVoidAsync("loadFileJS");
+            await module.InvokeVoidAsync("loadFileJS");
+           
         }
+
+        
+        
     }
 
 
