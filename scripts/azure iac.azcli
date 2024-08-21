@@ -1,7 +1,7 @@
 # install Azure CLI & common commands
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 
-
+## AZURE LOG IN
 # MSFTJim-FY25-Dev-AAD - 33824df8-959e-49c3-9d78-a56a9e310102
 az login --tenant 33824df8-959e-49c3-9d78-a56a9e310102
 az account list --output table
@@ -15,6 +15,7 @@ az account show
 
 az account list-locations -o table 
 
+## STORAGE ACCOUNT
 # create resource group
 az group create --name rg-TestLogin --location eastus2
 
@@ -24,3 +25,12 @@ az storage account check-name --name sa01files
 
 # create a container in this storage account
 az storage container create --name rt-images --account-name sa02files
+
+## SQL SERVER
+# The SQL Server may already exist so check ahead of time
+# Create a GeneralPurpose Gen5 1 vcore serverless database with auto pause delay of 60 minutes
+
+az sql db create -g rg-DataServices -s jfv-sql -n rtDb \
+--tier GeneralPurpose --family Gen5 --capacity 1 \
+--compute-model Serverless --auto-pause-delay 60 \
+--zone-redundant false --backup-storage-redundancy Local 
