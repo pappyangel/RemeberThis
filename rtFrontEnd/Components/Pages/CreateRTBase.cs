@@ -20,7 +20,7 @@ namespace rtFrontEnd.Components.Pages
         protected RTModalComponent? createChildModal { get; set; }
         protected string ChildModalBody { get; set; } = string.Empty;
 
-        protected string apiBase { get; set; } = "http://127.0.0.1:5026";
+        protected string apiBase { get; set; } = "http://127.0.0.1:5133";
 
         protected string apiRoute { get; set; } = "/RememberThis/rtMulti";
 
@@ -53,7 +53,7 @@ namespace rtFrontEnd.Components.Pages
             thisrtItem = new rtItem
             {
                 rtId = 0,
-                rtUserObjectId = string.Empty,
+                rtUserObjectId = "DN8PortUser",
                 rtDescription = string.Empty,
                 rtLocation = string.Empty,
                 rtDateTime = DateTime.UtcNow
@@ -76,7 +76,8 @@ namespace rtFrontEnd.Components.Pages
                                     .GetAuthenticationStateAsync();
             var user = authState.User;
 
-            thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            // thisrtItem!.rtUserObjectId = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+            thisrtItem!.rtUserObjectId = "DN8PortUser";
             //thisrtItem.rtDateTime = DateTime.UtcNow;
 
             // need to add code to handle no image selected
