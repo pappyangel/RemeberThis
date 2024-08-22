@@ -68,5 +68,10 @@ dotnet new sln -n RememberThisSolution
     dotnet sln RememberThisSolution.sln add rtFrontEnd/rtFrontEnd.csproj
     dotnet sln RememberThisSolution.sln add SharedModels/SharedModels.csproj
 
+
+# user object ids
+# a387ff55-c87d-4ed6-a8d6-0e6cb3be3443
+# 64ecf344-71fe-4901-8722-b716f64f58bd
+# DN8PortUser, Jim, Postman
     
     
