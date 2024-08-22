@@ -1,7 +1,33 @@
 ﻿@page "/"
+@rendermode InteractiveServer
+@inject FakeAuthService myAuth
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<h1>Please Log in to <i>RememberThis</i></h1>
+<br>
+<br>
+<span>Please select your account:</span>
 
-Welcome to your new app.
+<InputSelect @bind-Value="myAuth.Username"  >
+    <option value="Jim">Jim</option>
+    <option value="Tim">Tim</option>
+    <option value="DN8PortUser">DN8PortUser</option>
+    <option value="Postman">Postman</option>
+</InputSelect>
+<br>
+<br>
+<br>
+
+<p>The selected user is: @(string.IsNullOrEmpty(myAuth.Username) ? "no user selected" : myAuth.Username)</p>
+
+@code {
+    private string? selectedUser;
+    protected override void OnInitialized()
+    {        
+        @* selectedUser = string.IsNullOrEmpty(myAuth.Username) ? "Jim" : myAuth.Username; *@
+
+        @* selectedUser = "Jim"; // Default value or fetch from a service *@
+    }   
+    
+}
