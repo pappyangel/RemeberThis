@@ -63,3 +63,24 @@ dotnet add reference -h|--help
 
 
 dotnet new blazor -au none -int Server -o rtFrontEnd
+
+
+# Create a new .NET solution file
+dotnet new sln -n rtWebAppSolution
+# Add the existing project to the solution
+dotnet sln rtWebAppSolution.sln add rtWebApp/rtWebApp.csproj
+
+dotnet new blazor -int Server -au Individual -o rtWebApp
+
+dotnet add package Microsoft.AspNetCore.Authentication.MicrosoftAccount --version 8.0.8
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.8
+
+echo $AUTHDB_CONNECTION_STRING
+
+# MSFTJim-FY25-Dev-AAD - 33824df8-959e-49c3-9d78-a56a9e310102
+az login --tenant 33824df8-959e-49c3-9d78-a56a9e310102
+az login --tenant MngEnv914318.onmicrosoft.com
+# az login -t MSFTJim-FY25-Dev-AAD # this line does not work
+
+
+az logout
