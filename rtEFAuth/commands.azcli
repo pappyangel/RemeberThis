@@ -1,0 +1,20 @@
+
+
+dotnet tool install --global dotnet-ef
+dotnet ef 
+dotnet tool update --global dotnet-ef
+dotnet add package Microsoft.EntityFrameworkCore.Design
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer 
+dotnet add package Microsoft.EntityFrameworkCore.Tools 
+
+# be sure to az login first
+dotnet ef dbcontext scaffold "Server=tcp:jfv-sql.database.windows.net,1433;Initial Catalog=dbAuth2;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";" Microsoft.EntityFrameworkCore.SqlServer -o Context
+Server=tcp:jfv-sql.database.windows.net,1433;Initial Catalog=dbAuth2;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication=\"Active Directory Default\";
+
+
+
+dotnet tool install -g dotnet-ef
+dotnet ef migrations add InitialCreate
+dotnet ef database update
+
+

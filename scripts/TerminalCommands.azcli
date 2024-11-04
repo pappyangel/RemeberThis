@@ -84,3 +84,5 @@ az login --tenant MngEnv914318.onmicrosoft.com
 
 
 az logout
+
+dotnet new classlib -n rtEFAuth
